@@ -29,4 +29,6 @@ robotpy_extras = [
 
 # Other pip packages to install
 requires = [
+    "pylint>=3.2.6",
+    "mypy>=1.11.0",
 ]

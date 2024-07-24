@@ -15,7 +15,7 @@ class MAXSwerveModule:
         Encoder.
         """
 
-        self.chassisAngularOffset = 0
+        self.chassisAngularOffset = 0.0
         self.desiredState = SwerveModuleState(0.0, Rotation2d())
 
         self.drivingSparkMax = CANSparkMax(

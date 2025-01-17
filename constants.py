@@ -9,7 +9,6 @@ numerical or boolean constants. Don't use this for any other purpose!
 
 
 import math
-
 from wpimath import units
 from wpimath.geometry import Translation2d
 from wpimath.kinematics import SwerveDrive4Kinematics
@@ -47,21 +46,21 @@ class DriveConstants:
     kDriveKinematics = SwerveDrive4Kinematics(*kModulePositions)
 
     # Angular offsets of the modules relative to the chassis in radians
-    kFrontLeftChassisAngularOffset =  (-60 - 45)*(math.pi/180)
-    kFrontRightChassisAngularOffset = (43-180 - 45)*(math.pi/180)
-    kBackLeftChassisAngularOffset = (45 - 45)*(math.pi/180)
-    kBackRightChassisAngularOffset = (270 - 45)*(math.pi/180)
+    kFrontLeftChassisAngularOffset = math.radians(-120) #(-60 - 45)*(math.pi/180)
+    kFrontRightChassisAngularOffset = 0#(43-180 - 45)*(math.pi/180)
+    kBackLeftChassisAngularOffset = 0#(45 - 45)*(math.pi/180)
+    kBackRightChassisAngularOffset = math.radians(70)#(270 - 45)*(math.pi/180)
 
     # SPARK MAX CAN IDs
-    kFrontLeftDrivingCanId = 1
-    kRearLeftDrivingCanId = 3
-    kFrontRightDrivingCanId = 21
-    kRearRightDrivingCanId = 32
+    kFrontLeftDrivingCanId = 32
+    kRearLeftDrivingCanId = 1
+    kFrontRightDrivingCanId = 3
+    kRearRightDrivingCanId = 21
 
-    kFrontLeftTurningCanId = 11
-    kRearLeftTurningCanId = 10
+    kFrontLeftTurningCanId = 13
+    kRearLeftTurningCanId = 11
     kFrontRightTurningCanId = 12
-    kRearRightTurningCanId = 13
+    kRearRightTurningCanId = 14
 
     kGyroReversed = True
 

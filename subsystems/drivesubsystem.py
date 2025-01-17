@@ -13,8 +13,8 @@ from wpimath.kinematics import (
     SwerveDrive4Odometry,
 )
 
-from constants import DriveConstants
-import swerveutils
+from utils.constants import DriveConstants
+import utils.swerveutils as swerveutils
 from .maxswervemodule import MAXSwerveModule
 
 

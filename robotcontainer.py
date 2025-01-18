@@ -5,6 +5,7 @@ import wpimath
 import wpilib
 
 from commands2 import cmd
+from wpimath.controller import HolonomicDriveController
 from wpimath.controller import PIDController, ProfiledPIDControllerRadians
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
@@ -102,9 +103,11 @@ class RobotContainer:
             self.robotDrive.getPose,  # Functional interface to feed supplier
             DriveConstants.kDriveKinematics,
             # Position controllers
-            PIDController(AutoConstants.kPXController, 0, 0),
-            PIDController(AutoConstants.kPYController, 0, 0),
-            thetaController,
+            HolonomicDriveController(
+                PIDController(AutoConstants.kPXController, 0, 0),
+                PIDController(AutoConstants.kPYController, 0, 0),
+                thetaController
+                ),
             self.robotDrive.setModuleStates,
             (self.robotDrive,),
         )

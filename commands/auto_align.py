@@ -6,7 +6,7 @@ from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.limelight_subsystems import LimelightSystem
 
-class AutoAlign(commands2.CommandBase):
+class AutoAlign(commands2.Command):
     def __init__(self, drive_subsystem: DriveSubsystem, limelight_subsystem: LimelightSystem) -> None:
         self.drive_subsystem = drive_subsystem
         self.limelight_subsystem = limelight_subsystem
@@ -29,7 +29,7 @@ class AutoAlign(commands2.CommandBase):
     def isFinished(self) -> bool:
         return False
 
-    def end(self) -> None:
+    def end(self, interrupted: bool = False) -> None:
         self.drive_subsystem.setX()
 
     def interrupted(self) -> None:

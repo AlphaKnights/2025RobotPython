@@ -1,11 +1,14 @@
 import math
 import typing
 
+import wpimath.kinematics
 import wpilib
 
 from commands2 import Subsystem
 from wpimath.filter import SlewRateLimiter
-from wpimath.geometry import Pose2d, Rotation2d
+from wpimath.controller import ProfiledPIDControllerRadians
+from wpimath.geometry import Pose2d, Rotation2d, Translation2d
+from wpimath.trajectory import TrajectoryConfig, Trajectory, TrajectoryGenerator
 from wpimath.kinematics import (
     ChassisSpeeds,
     SwerveModuleState,
@@ -13,12 +16,15 @@ from wpimath.kinematics import (
     SwerveDrive4Odometry,
 )
 
-from constants import DriveConstants
+from constants import AutoConstants, DriveConstants
 import swerveutils
 from .maxswervemodule import MAXSwerveModule
 
 
 class DriveSubsystem(Subsystem):
+    """
+    The DriveSubsystem class is a subsystem that controls the swerve drive of the robot.
+    """
     def __init__(self) -> None:
         super().__init__()
 
@@ -213,6 +219,39 @@ class DriveSubsystem(Subsystem):
         self.frontRight.setDesiredState(fr)
         self.rearLeft.setDesiredState(rl)
         self.rearRight.setDesiredState(rr)
+
+    def navigate(self, finalPos: Translation2d, finalRot: Rotation2d) -> None:
+        config = TrajectoryConfig(
+            AutoConstants.kMaxSpeedMetersPerSecond,
+            AutoConstants.kMaxAccelerationMetersPerSecondSquared,
+        )
+
+        config.setKinematics(DriveConstants.kDriveKinematics)
+
+        trajectory = TrajectoryGenerator.generateTrajectory(
+            Pose2d(0, 0, Rotation2d(0)),
+            [finalPos],
+            Pose2d(0, 0, finalRot),
+            config,
+        )
+
+        thetaController = ProfiledPIDControllerRadians(
+            AutoConstants.kPThetaController,
+            0,
+            0,
+            AutoConstants.kThetaControllerConstraints,
+        )
+        thetaController.enableContinuousInput(-math.pi, math.pi)
+
+        for state in trajectory.states():
+            chassisSpeeds = wpimath.kinematics.ChassisSpeeds(
+            state.velocity,
+            0,
+            thetaController.calculate(self.getHeading(), state.pose.rotation().radians())
+            )
+
+            swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds)
+            self.setModuleStates(swerveModuleStates)
 
     def setX(self) -> None:
         """Sets the wheels into an X formation to prevent movement."""

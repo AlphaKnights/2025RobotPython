@@ -4,7 +4,6 @@ from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 
 from constants import ModuleConstants
 
-
 class MAXSwerveModule:
     def __init__(
         self, drivingCANId: int, turningCANId: int, chassisAngularOffset: float

@@ -65,57 +65,57 @@ class RobotContainer:
         This should be called on robot disable to prevent integral windup."""
 
     
-    # def getAutonomousCommand(self) -> commands2.Command:
-    #     """Use this to pass the autonomous command to the main {@link Robot} class.
+    def getAutonomousCommand(self) -> commands2.Command:
+        """Use this to pass the autonomous command to the main {@link Robot} class.
 
-    #     :returns: the command to run in autonomous
-    #     """
-    #     # Create config for trajectory
-    #     config = TrajectoryConfig(
-    #         AutoConstants.kMaxSpeedMetersPerSecond,
-    #         AutoConstants.kMaxAccelerationMetersPerSecondSquared,
-    #     )
-    #     # Add kinematics to ensure max speed is actually obeyed
-    #     config.setKinematics(DriveConstants.kDriveKinematics)
+        :returns: the command to run in autonomous
+        """
+        # Create config for trajectory
+        config = TrajectoryConfig(
+            AutoConstants.kMaxSpeedMetersPerSecond,
+            AutoConstants.kMaxAccelerationMetersPerSecondSquared,
+        )
+        # Add kinematics to ensure max speed is actually obeyed
+        config.setKinematics(DriveConstants.kDriveKinematics)
 
-    #     # An example trajectory to follow. All units in meters.
-    #     exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-    #         # Start at the origin facing the +X direction
-    #         Pose2d(0, 0, Rotation2d(0)),
-    #         # Pass through these two interior waypoints, making an 's' curve path
-    #         [Translation2d(1, 1), Translation2d(2, -1)],
-    #         # End 3 meters straight ahead of where we started, facing forward
-    #         Pose2d(3, 0, Rotation2d(0)),
-    #         config,
-    #     )
+        # An example trajectory to follow. All units in meters.
+        exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+            # Start at the origin facing the +X direction
+            Pose2d(0, 0, Rotation2d(0)),
+            # Pass through these two interior waypoints, making an 's' curve path
+            [Translation2d(1, 1), Translation2d(2, -1)],
+            # End 3 meters straight ahead of where we started, facing forward
+            Pose2d(3, 0, Rotation2d(0)),
+            config,
+        )
 
-    #     thetaController = ProfiledPIDControllerRadians(
-    #         AutoConstants.kPThetaController,
-    #         0,
-    #         0,
-    #         AutoConstants.kThetaControllerConstraints,
-    #     )
-    #     thetaController.enableContinuousInput(-math.pi, math.pi)
+        thetaController = ProfiledPIDControllerRadians(
+            AutoConstants.kPThetaController,
+            0,
+            0,
+            AutoConstants.kThetaControllerConstraints,
+        )
+        thetaController.enableContinuousInput(-math.pi, math.pi)
 
-    #     swerveControllerCommand = commands2.SwerveControllerCommand(
-    #         exampleTrajectory,
-    #         self.robotDrive.getPose,  # Functional interface to feed supplier
-    #         DriveConstants.kDriveKinematics,
-    #         # Position controllers
-    #         PIDController(AutoConstants.kPXController, 0, 0),
-    #         PIDController(AutoConstants.kPYController, 0, 0),
-    #         thetaController,
-    #         self.robotDrive.setModuleStates,
-    #         (self.robotDrive,),
-    #     )
+        swerveControllerCommand = commands2.SwerveControllerCommand(
+            exampleTrajectory,
+            self.robotDrive.getPose,  # Functional interface to feed supplier
+            DriveConstants.kDriveKinematics,
+            # Position controllers
+            PIDController(AutoConstants.kPXController, 0, 0),
+            PIDController(AutoConstants.kPYController, 0, 0),
+            thetaController,
+            self.robotDrive.setModuleStates,
+            (self.robotDrive,),
+        )
 
-    #     # Reset odometry to the starting pose of the trajectory.
-    #     self.robotDrive.resetOdometry(exampleTrajectory.initialPose())
+        # Reset odometry to the starting pose of the trajectory.
+        self.robotDrive.resetOdometry(exampleTrajectory.initialPose())
 
-    #     # Run path following command, then stop at the end.
-    #     return swerveControllerCommand.andThen(
-    #         cmd.run(
-    #             lambda: self.robotDrive.drive(0, 0, 0, False, False),
-    #             self.robotDrive,
-    #         )
-    #     )
+        # Run path following command, then stop at the end.
+        return swerveControllerCommand.andThen(
+            cmd.run(
+                lambda: self.robotDrive.drive(0, 0, 0, False, False),
+                self.robotDrive,
+            )
+        )

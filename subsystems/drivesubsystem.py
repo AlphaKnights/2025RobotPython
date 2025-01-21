@@ -263,33 +263,15 @@ class DriveSubsystem(Subsystem):
         self.rearLeft.setDesiredState(SwerveModuleState(0, Rotation2d.fromDegrees(-45)))
         self.rearRight.setDesiredState(SwerveModuleState(0, Rotation2d.fromDegrees(45)))
 
-    # def getModuleStates(self) -> Callable[[Sequence[SwerveModuleState]], None]:
-    #     """Returns the current states of the swerve modules.
-
-    #     :returns: A lamda that returns the relative position of the swerve modules.
-    #     """
-    #     return lambda: (
-
-    def setStates(self, states: Sequence[SwerveModuleState]) -> None:
-        """Sets the swerve ModuleStates.
-
-        :param states: The desired SwerveModule states.
-        """
-        self.frontLeft.setDesiredState(states[0])
-        self.frontRight.setDesiredState(states[1])
-        self.rearLeft.setDesiredState(states[2])
-        self.rearRight.setDesiredState(states[3])
-
     def setModuleStates(
         self,
         desiredStates: typing.Sequence[
             SwerveModuleState
         ],
-    # ) -> Callable[[Sequence[SwerveModuleState]], None]:
     ) -> None:
         """Sets the swerve ModuleStates.
 
-        :param desiredStates: The desired SwerveModule states.
+        :param desiredStates: The desired SwerveModule states. Must be 4 states
         """
         
         desiredStates = (

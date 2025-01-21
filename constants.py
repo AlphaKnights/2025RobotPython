@@ -138,3 +138,7 @@ class AutoConstants:
     kThetaControllerConstraints = TrapezoidProfileRadians.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared
     )
+
+class LEDConstants:
+    kLEDPort = 0
+    kLEDBuffer = 60

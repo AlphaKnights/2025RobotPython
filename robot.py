@@ -18,11 +18,11 @@ class MyRobot(commands2.TimedCommandRobot):
         self.container = RobotContainer()
         self.autonomousCommand = None
 
-    # def autonomousInit(self) -> None:
-    #     self.autonomousCommand = self.container.getAutonomousCommand()
+    def autonomousInit(self) -> None:
+        self.autonomousCommand = self.container.getAutonomousCommand()
 
-    #     if self.autonomousCommand:
-    #         self.autonomousCommand.schedule()
+        if self.autonomousCommand:
+            self.autonomousCommand.schedule()
 
     def teleopInit(self) -> None:
         if self.autonomousCommand:

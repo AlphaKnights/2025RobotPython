@@ -1,5 +1,6 @@
 import math
 import typing
+from typing import Callable, Sequence
 
 import wpimath.kinematics
 import wpilib
@@ -220,7 +221,7 @@ class DriveSubsystem(Subsystem):
         self.rearLeft.setDesiredState(rl)
         self.rearRight.setDesiredState(rr)
 
-    def navigate(self, finalPos: Translation2d, finalRot: Rotation2d) -> None:
+    def navigate(self, waypoints: list[Translation2d], finalPos: tuple, finalRot: Rotation2d) -> None:
         config = TrajectoryConfig(
             AutoConstants.kMaxSpeedMetersPerSecond,
             AutoConstants.kMaxAccelerationMetersPerSecondSquared,
@@ -230,8 +231,8 @@ class DriveSubsystem(Subsystem):
 
         trajectory = TrajectoryGenerator.generateTrajectory(
             Pose2d(0, 0, Rotation2d(0)),
-            [finalPos],
-            Pose2d(0, 0, finalRot),
+            waypoints,
+            Pose2d(finalPos[0], finalPos[1], finalRot),
             config,
         )
 
@@ -262,16 +263,42 @@ class DriveSubsystem(Subsystem):
         self.rearLeft.setDesiredState(SwerveModuleState(0, Rotation2d.fromDegrees(-45)))
         self.rearRight.setDesiredState(SwerveModuleState(0, Rotation2d.fromDegrees(45)))
 
+    # def getModuleStates(self) -> Callable[[Sequence[SwerveModuleState]], None]:
+    #     """Returns the current states of the swerve modules.
+
+    #     :returns: A lamda that returns the relative position of the swerve modules.
+    #     """
+    #     return lambda: (
+
+    def setStates(self, states: Sequence[SwerveModuleState]) -> None:
+        """Sets the swerve ModuleStates.
+
+        :param states: The desired SwerveModule states.
+        """
+        self.frontLeft.setDesiredState(states[0])
+        self.frontRight.setDesiredState(states[1])
+        self.rearLeft.setDesiredState(states[2])
+        self.rearRight.setDesiredState(states[3])
+
     def setModuleStates(
         self,
-        desiredStates: typing.Tuple[
-            SwerveModuleState, SwerveModuleState, SwerveModuleState, SwerveModuleState
+        desiredStates: typing.Sequence[
+            SwerveModuleState
         ],
+    # ) -> Callable[[Sequence[SwerveModuleState]], None]:
     ) -> None:
         """Sets the swerve ModuleStates.
 
         :param desiredStates: The desired SwerveModule states.
         """
+        
+        desiredStates = (
+            desiredStates[0],
+            desiredStates[1],
+            desiredStates[2],
+            desiredStates[3],
+        )
+
         fl, fr, rl, rr = SwerveDrive4Kinematics.desaturateWheelSpeeds(
             desiredStates, DriveConstants.kMaxSpeedMetersPerSecond
         )
@@ -279,6 +306,8 @@ class DriveSubsystem(Subsystem):
         self.frontRight.setDesiredState(fr)
         self.rearLeft.setDesiredState(rl)
         self.rearRight.setDesiredState(rr)
+
+        # return self.setStates
 
     def resetEncoders(self) -> None:
         """Resets the drive encoders to currently read a position of 0."""

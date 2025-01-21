@@ -6,7 +6,7 @@ import wpilib
 
 from commands2 import cmd
 from wpimath.controller import HolonomicDriveController
-from wpimath.controller import PIDController, ProfiledPIDControllerRadians
+from wpimath.controller import PIDController, ProfiledPIDControllerRadians, HolonomicDriveController
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 
@@ -90,6 +90,17 @@ class RobotContainer:
             config,
         )
 
+        exampleTrajectoryTwo = TrajectoryGenerator.generateTrajectory(
+            # Start at the origin facing the +X direction
+            Pose2d(0, 0, Rotation2d(0)),
+            # Pass through these two interior waypoints, making an 's' curve path
+            # [Translation2d(1, 1), Translation2d(2, -1)],
+            [],
+            # End 3 meters straight ahead of where we started, facing forward
+            Pose2d(3, 0, Rotation2d(0)),
+            config,
+        )
+
         thetaController = ProfiledPIDControllerRadians(
             AutoConstants.kPThetaController,
             0,
@@ -98,16 +109,17 @@ class RobotContainer:
         )
         thetaController.enableContinuousInput(-math.pi, math.pi)
 
+        controller = HolonomicDriveController(
+            PIDController(AutoConstants.kPXController, 0, 0),
+            PIDController(AutoConstants.kPYController, 0, 0),
+            thetaController,
+        )
+
         swerveControllerCommand = commands2.SwerveControllerCommand(
             exampleTrajectory,
-            self.robotDrive.getPose,  # Functional interface to feed supplier
+            self.robotDrive.getPose,
             DriveConstants.kDriveKinematics,
-            # Position controllers
-            HolonomicDriveController(
-                PIDController(AutoConstants.kPXController, 0, 0),
-                PIDController(AutoConstants.kPYController, 0, 0),
-                thetaController
-                ),
+            controller,
             self.robotDrive.setModuleStates,
             (self.robotDrive,),
         )

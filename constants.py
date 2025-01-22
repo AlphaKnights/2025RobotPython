@@ -143,6 +143,10 @@ class LEDConstants:
     kLEDPort = 0
     kLEDBuffer = 60
 
-    kSilverHue = 230
+    kSilverHue = 180
     kSilverSat = 0
-    kSilverVal = 80
+    kSilverVal = 190
+
+    kBlueHue = 180
+    kBlueSat = 220
+    kBlueVal = 255

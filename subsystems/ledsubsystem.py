@@ -31,4 +31,4 @@ class LEDSubsystem(Subsystem):
             if (i % 2 == 0):
                 self.ledData[i].setHSV(LEDConstants.kSilverHue, LEDConstants.kSilverSat, LEDConstants.kSilverVal)
             else:
-                self.ledData[i].setHSV(0, 0, 0)
+                self.ledData[i].setHSV(LEDConstants.kBlueHue, LEDConstants.kBlueSat, LEDConstants.kBlueVal)

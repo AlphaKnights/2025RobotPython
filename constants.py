@@ -141,12 +141,12 @@ class AutoConstants:
 
 class LEDConstants:
     kLEDPort = 0
-    kLEDBuffer = 60
+    kLEDBuffer = 64
 
-    kSilverHue = 180
+    kSilverHue = 0
     kSilverSat = 0
     kSilverVal = 190
 
-    kBlueHue = 180
+    kBlueHue = 90
     kBlueSat = 220
     kBlueVal = 255

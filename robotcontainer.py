@@ -11,6 +11,9 @@ from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 
 from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
+from subsystems.ledsubsystem import LEDSubsystem
+
+from commands.teamcolors import TeamColorsCommand
 
 
 class RobotContainer:
@@ -24,6 +27,7 @@ class RobotContainer:
     def __init__(self) -> None:
         # The robot's subsystems
         self.robotDrive = DriveSubsystem()
+        self.led_subsystem = LEDSubsystem()
 
         # The driver's controller
         self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
@@ -52,6 +56,8 @@ class RobotContainer:
                 self.robotDrive,
             )
         )
+
+        self.led_subsystem.setDefaultCommand(TeamColorsCommand(self.led_subsystem))
 
     def configureButtonBindings(self) -> None:
         """

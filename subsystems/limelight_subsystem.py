@@ -2,7 +2,7 @@
 
 import typing
 import commands2
-import limelight
+import limelight  # type: ignore
 from interfaces.limelight_results import LimelightResults
 
 class LimelightSystem(commands2.Subsystem):

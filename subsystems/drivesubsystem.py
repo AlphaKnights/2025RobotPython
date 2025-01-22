@@ -221,39 +221,6 @@ class DriveSubsystem(Subsystem):
         self.rearLeft.setDesiredState(rl)
         self.rearRight.setDesiredState(rr)
 
-    def navigate(self, waypoints: list[Translation2d], finalPos: tuple, finalRot: Rotation2d) -> None:
-        config = TrajectoryConfig(
-            AutoConstants.kMaxSpeedMetersPerSecond,
-            AutoConstants.kMaxAccelerationMetersPerSecondSquared,
-        )
-
-        config.setKinematics(DriveConstants.kDriveKinematics)
-
-        trajectory = TrajectoryGenerator.generateTrajectory(
-            Pose2d(0, 0, Rotation2d(0)),
-            waypoints,
-            Pose2d(finalPos[0], finalPos[1], finalRot),
-            config,
-        )
-
-        thetaController = ProfiledPIDControllerRadians(
-            AutoConstants.kPThetaController,
-            0,
-            0,
-            AutoConstants.kThetaControllerConstraints,
-        )
-        thetaController.enableContinuousInput(-math.pi, math.pi)
-
-        for state in trajectory.states():
-            chassisSpeeds = wpimath.kinematics.ChassisSpeeds(
-            state.velocity,
-            0,
-            thetaController.calculate(self.getHeading(), state.pose.rotation().radians())
-            )
-
-            swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds)
-            self.setModuleStates(swerveModuleStates)
-
     def setX(self) -> None:
         """Sets the wheels into an X formation to prevent movement."""
         self.frontLeft.setDesiredState(SwerveModuleState(0, Rotation2d.fromDegrees(45)))

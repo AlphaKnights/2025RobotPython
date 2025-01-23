@@ -9,6 +9,8 @@ import commands2
 import wpilib
 
 from robotcontainer import RobotContainer
+from ntcore import NetworkTableInstance
+from constants import OIConstants
 
 
 class MyRobot(commands2.TimedCommandRobot):
@@ -17,6 +19,10 @@ class MyRobot(commands2.TimedCommandRobot):
         # autonomous chooser on the dashboard.
         self.container = RobotContainer()
         self.autonomousCommand = None
+
+        self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
+        self.cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection")
+        wpilib.CameraServer.launch("vision.py:main")
 
     # def autonomousInit(self) -> None:
     #     self.autonomousCommand = self.container.getAutonomousCommand()
@@ -27,6 +33,12 @@ class MyRobot(commands2.TimedCommandRobot):
     def teleopInit(self) -> None:
         if self.autonomousCommand:
             self.autonomousCommand.cancel()
+    
+    def teleopPeridodic(self) -> None:
+        if self.driverController.getLeftY() < 0:
+            self.cameraSelection.setString("USB Camera 1")
+        else:
+            self.cameraSelection.setString("USB Camera 0")
 
     def testInit(self) -> None:
         commands2.CommandScheduler.getInstance().cancelAll()

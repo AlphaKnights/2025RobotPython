@@ -11,6 +11,7 @@ from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 
 from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
+from commands.drivecommand import DriveCommand
 
 
 class RobotContainer:
@@ -35,23 +36,22 @@ class RobotContainer:
         self.robotDrive.setDefaultCommand(
             # The left stick controls translation of the robot.
             # Turning is controlled by the X axis of the right stick.
-            commands2.RunCommand(
-                lambda: self.robotDrive.drive(
+            DriveCommand(
+                self.robotDrive,
+                lambda:
                     -wpimath.applyDeadband(
                         self.driverController.getLeftY(), OIConstants.kDriveDeadband
                     ),
+                lambda:
                     -wpimath.applyDeadband(
                         self.driverController.getLeftX(), OIConstants.kDriveDeadband
                     ),
+                lambda:
                     -wpimath.applyDeadband(
                         self.driverController.getRightX(), OIConstants.kDriveDeadband
                     ),
-                    True,
-                    True,
                 ),
-                self.robotDrive,
             )
-        )
 
     def configureButtonBindings(self) -> None:
         """

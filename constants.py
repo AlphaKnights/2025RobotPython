@@ -145,8 +145,8 @@ class LEDConstants:
 
     kSilverHue = 0
     kSilverSat = 0
-    kSilverVal = 190
+    kSilverVal = 10
 
     kBlueHue = 90
     kBlueSat = 220
-    kBlueVal = 255
+    kBlueVal = 30

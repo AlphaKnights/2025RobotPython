@@ -8,6 +8,9 @@ from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.limelight_subsystem import LimelightSystem
 
 class AutoAlign(commands2.Command):
+    """Align to the closest AprilTag
+    """
+
     def __init__(self, drive_subsystem: DriveSubsystem, limelight_subsystem: LimelightSystem) -> None:
         self.drive_subsystem = drive_subsystem
         self.limelight_subsystem = limelight_subsystem
@@ -25,6 +28,9 @@ class AutoAlign(commands2.Command):
 
         tx = results.tx
         ty = results.ty
+
+        # Keep some between the tag and robot
+        ty = ty - 5
         
         y = -0.2 if tx > 0 else 0.2
         x = 0.2 if ty > 0 else -0.2
@@ -41,7 +47,18 @@ class AutoAlign(commands2.Command):
 
 
     def isFinished(self) -> bool:
-        return False
+        results = self.limelight_subsystem.get_results()
+        if results is None:
+            return False
+
+        tx = results.tx
+        ty = results.ty
+
+        # Define margin of error
+        margin_of_error = 3
+
+        # Check if the tag is within the margin of error
+        return abs(tx) < margin_of_error and abs(ty) < margin_of_error
 
     def end(self, interrupted: bool = False) -> None:
         self.drive_subsystem.setX()

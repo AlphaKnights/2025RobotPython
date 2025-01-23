@@ -12,7 +12,6 @@ from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
 
-from CameraServer import cameraServer
 
 class RobotContainer:
     """
@@ -31,9 +30,6 @@ class RobotContainer:
 
         # Configure the button bindings
         self.configureButtonBindings()
-
-        self.cameraServer = cameraServer()
-        self.cameraServer.run()
 
         # Configure default commands
         self.robotDrive.setDefaultCommand(

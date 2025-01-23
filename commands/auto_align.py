@@ -54,6 +54,9 @@ class AutoAlign(commands2.Command):
         tx = results.tx
         ty = results.ty
 
+        ty = ty - 5
+
+
         # Define margin of error
         margin_of_error = 3
 

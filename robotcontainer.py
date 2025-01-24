@@ -10,10 +10,11 @@ from wpimath.controller import PIDController, ProfiledPIDControllerRadians, Holo
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 
+from commands.auto_align import AutoAlign
 from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.limelight_subsystem import LimelightSystem
-from commands.auto_align import AutoAlign
+from commands.auto_rotate import AutoRotate
 
 class RobotContainer:
     """
@@ -139,4 +140,4 @@ class RobotContainer:
 
         # https://github.com/robotpy/robotpy-rev/tree/384ca50b2ede3ab44e09f0c12b8c5db33dff7c9e/examples/maxswerve
 
-        return AutoAlign(self.robotDrive, self.limelight)
+        return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))

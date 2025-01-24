@@ -7,8 +7,8 @@ from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.limelight_subsystem import LimelightSystem
 
-class AutoAlign(commands2.Command):
-    """Align to the closest AprilTag
+class AutoRotate(commands2.Command):
+    """Rotate to the closest AprilTag
     """
 
     def __init__(self, drive_subsystem: DriveSubsystem, limelight_subsystem: LimelightSystem) -> None:
@@ -24,28 +24,17 @@ class AutoAlign(commands2.Command):
         if results is None:
             self.drive_subsystem.setX()
             return
+
+        ta = results.ta
+
+        print(f'a: {ta}')
         
+        a = -0.2 if ta > 0 else 0.2
 
-        tx = results.tx
-        ty = results.ty
+        if abs(a) < 0.01:
+            a = 0
 
-        print(f'x: {tx}, y: {ty}')
-
-
-        # Keep some between the tag and robot
-        ty = ty - 0.25
-        
-        y = -0.2 if tx > 0 else 0.2
-        x = 0.2 if ty > 0 else -0.2
-
-        if abs(tx) < 0.01:
-            y = 0
-
-        if abs(ty) < 0.01:
-            x = 0
-
-
-        self.drive_subsystem.drive(x, y, 0, False, False)
+        self.drive_subsystem.drive(0, 0, a, False, False)
 
 
     def isFinished(self) -> bool:
@@ -53,17 +42,13 @@ class AutoAlign(commands2.Command):
         if results is None:
             return False
 
-        tx = results.tx
-        ty = results.ty
-
-        ty = ty - 0.25
-
+        ta = results.ta
 
         # Define margin of error
-        margin_of_error = 0.01
+        margin_of_error = 1
 
         # Check if the tag is within the margin of error
-        return abs(tx) < margin_of_error and abs(ty) < margin_of_error
+        return abs(ta) < margin_of_error
 
     def end(self, interrupted: bool = False) -> None:
         self.drive_subsystem.setX()

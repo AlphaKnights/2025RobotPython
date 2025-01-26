@@ -138,3 +138,9 @@ class AutoConstants:
     kThetaControllerConstraints = TrapezoidProfileRadians.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared
     )
+
+class ElevatorConstants:
+    kLeftMotorCanId = 31
+    kRightMotorCanId = 30
+    kUpperLimit = 0
+    kLowerLimit = 0

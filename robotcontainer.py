@@ -13,6 +13,8 @@ from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
 from commands.drivecommand import DriveCommand
 
+from subsystems.elevatorsubsystem import ElevatorSubsystem
+from commands.elevatorUpCommand import ElevatorUpCommand
 
 class RobotContainer:
     """
@@ -24,7 +26,8 @@ class RobotContainer:
 
     def __init__(self) -> None:
         # The robot's subsystems
-        self.robotDrive = DriveSubsystem()
+        #self.robotDrive = DriveSubsystem()
+        self.elevator = ElevatorSubsystem()
 
         # The driver's controller
         self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
@@ -32,26 +35,27 @@ class RobotContainer:
         # Configure the button bindings
         self.configureButtonBindings()
 
+        self.elevator.setDefaultCommand(ElevatorUpCommand(self.elevator).onlyIf(lambda: self.driverController.getAButton()).onlyWhile(lambda: self.driverController.getAButton()))
         # Configure default commands
-        self.robotDrive.setDefaultCommand(
-            # The left stick controls translation of the robot.
-            # Turning is controlled by the X axis of the right stick.
-            DriveCommand(
-                self.robotDrive,
-                lambda:
-                    -wpimath.applyDeadband(
-                        self.driverController.getLeftY(), OIConstants.kDriveDeadband
-                    ),
-                lambda:
-                    -wpimath.applyDeadband(
-                        self.driverController.getLeftX(), OIConstants.kDriveDeadband
-                    ),
-                lambda:
-                    -wpimath.applyDeadband(
-                        self.driverController.getRightX(), OIConstants.kDriveDeadband
-                    ),
-                ),
-            )
+        # self.robotDrive.setDefaultCommand(
+        #     # The left stick controls translation of the robot.
+        #     # Turning is controlled by the X axis of the right stick.
+        #     DriveCommand(
+        #         self.robotDrive,
+        #         lambda:   
+        #             -wpimath.applyDeadband(
+        #                 self.driverController.getLeftY(), OIConstants.kDriveDeadband
+        #             ),
+        #         lambda:
+        #             -wpimath.applyDeadband(
+        #                 self.driverController.getLeftX(), OIConstants.kDriveDeadband
+        #             ),
+        #         lambda:
+        #             -wpimath.applyDeadband(
+        #                 self.driverController.getRightX(), OIConstants.kDriveDeadband
+        #             ),
+        #         ),
+        #     )
 
     def configureButtonBindings(self) -> None:
         """
@@ -59,6 +63,8 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
+
+
 
     def disablePIDSubsystems(self) -> None:
         """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.
@@ -69,7 +75,7 @@ class RobotContainer:
     #     """Use this to pass the autonomous command to the main {@link Robot} class.
 
     #     :returns: the command to run in autonomous
-    #     """
+    #     """   
     #     # Create config for trajectory
     #     config = TrajectoryConfig(
     #         AutoConstants.kMaxSpeedMetersPerSecond,

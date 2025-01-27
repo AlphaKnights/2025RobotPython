@@ -5,14 +5,17 @@ import wpimath
 import wpilib
 
 from commands2 import cmd
-from wpimath.controller import PIDController, ProfiledPIDControllerRadians
+from wpimath.controller import HolonomicDriveController
+from wpimath.controller import PIDController, ProfiledPIDControllerRadians, HolonomicDriveController
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 
+from commands.auto_align import AutoAlign
 from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
+from subsystems.limelight_subsystem import LimelightSystem
+from commands.auto_rotate import AutoRotate
 from commands.drivecommand import DriveCommand
-
 
 class RobotContainer:
     """
@@ -25,6 +28,7 @@ class RobotContainer:
     def __init__(self) -> None:
         # The robot's subsystems
         self.robotDrive = DriveSubsystem()
+        self.limelight = LimelightSystem()
 
         # The driver's controller
         self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
@@ -65,57 +69,75 @@ class RobotContainer:
         This should be called on robot disable to prevent integral windup."""
 
     
-    # def getAutonomousCommand(self) -> commands2.Command:
-    #     """Use this to pass the autonomous command to the main {@link Robot} class.
+    def getAutonomousCommand(self) -> commands2.Command:
+        # """Use this to pass the autonomous command to the main {@link Robot} class.
 
-    #     :returns: the command to run in autonomous
-    #     """
-    #     # Create config for trajectory
-    #     config = TrajectoryConfig(
-    #         AutoConstants.kMaxSpeedMetersPerSecond,
-    #         AutoConstants.kMaxAccelerationMetersPerSecondSquared,
-    #     )
-    #     # Add kinematics to ensure max speed is actually obeyed
-    #     config.setKinematics(DriveConstants.kDriveKinematics)
+        # :returns: the command to run in autonomous
+        # """
+        # # Create config for trajectory
+        # config = TrajectoryConfig(
+        #     AutoConstants.kMaxSpeedMetersPerSecond,
+        #     AutoConstants.kMaxAccelerationMetersPerSecondSquared,
+        # )
+        # # Add kinematics to ensure max speed is actually obeyed
+        # config.setKinematics(DriveConstants.kDriveKinematics)
 
-    #     # An example trajectory to follow. All units in meters.
-    #     exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-    #         # Start at the origin facing the +X direction
-    #         Pose2d(0, 0, Rotation2d(0)),
-    #         # Pass through these two interior waypoints, making an 's' curve path
-    #         [Translation2d(1, 1), Translation2d(2, -1)],
-    #         # End 3 meters straight ahead of where we started, facing forward
-    #         Pose2d(3, 0, Rotation2d(0)),
-    #         config,
-    #     )
+        # # An example trajectory to follow. All units in meters.
+        # exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        #     # Start at the origin facing the +X direction
+        #     Pose2d(0, 0, Rotation2d(0)),
+        #     # Pass through these two interior waypoints, making an 's' curve path
+        #     [Translation2d(1, 1), Translation2d(2, -1)],
+        #     # End 3 meters straight ahead of where we started, facing forward
+        #     Pose2d(3, 0, Rotation2d(0)),
+        #     config,
+        # )
 
-    #     thetaController = ProfiledPIDControllerRadians(
-    #         AutoConstants.kPThetaController,
-    #         0,
-    #         0,
-    #         AutoConstants.kThetaControllerConstraints,
-    #     )
-    #     thetaController.enableContinuousInput(-math.pi, math.pi)
+        # exampleTrajectoryTwo = TrajectoryGenerator.generateTrajectory(
+        #     # Start at the origin facing the +X direction
+        #     Pose2d(0, 0, Rotation2d(0)),
+        #     # Pass through these two interior waypoints, making an 's' curve path
+        #     # [Translation2d(1, 1), Translation2d(2, -1)],
+        #     [],
+        #     # End 3 meters straight ahead of where we started, facing forward
+        #     Pose2d(3, 0, Rotation2d(0)),
+        #     config,
+        # )
 
-    #     swerveControllerCommand = commands2.SwerveControllerCommand(
-    #         exampleTrajectory,
-    #         self.robotDrive.getPose,  # Functional interface to feed supplier
-    #         DriveConstants.kDriveKinematics,
-    #         # Position controllers
-    #         PIDController(AutoConstants.kPXController, 0, 0),
-    #         PIDController(AutoConstants.kPYController, 0, 0),
-    #         thetaController,
-    #         self.robotDrive.setModuleStates,
-    #         (self.robotDrive,),
-    #     )
+        # thetaController = ProfiledPIDControllerRadians(
+        #     AutoConstants.kPThetaController,
+        #     0,
+        #     0,
+        #     AutoConstants.kThetaControllerConstraints,
+        # )
+        # thetaController.enableContinuousInput(-math.pi, math.pi)
 
-    #     # Reset odometry to the starting pose of the trajectory.
-    #     self.robotDrive.resetOdometry(exampleTrajectory.initialPose())
+        # controller = HolonomicDriveController(
+        #     PIDController(AutoConstants.kPXController, 0, 0),
+        #     PIDController(AutoConstants.kPYController, 0, 0),
+        #     thetaController,
+        # )
 
-    #     # Run path following command, then stop at the end.
-    #     return swerveControllerCommand.andThen(
-    #         cmd.run(
-    #             lambda: self.robotDrive.drive(0, 0, 0, False, False),
-    #             self.robotDrive,
-    #         )
-    #     )
+        # swerveControllerCommand = commands2.SwerveControllerCommand(
+        #     exampleTrajectory,
+        #     self.robotDrive.getPose,
+        #     DriveConstants.kDriveKinematics,
+        #     controller,
+        #     self.robotDrive.setModuleStates,
+        #     (self.robotDrive,),
+        # )
+
+        # # Reset odometry to the starting pose of the trajectory.
+        # self.robotDrive.resetOdometry(exampleTrajectory.initialPose())
+
+        # # Run path following command, then stop at the end.
+        # return swerveControllerCommand.andThen(
+        #     cmd.run(
+        #         lambda: self.robotDrive.drive(0, 0, 0, False, False),
+        #         self.robotDrive,
+        #     )
+        # )
+
+        # https://github.com/robotpy/robotpy-rev/tree/384ca50b2ede3ab44e09f0c12b8c5db33dff7c9e/examples/maxswerve
+
+        return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))

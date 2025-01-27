@@ -1,11 +1,15 @@
 import math
 import typing
+from typing import Callable, Sequence
 
+import wpimath.kinematics
 import wpilib
 
 from commands2 import Subsystem
 from wpimath.filter import SlewRateLimiter
-from wpimath.geometry import Pose2d, Rotation2d
+from wpimath.controller import ProfiledPIDControllerRadians
+from wpimath.geometry import Pose2d, Rotation2d, Translation2d
+from wpimath.trajectory import TrajectoryConfig, Trajectory, TrajectoryGenerator
 from wpimath.kinematics import (
     ChassisSpeeds,
     SwerveModuleState,
@@ -13,12 +17,15 @@ from wpimath.kinematics import (
     SwerveDrive4Odometry,
 )
 
-from constants import DriveConstants
+from constants import AutoConstants, DriveConstants
 import swerveutils
 from .maxswervemodule import MAXSwerveModule
 
 
 class DriveSubsystem(Subsystem):
+    """
+    The DriveSubsystem class is a subsystem that controls the swerve drive of the robot.
+    """
     def __init__(self) -> None:
         super().__init__()
 
@@ -225,14 +232,22 @@ class DriveSubsystem(Subsystem):
 
     def setModuleStates(
         self,
-        desiredStates: typing.Tuple[
-            SwerveModuleState, SwerveModuleState, SwerveModuleState, SwerveModuleState
+        desiredStates: typing.Sequence[
+            SwerveModuleState
         ],
     ) -> None:
         """Sets the swerve ModuleStates.
 
-        :param desiredStates: The desired SwerveModule states.
+        :param desiredStates: The desired SwerveModule states. Must be 4 states
         """
+        
+        desiredStates = (
+            desiredStates[0],
+            desiredStates[1],
+            desiredStates[2],
+            desiredStates[3],
+        )
+
         fl, fr, rl, rr = SwerveDrive4Kinematics.desaturateWheelSpeeds(
             desiredStates, DriveConstants.kMaxSpeedMetersPerSecond
         )
@@ -240,6 +255,8 @@ class DriveSubsystem(Subsystem):
         self.frontRight.setDesiredState(fr)
         self.rearLeft.setDesiredState(rl)
         self.rearRight.setDesiredState(rr)
+
+        # return self.setStates
 
     def resetEncoders(self) -> None:
         """Resets the drive encoders to currently read a position of 0."""

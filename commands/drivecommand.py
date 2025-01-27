@@ -3,7 +3,7 @@ import typing
 from subsystems.drivesubsystem import DriveSubsystem
 
 class DriveCommand(commands2.Command):
-    def __init__(self, swerve_subsystem: DriveSubsystem, x: typing.Callable[[], float], y: typing.Callable[[], float], rot: typing.Callable[[], float]) -> None:
+    def __init__(self, swerve_subsystem: DriveSubsystem, x: typing.Callable[[], float], y: typing.Callable[[], float], rot: typing.Callable[[], float], align: typing.Callable[[], bool]) -> None:
         super().__init__()
         self.swerve = swerve_subsystem
         self.y = y

@@ -51,6 +51,7 @@ class DriveConstants:
     kBackLeftChassisAngularOffset = math.radians(-205)
     kBackRightChassisAngularOffset = math.radians(70)
 
+
     # SPARK MAX CAN IDs
     kFrontLeftDrivingCanId = 32
     kRearLeftDrivingCanId = 1
@@ -121,7 +122,7 @@ class ModuleConstants:
 
 class OIConstants:
     kDriverControllerPort = 1
-    kDriveDeadband = 0.025
+    kDriveDeadband = 0.2
     
 
 class AutoConstants:

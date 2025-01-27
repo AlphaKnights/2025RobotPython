@@ -47,7 +47,7 @@ class DriveConstants:
 
     # Angular offsets of the modules relative to the chassis in radians
     kFrontLeftChassisAngularOffset = math.radians(-120) #(-60 - 45)*(math.pi/180)
-    kFrontRightChassisAngularOffset = math.radians(55)
+    kFrontRightChassisAngularOffset = math.radians(-25)
     kBackLeftChassisAngularOffset = math.radians(-205)
     kBackRightChassisAngularOffset = math.radians(70)
 

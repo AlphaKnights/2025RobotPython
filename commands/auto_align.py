@@ -35,8 +35,8 @@ class AutoAlign(commands2.Command):
         # Keep some between the tag and robot
         ty = ty - 0.25
         
-        y = -0.2 if tx > 0 else 0.2
-        x = 0.2 if ty > 0 else -0.2
+        y = -0.1 if tx > 0 else 0.1
+        x = 0.1 if ty > 0 else -0.1
 
         if abs(tx) < 0.01:
             y = 0

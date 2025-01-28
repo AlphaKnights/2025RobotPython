@@ -33,7 +33,7 @@ class AutoAlign(commands2.Command):
 
 
         # Keep some between the tag and robot
-        ty = ty - 0.25
+        ty = ty - 0.35
         
         y = -0.1 if tx > 0 else 0.1
         x = 0.1 if ty > 0 else -0.1
@@ -56,7 +56,7 @@ class AutoAlign(commands2.Command):
         tx = results.tx
         ty = results.ty
 
-        ty = ty - 0.25
+        ty = ty - 0.35
 
 
         # Define margin of error

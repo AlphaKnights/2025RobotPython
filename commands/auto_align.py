@@ -43,18 +43,27 @@ class AutoAlign(commands2.Command):
         ty = ty + self.goalY
         tx = tx + self.goalY
 
-        if (tx > ty):
-            y = ty/tx
+        ax = abs(tx)
+        ay = abs(ty)
+
+        if (ax > ay):
+            y = ay/ax
             x = 1
         else:
             y = 1
-            x = tx/ty
+            x = ax/ay
 
-        if abs(tx) < AlignConstants.kAlignDeadzone:
-            y = 0
+        if ty < 0:
+            y *= -1
 
-        if abs(ty) < AlignConstants.kAlignDeadzone:
+        if tx < 0: 
+            x *= -1
+
+        if ax < AlignConstants.kAlignDeadzone:
             x = 0
+
+        if ay < AlignConstants.kAlignDeadzone:
+            y = 0
 
         dist = sqrt(tx**2 + ty**2)
 
@@ -63,7 +72,7 @@ class AutoAlign(commands2.Command):
         else:
             dist = dist / AlignConstants.kDistToSlow
 
-        self.drive_subsystem.drive(x * AlignConstants.kMaxNormalizedSpeed * dist, y * AlignConstants.kMaxNormalizedSpeed * dist, 0, False, False)
+        self.drive_subsystem.drive(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, 0, False, False)
 
 
     def isFinished(self) -> bool:

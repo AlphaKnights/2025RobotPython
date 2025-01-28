@@ -42,6 +42,7 @@ class RobotContainer:
             # Turning is controlled by the X axis of the right stick.
             DriveCommand(
                 self.robotDrive,
+                self.limelight,
                 lambda:
                     -wpimath.applyDeadband(
                         self.driverController.getLeftY(), OIConstants.kDriveDeadband

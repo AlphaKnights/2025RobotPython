@@ -15,6 +15,7 @@ from commands.drivecommand import DriveCommand
 
 from subsystems.elevatorsubsystem import ElevatorSubsystem
 from commands.elevatorUpCommand import ElevatorUpCommand
+from commands.elevatorDownCommand import ElevatorDownCommand
 
 class RobotContainer:
     """
@@ -30,12 +31,11 @@ class RobotContainer:
         self.elevator = ElevatorSubsystem()
 
         # The driver's controller
-        self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
+        self.driverController = commands2.button.CommandXboxController(OIConstants.kDriverControllerPort)
 
         # Configure the button bindings
         self.configureButtonBindings()
 
-        self.elevator.setDefaultCommand(ElevatorUpCommand(self.elevator).onlyIf(lambda: self.driverController.getAButton()).onlyWhile(lambda: self.driverController.getAButton()))
         # Configure default commands
         # self.robotDrive.setDefaultCommand(
         #     # The left stick controls translation of the robot.
@@ -63,6 +63,8 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
+        self.driverController.a().whileTrue(ElevatorUpCommand(self.elevator))
+        self.driverController.b().whileTrue(ElevatorDownCommand(self.elevator))
 
 
 

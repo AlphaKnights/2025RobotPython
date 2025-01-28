@@ -24,7 +24,7 @@ class DriveCommand(commands2.Command):
         results = self.limelight.get_results()
 
         if results is None:
-            print('No limelight detected')
+            print('No tag detected')
             self.swerve.setX()
             return
         
@@ -33,11 +33,11 @@ class DriveCommand(commands2.Command):
         tx = results.tx
         ty = results.ty
 
-        print(f'x: {tx}, y: {ty}')
+        # print(f'x: {tx}, y: {ty}')
 
 
         # Keep some between the tag and robot
-        ty = ty - 0.25
+        ty = ty - 0.35
         
         y = -0.1 if tx > 0 else 0.1
         x = 0.1 if ty > 0 else -0.1
@@ -58,10 +58,11 @@ class DriveCommand(commands2.Command):
         
         a = -0.2 if ta > 0 else 0.2
 
-        if abs(a) > 0.01:
+        if abs(ta) > 1:
             self.swerve.drive(0, 0, a, False, False)
             return
         
+        self.swerve.setX()
         print('Already aligned')
         
 

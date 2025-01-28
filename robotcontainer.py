@@ -55,7 +55,7 @@ class RobotContainer:
                     -wpimath.applyDeadband(
                         self.driverController.getRightX(), OIConstants.kDriveDeadband
                     ),
-                self.driverController.getAButtonPressed
+                self.driverController.getAButton
                 ),
             )
 

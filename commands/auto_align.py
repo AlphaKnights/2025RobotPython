@@ -83,7 +83,7 @@ class AutoAlign(commands2.Command):
         tx = results.tx
         ty = results.ty
 
-        ty = ty - 0.25
+        ty = ty - self.goalY
 
 
         # Define margin of error

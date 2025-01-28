@@ -21,6 +21,11 @@ from constants import AutoConstants, DriveConstants
 import swerveutils
 from .maxswervemodule import MAXSwerveModule
 
+from pathplannerlib.auto import AutoBuilder # type: ignore
+from pathplannerlib.controller import PPHolonomicDriveController  # type: ignore
+from pathplannerlib.config import RobotConfig, PIDConstants # type: ignore
+from wpilib import DriverStation
+
 
 class DriveSubsystem(Subsystem):
     """
@@ -78,6 +83,24 @@ class DriveSubsystem(Subsystem):
             ),
         )
 
+        config = RobotConfig.fromGUISettings()
+
+        # Configure the AutoBuilder last
+        AutoBuilder.configure(
+            self.getPose, # Robot pose supplier
+            self.resetPose, # Method to reset odometry (will be called if your auto has a starting pose)
+            self.getCurrentSpeeds, # ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            lambda speeds, feedforwards: self.drive(speeds, False, False), # Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also outputs individual module feedforwards
+            PPHolonomicDriveController( # PPHolonomicController is the built in path following controller for holonomic drive trains
+                PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
+                PIDConstants(5.0, 0.0, 0.0), # Rotation PID constants
+                1,
+            ),
+            config, # The robot configuration
+            self.shouldFlipPath, # Supplier to control path flipping based on alliance color
+            self # Reference to this subsystem to set requirements
+        )
+
     def periodic(self) -> None:
         # Update the odometry in the periodic block
         self.odometry.update(
@@ -114,11 +137,19 @@ class DriveSubsystem(Subsystem):
             pose,
         )
 
+    def resetPose(self, pose: Pose2d) -> None:
+        """Resets the pose of the robot.
+
+        :param pose: The pose to which to set the robot.
+        """
+        self.resetOdometry(pose)
+
     def drive(
         self,
-        xSpeed: float,
-        ySpeed: float,
-        rot: float,
+        # xSpeed: float,
+        # ySpeed: float,
+        # rot: float,
+        speeds: ChassisSpeeds,
         fieldRelative: bool,
         rateLimit: bool,
     ) -> None:
@@ -131,6 +162,10 @@ class DriveSubsystem(Subsystem):
                               field.
         :param rateLimit:     Whether to enable rate limiting for smoother control.
         """
+
+        xSpeed = speeds.vx
+        ySpeed = speeds.vy
+        rot = speeds.omega
 
         xSpeedCommanded = xSpeed
         ySpeedCommanded = ySpeed
@@ -232,9 +267,7 @@ class DriveSubsystem(Subsystem):
 
     def setModuleStates(
         self,
-        desiredStates: typing.Sequence[
-            SwerveModuleState
-        ],
+        desiredStates: typing.Sequence[SwerveModuleState],
     ) -> None:
         """Sets the swerve ModuleStates.
 
@@ -275,10 +308,30 @@ class DriveSubsystem(Subsystem):
         :returns: the robot's heading in degrees, from -180 to 180
         """
         return Rotation2d.fromDegrees(self.gyro.getAngle()).degrees()
+    
+    def getCurrentSpeeds(self) -> ChassisSpeeds:
+        """Returns the current speeds of the robot.
 
+        :returns: The current speeds of the robot
+        """
+        moduleStates = (
+            self.frontLeft.getState(),
+            self.frontRight.getState(),
+            self.rearLeft.getState(),
+            self.rearRight.getState(),
+        )
+
+        return DriveConstants.kDriveKinematics.toChassisSpeeds(moduleStates)
+    
     def getTurnRate(self) -> float:
         """Returns the turn rate of the robot.
 
         :returns: The turn rate of the robot, in degrees per second
         """
         return self.gyro.getRate() * (-1.0 if DriveConstants.kGyroReversed else 1.0)
+
+    def shouldFlipPath(self) -> bool:
+    # Boolean supplier that controls when the path will be mirrored for the red alliance
+    # This will flip the path being followed to the red side of the field.
+    # THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        return DriverStation.getAlliance() == DriverStation.Alliance.kRed

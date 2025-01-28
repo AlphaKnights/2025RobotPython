@@ -1,5 +1,13 @@
 import commands2
 import typing
+
+from wpimath.kinematics import (
+    ChassisSpeeds,
+    SwerveModuleState,
+    SwerveDrive4Kinematics,
+    SwerveDrive4Odometry,
+)
+
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.limelight_subsystem import LimelightSystem
 
@@ -18,7 +26,8 @@ class DriveCommand(commands2.Command):
     def execute(self) -> None:
         align = self.align()
         if not align:
-            self.swerve.drive(self.x(), self.y(), self.rot(), True, True)
+            # self.swerve.drive(self.x(), self.y(), self.rot(), True, True)
+            self.swerve.drive(ChassisSpeeds(self.x(), self.y(), self.rot()), True, True)
             return
         
         results = self.limelight.get_results()
@@ -49,7 +58,8 @@ class DriveCommand(commands2.Command):
             x = 0
 
         if y != 0 or x != 0:
-            self.swerve.drive(x, y, 0, False, False)
+            # self.swerve.drive(x, y, 0, False, False)
+            self.swerve.drive(ChassisSpeeds(x, y, 0), False, False)
             return
 
         ta = results.ta
@@ -59,7 +69,8 @@ class DriveCommand(commands2.Command):
         a = -0.2 if ta > 0 else 0.2
 
         if abs(ta) > 1:
-            self.swerve.drive(0, 0, a, False, False)
+            # self.swerve.drive(0, 0, a, False, False)
+            self.swerve.drive(ChassisSpeeds(0, 0, a), False, False)
             return
         
         self.swerve.setX()
@@ -70,4 +81,5 @@ class DriveCommand(commands2.Command):
         return False
     
     def end(self, interrupted: bool) -> None:
-        self.swerve.drive(0, 0, 0, False, True)
+        # self.swerve.drive(0, 0, 0, False, True)
+        self.swerve.drive(ChassisSpeeds(0, 0, 0), False, True)

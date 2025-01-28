@@ -3,6 +3,12 @@ import typing
 
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
+from wpimath.kinematics import (
+    ChassisSpeeds,
+    SwerveModuleState,
+    SwerveDrive4Kinematics,
+    SwerveDrive4Odometry,
+)
 
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.limelight_subsystem import LimelightSystem
@@ -45,7 +51,9 @@ class AutoAlign(commands2.Command):
             x = 0
 
 
-        self.drive_subsystem.drive(x, y, 0, False, False)
+        # self.drive_subsystem.drive(x, y, 0, False, False)
+        self.drive_subsystem.drive(ChassisSpeeds(x, y, 0), False, False)
+        
 
 
     def isFinished(self) -> bool:

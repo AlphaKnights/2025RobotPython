@@ -3,6 +3,7 @@ import math
 import commands2
 import wpimath
 import wpilib
+from wpilib import SmartDashboard
 
 from commands2 import cmd
 from wpimath.controller import HolonomicDriveController
@@ -17,6 +18,9 @@ from subsystems.limelight_subsystem import LimelightSystem
 from commands.auto_rotate import AutoRotate
 from commands.drivecommand import DriveCommand
 
+from pathplannerlib.auto import AutoBuilder # type: ignore
+from pathplannerlib.auto import NamedCommands # type: ignore
+
 class RobotContainer:
     """
     This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -29,6 +33,10 @@ class RobotContainer:
         # The robot's subsystems
         self.robotDrive = DriveSubsystem()
         self.limelight = LimelightSystem()
+        
+        self.autoChooser = AutoBuilder.buildAutoChooser()
+
+        SmartDashboard.putData("Auto Chooser", self.autoChooser)
 
         # The driver's controller
         self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
@@ -142,4 +150,6 @@ class RobotContainer:
 
         # https://github.com/robotpy/robotpy-rev/tree/384ca50b2ede3ab44e09f0c12b8c5db33dff7c9e/examples/maxswerve
 
-        return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))
+        # return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))
+
+        return self.autoChooser.getSelected()

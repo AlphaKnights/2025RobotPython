@@ -17,6 +17,8 @@ from subsystems.limelight_subsystem import LimelightSystem
 from commands.auto_rotate import AutoRotate
 from commands.drivecommand import DriveCommand
 
+
+
 class RobotContainer:
     """
     This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -140,4 +142,4 @@ class RobotContainer:
 
         # https://github.com/robotpy/robotpy-rev/tree/384ca50b2ede3ab44e09f0c12b8c5db33dff7c9e/examples/maxswerve
 
-        return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))
+        return AutoAlign(self.robotDrive, self.limelight, 0.25, 0).andThen(AutoRotate(self.robotDrive, self.limelight))

@@ -143,4 +143,4 @@ class AutoConstants:
 class AlignConstants:
     kMaxNormalizedSpeed = 0.1
     kAlignDeadzone = 0.01 # centimeters
-    kDistToSlow = 2.0 #meters away to start to slow down
+    kDistToSlow = 0.1 #meters away to start to slow down

@@ -40,8 +40,8 @@ class AutoAlign(commands2.Command):
 
 
         # Keep some between the tag and robot
-        ty = ty + self.goalY
-        tx = tx + self.goalY
+        ty = ty - self.goalY
+        tx = tx + self.goalX
 
         ax = abs(tx)
         ay = abs(ty)
@@ -84,10 +84,11 @@ class AutoAlign(commands2.Command):
         ty = results.ty
 
         ty = ty - self.goalY
+        tx = tx + self.goalX
 
 
         # Define margin of error
-        margin_of_error = 0.01
+        margin_of_error = AlignConstants.kAlignDeadzone
 
         # Check if the tag is within the margin of error
         return abs(tx) < margin_of_error and abs(ty) < margin_of_error

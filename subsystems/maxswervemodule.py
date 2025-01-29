@@ -1,104 +1,108 @@
-from rev import SparkMax, SparkAbsoluteEncoder, SparkClosedLoopController
+from rev import SparkMax, ClosedLoopConfig, EncoderConfig, SparkBaseConfig
 from wpimath.geometry import Rotation2d
 from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
+
 from constants import ModuleConstants
 
 class MAXSwerveModule:
-    def __init__(self, drivingCANId: int, turningCANId: int, chassisAngularOffset: float) -> None:
-        """Constructs a MAXSwerveModule using REVLib 2025 configuration system"""
-        self.chassisAngularOffset = chassisAngularOffset
-        self.desiredState = SwerveModuleState(0.0, Rotation2d())
-
-        # Initialize motors with new class names :cite[4]
-        self.drivingSpark = SparkMax(drivingCANId, SparkMax.MotorType.kBrushless)
-        self.turningSpark = SparkMax(turningCANId, SparkMax.MotorType.kBrushless)
-
-        # Create configuration objects :cite[1]
-        driving_config = SparkMaxConfig()
-        turning_config = SparkMaxConfig()
-
-        # Configure driving motor
-        driving_config.idleMode(ModuleConstants.kDrivingMotorIdleMode)
-        driving_config.smartCurrentLimit(ModuleConstants.kDrivingMotorCurrentLimit)
-        driving_config.closedLoop.pid(
-            ModuleConstants.kDrivingP,
-            ModuleConstants.kDrivingI,
-            ModuleConstants.kDrivingD
-        ).ff(ModuleConstants.kDrivingFF)
-        driving_config.outputRange(
-            ModuleConstants.kDrivingMinOutput,
-            ModuleConstants.kDrivingMaxOutput
-        )
-
-        # Configure turning motor
-        turning_config.idleMode(ModuleConstants.kTurningMotorIdleMode)
-        turning_config.smartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit)
-        turning_config.closedLoop.pid(
-            ModuleConstants.kTurningP,
-            ModuleConstants.kTurningI,
-            ModuleConstants.kTurningD
-        ).ff(ModuleConstants.kTurningFF)
-        turning_config.outputRange(
-            ModuleConstants.kTurningMinOutput,
-            ModuleConstants.kTurningMaxOutput
-        )
-        turning_config.closedLoop.positionWrapping(
-            minInput=ModuleConstants.kTurningEncoderPositionPIDMinInput,
-            maxInput=ModuleConstants.kTurningEncoderPositionPIDMaxInput
-        )
-
-        # Apply configurations :cite[1]
-        self.drivingSpark.configure(driving_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters)
-        self.turningSpark.configure(turning_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters)
-
-        # Get encoders
-        self.drivingEncoder = self.drivingSpark.getEncoder()
-        self.turningEncoder = self.turningSpark.getAbsoluteEncoder()
-
-        # Configure encoder conversions :cite[4]
-        self.drivingEncoder.setPositionConversionFactor(ModuleConstants.kDrivingEncoderPositionFactor)
-        self.drivingEncoder.setVelocityConversionFactor(ModuleConstants.kDrivingEncoderVelocityFactor)
+    def __init__(
+            self, drivingCANId: int, turningCANId: int, chassisAngularOffset: float
+    ) -> None:
         
-        self.turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor)
-        self.turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor)
-        self.turningEncoder.setInverted(ModuleConstants.kTurningEncoderInverted)
+        self.desiredState = SwerveModuleState(0.0, Rotation2d())
+        self.chassisAngularOffset = chassisAngularOffset
 
-        # Get closed-loop controllers :cite[4]
-        self.drivingPID = self.drivingSpark.getClosedLoopController()
-        self.turningPID = self.turningSpark.getClosedLoopController()
+        self.driving_motor = SparkMax(drivingCANId, SparkMax.MotorType.kBrushless)
+        self.turning_motor = SparkMax(turningCANId, SparkMax.MotorType.kBrushless)
 
-        # Initialize positions
-        self.desiredState.angle = Rotation2d(self.turningEncoder.getPosition())
-        self.drivingEncoder.setPosition(0)
+        self.driving_encoder = self.driving_motor.getEncoder()
+        self.turning_encoder = self.turning_motor.getAbsoluteEncoder()
+
+        self.driving_PID_controller = self.driving_motor.getClosedLoopController()
+        self.turning_PID_controller = self.turning_motor.getClosedLoopController()
+
+        self.turning_motor.setInverted(ModuleConstants.kTurningEncoderInverted)
+
+        driving_motor_config = SparkBaseConfig() 
+        driving_motor_config.setIdleMode(ModuleConstants.kDrivingMotorIdleMode) 
+        driving_motor_config.smartCurrentLimit(ModuleConstants.kDrivingMotorCurrentLimit)
+
+        turning_motor_config = SparkBaseConfig() 
+        turning_motor_config.setIdleMode(ModuleConstants.kTurningMotorIdleMode)
+        turning_motor_config.smartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit)
+
+
+
+        driving_motor_encoder_config = EncoderConfig()
+        driving_motor_encoder_config.positionConversionFactor(ModuleConstants.kDrivingEncoderPositionFactor)
+        driving_motor_encoder_config.velocityConversionFactor(ModuleConstants.kDrivingEncoderVelocityFactor)
+
+        driving_motor_config.apply(driving_motor_encoder_config)
+
+
+        turning_motor_encoder_config = EncoderConfig()
+        turning_motor_encoder_config.positionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor)
+        turning_motor_encoder_config.velocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor)
+        # turning_motor_encoder_config.inverted(ModuleConstants.kTurningEncoderInverted)
+
+        turning_motor_config.apply(turning_motor_encoder_config)
+
+
+
+        driving_motor_PID_config = ClosedLoopConfig()
+        driving_motor_PID_config.P(ModuleConstants.kDrivingP)
+        driving_motor_PID_config.I(ModuleConstants.kDrivingI)
+        driving_motor_PID_config.D(ModuleConstants.kDrivingD)
+        driving_motor_PID_config.velocityFF(ModuleConstants.kDrivingFF)
+        driving_motor_PID_config.outputRange(ModuleConstants.kDrivingMinOutput, ModuleConstants.kDrivingMaxOutput)
+        
+        driving_motor_config.apply(driving_motor_PID_config)
+
+
+
+        turning_motor_PID_config = ClosedLoopConfig()
+        turning_motor_PID_config.positionWrappingEnabled(True)
+        turning_motor_PID_config.positionWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput)
+        turning_motor_PID_config.positionWrappingMaxInput(ModuleConstants.kTurningEncoderPositionPIDMaxInput)
+
+        turning_motor_PID_config.P(ModuleConstants.kTurningP)
+        turning_motor_PID_config.I(ModuleConstants.kTurningI)
+        turning_motor_PID_config.D(ModuleConstants.kTurningD)
+        turning_motor_PID_config.velocityFF(ModuleConstants.kTurningFF)
+        turning_motor_PID_config.outputRange(ModuleConstants.kTurningMinOutput, ModuleConstants.kTurningMaxOutput)
+
+        turning_motor_config.apply(turning_motor_PID_config)
+
+        self.driving_motor.configure(driving_motor_config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
+        self.turning_motor.configure(turning_motor_config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
+
+        self.desiredState.angle = Rotation2d(self.turning_encoder.getPosition())
+        self.driving_encoder.setPosition(0)
 
     def getState(self) -> SwerveModuleState:
         return SwerveModuleState(
-            self.drivingEncoder.getVelocity(),
-            Rotation2d(self.turningEncoder.getPosition() - self.chassisAngularOffset)
+            self.driving_encoder.getVelocity(),
+            Rotation2d(self.turning_encoder.getPosition() - self.chassisAngularOffset)
         )
-
+    
     def getPosition(self) -> SwerveModulePosition:
         return SwerveModulePosition(
-            self.drivingEncoder.getPosition(),
-            Rotation2d(self.turningEncoder.getPosition() - self.chassisAngularOffset)
+            self.driving_encoder.getPosition(),
+            Rotation2d(self.turning_encoder.getPosition() - self.chassisAngularOffset)
         )
-
+    
     def setDesiredState(self, desiredState: SwerveModuleState) -> None:
-        correctedState = SwerveModuleState(
-            desiredState.speed,
-            desiredState.angle + Rotation2d(self.chassisAngularOffset)
-        )
-        
-        optimizedState = SwerveModuleState.optimize(
-            correctedState,
-            Rotation2d(self.turningEncoder.getPosition())
-        )
+        correctedDesiredState = SwerveModuleState()
+        correctedDesiredState.speed = desiredState.speed
+        correctedDesiredState.angle = desiredState.angle + Rotation2d(self.chassisAngularOffset)
 
-        # Set references using new control types :cite[4]
-        self.drivingPID.setReference(optimizedState.speed, ControlType.kVelocity)
-        self.turningPID.setReference(optimizedState.angle.radians(), ControlType.kPosition)
+        correctedDesiredState.optimize(Rotation2d(self.turning_encoder.getPosition()))
 
-        self.desiredState = desiredState
+        self.driving_PID_controller.setReference(correctedDesiredState.speed, SparkMax.ControlType.kVelocity)
+
+        self.turning_PID_controller.setReference(correctedDesiredState.angle.radians(), SparkMax.ControlType.kPosition)
+
+        self.desiredState = correctedDesiredState
 
     def resetEncoders(self) -> None:
-        self.drivingEncoder.setPosition(0)
+        self.driving_encoder.setPosition(0)

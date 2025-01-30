@@ -8,8 +8,10 @@ def main():
     CS.enableLogging()
     # Get the UsbCamera from CameraServer
     camera = CS.startAutomaticCapture()
+    camera2 = CS.startAutomaticCapture()
     # Set the resolution
     camera.setResolution(640, 480)
+    camera2.setResolution(640, 480)
 
     # Get a CvSink. This will capture images from the camera
     cvSink = CS.getVideo()

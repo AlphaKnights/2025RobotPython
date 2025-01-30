@@ -43,13 +43,12 @@ class ElevatorSubsystem(Subsystem):
             self.elevatorMotorL.stopMotor()
     
     def move(self, speed: float) -> None:
-        self.elevatorMotorL.set(speed)
-        
-        if (not self.upperLimit.get() and self.elevatorMotorL.get() > 0):
+        if (not self.upperLimit.get() and speed > 0):
             self.elevatorMotorL.stopMotor()
-        
-        if (not self.lowerLimit.get() and self.elevatorMotorL.get() < 0):
+        elif (not self.lowerLimit.get() and speed < 0):
             self.elevatorMotorL.stopMotor()
+        else:
+            self.elevatorMotorL.set(speed)
 
     def stop(self) -> None:
         self.elevatorMotorL.stopMotor()

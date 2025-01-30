@@ -21,7 +21,7 @@ class MAXSwerveModule:
         self.driving_PID_controller = self.driving_motor.getClosedLoopController()
         self.turning_PID_controller = self.turning_motor.getClosedLoopController()
 
-        self.turning_motor.setInverted(ModuleConstants.kTurningEncoderInverted)
+        # self.turning_motor.setInverted(ModuleConstants.kTurningEncoderInverted)
 
         driving_motor_config = SparkBaseConfig() 
         driving_motor_config.setIdleMode(ModuleConstants.kDrivingMotorIdleMode) 

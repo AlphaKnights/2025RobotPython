@@ -122,6 +122,10 @@ class ModuleConstants:
 class OIConstants:
     kDriverControllerPort = 1
     kDriveDeadband = 0.2
+
+    kButtonBoardPort = 0
+    kElevatorUpButton = 0
+    kElevatorDownButton = 1
     
 
 class AutoConstants:

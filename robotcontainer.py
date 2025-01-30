@@ -33,6 +33,9 @@ class RobotContainer:
         # The driver's controller
         self.driverController = commands2.button.CommandXboxController(OIConstants.kDriverControllerPort)
 
+        # button boards
+        self.buttonBoard = commands2.button.CommandJoystick(OIConstants.kButtonBoardPort)
+
         # Configure the button bindings
         self.configureButtonBindings()
 
@@ -63,8 +66,8 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
-        self.driverController.a().whileTrue(ElevatorUpCommand(self.elevator))
-        self.driverController.b().whileTrue(ElevatorDownCommand(self.elevator))
+        self.buttonBoard.button(OIConstants.kElevatorUpButton).whileTrue(ElevatorUpCommand(self.elevator))
+        self.driverController.button(OIConstants.kElevatorDownButton).whileTrue(ElevatorDownCommand(self.elevator))
 
 
 

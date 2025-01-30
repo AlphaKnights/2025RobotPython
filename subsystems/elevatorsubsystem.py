@@ -31,21 +31,25 @@ class ElevatorSubsystem(Subsystem):
         self.elevatorMotorL.burnFlash()
         self.elevatorMotorR.burnFlash()
 
-        #self.upperLimit = wpilib.DigitalInput(ElevatorConstants.kUpperLimit)
-        #self.lowerLimit = wpilib.DigitalInput(ElevatorConstants.kLowerLimit)
+        self.upperLimit = wpilib.DigitalInput(ElevatorConstants.kUpperLimit)
+        self.lowerLimit = wpilib.DigitalInput(ElevatorConstants.kLowerLimit)
 
     def periodic(self) -> None:
         # Timer/Encoder Limits -> Limit Switches -> Physical Barrier
-        # if (self.upperLimit.get() and self.elevatorMotorL.get() > 0):
-        #     self.elevatorMotorL.stopMotor()
+        if (not self.upperLimit.get() and self.elevatorMotorL.get() > 0):
+            self.elevatorMotorL.stopMotor()
         
-        # if (self.lowerLimit.get() and self.elevatorMotorL.get() < 0):
-        #     self.elevatorMotorL.stopMotor()
-        pass
+        if (not self.lowerLimit.get() and self.elevatorMotorL.get() < 0):
+            self.elevatorMotorL.stopMotor()
     
     def move(self, speed: float) -> None:
         self.elevatorMotorL.set(speed)
-
+        
+        if (not self.upperLimit.get() and self.elevatorMotorL.get() > 0):
+            self.elevatorMotorL.stopMotor()
+        
+        if (not self.lowerLimit.get() and self.elevatorMotorL.get() < 0):
+            self.elevatorMotorL.stopMotor()
 
     def stop(self) -> None:
         self.elevatorMotorL.stopMotor()

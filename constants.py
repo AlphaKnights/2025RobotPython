@@ -142,5 +142,5 @@ class AutoConstants:
 class ElevatorConstants:
     kLeftMotorCanId = 31
     kRightMotorCanId = 30
-    kUpperLimit = 0
-    kLowerLimit = 0
+    kUpperLimit = 1
+    kLowerLimit = 2

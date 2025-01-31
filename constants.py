@@ -124,8 +124,8 @@ class OIConstants:
     kDriveDeadband = 0.2
 
     kButtonBoardPort = 0
-    kElevatorUpButton = 0
-    kElevatorDownButton = 1
+    kElevatorUpButton = 12
+    kElevatorDownButton = 11
     
 
 class AutoConstants:

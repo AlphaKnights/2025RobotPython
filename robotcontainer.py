@@ -67,7 +67,7 @@ class RobotContainer:
         and then passing it to a JoystickButton.
         """
         self.buttonBoard.button(OIConstants.kElevatorUpButton).whileTrue(ElevatorUpCommand(self.elevator))
-        self.driverController.button(OIConstants.kElevatorDownButton).whileTrue(ElevatorDownCommand(self.elevator))
+        self.buttonBoard.button(OIConstants.kElevatorDownButton).whileTrue(ElevatorDownCommand(self.elevator))
 
 
 

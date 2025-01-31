@@ -36,13 +36,15 @@ class MAXSwerveModule:
         turningConfig.IdleMode(int(ModuleConstants.kTurningMotorIdleMode))
         turningConfig.smartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit)
 
-        turningConfig.encoder.positionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor)
-        turningConfig.encoder.velocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor)
+        turningConfig.absoluteEncoder.inverted(True)
+        turningConfig.absoluteEncoder.positionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor)
+        turningConfig.absoluteEncoder.velocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor)
 
         turningConfig.closedLoop.setFeedbackSensor(ClosedLoopConfig.FeedbackSensor.kAbsoluteEncoder)
         turningConfig.closedLoop.pid(ModuleConstants.kTurningP, ModuleConstants.kTurningI, ModuleConstants.kTurningD)
+        turningConfig.closedLoop.outputRange(-1, 1)
         turningConfig.closedLoop.positionWrappingEnabled(True)
-        turningConfig.closedLoop.positionWrappingInputRange(ModuleConstants.kTurningEncoderPositionPIDMinInput, ModuleConstants.kTurningEncoderPositionPIDMaxInput)
+        turningConfig.closedLoop.positionWrappingInputRange(0, ModuleConstants.kTurningEncoderPositionPIDMaxInput)
 
         self.drive_motor.configure(drivingConfig, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
         self.turn_motor.configure(turningConfig, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
@@ -61,7 +63,7 @@ class MAXSwerveModule:
         correctedState = SwerveModuleState()
         correctedState.speed = desiredState.speed
         correctedState.angle = Rotation2d(desiredState.angle.radians() + self.chassisAngularOffset)
-
+        
         correctedState.optimize(Rotation2d(self.turn_encoder.getPosition()))
 
         self.drive_PID_controller.setReference(correctedState.speed, SparkMax.ControlType.kVelocity)

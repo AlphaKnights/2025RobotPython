@@ -26,7 +26,6 @@ class DriveCommand(commands2.Command):
     def execute(self) -> None:
         align = self.align()
         if not align:
-            # self.swerve.drive(self.x(), self.y(), self.rot(), True, True)
             self.swerve.drive(ChassisSpeeds(self.x(), self.y(), self.rot()), True, True)
             return
         

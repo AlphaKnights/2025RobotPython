@@ -163,18 +163,17 @@ class DriveSubsystem(Subsystem):
         :param rateLimit:     Whether to enable rate limiting for smoother control.
         """
 
-        xSpeed = speeds.vx
-        ySpeed = speeds.vy
+        xSpeed = speeds.vx * DriveConstants.kMaxSpeedMetersPerSecond
+        ySpeed = speeds.vy * DriveConstants.kMaxSpeedMetersPerSecond
         rot = speeds.omega
-
-        xSpeedCommanded = xSpeed
-        ySpeedCommanded = ySpeed
 
         swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
             ChassisSpeeds(xSpeed, ySpeed, rot)
         )
 
         swerveModuleStates = SwerveDrive4Kinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond)
+
+        print(swerveModuleStates[0].speed)
 
         self.frontLeft.setDesiredState(swerveModuleStates[0])
         self.frontRight.setDesiredState(swerveModuleStates[1])

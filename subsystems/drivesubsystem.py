@@ -4,6 +4,7 @@ from typing import Callable, Sequence
 
 import wpimath.kinematics
 import wpilib
+from navx import AHRS 
 
 from commands2 import Subsystem
 from wpimath.filter import SlewRateLimiter
@@ -60,7 +61,8 @@ class DriveSubsystem(Subsystem):
         )
 
         # The gyro sensor
-        self.gyro = wpilib.ADIS16448_IMU()
+        self.gyro = AHRS(AHRS.NavXComType.kMXP_UART)
+        # self.gyro = wpilib.ADXRS450_Gyro()
 
         # Slew rate filter variables for controlling lateral acceleration
         self.currentRotation = 0.0
@@ -173,7 +175,7 @@ class DriveSubsystem(Subsystem):
 
         swerveModuleStates = SwerveDrive4Kinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond)
 
-        print(swerveModuleStates[0].speed)
+        print(self.gyro.getAngle())
 
         self.frontLeft.setDesiredState(swerveModuleStates[0])
         self.frontRight.setDesiredState(swerveModuleStates[1])

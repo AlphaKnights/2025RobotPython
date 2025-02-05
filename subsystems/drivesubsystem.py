@@ -175,7 +175,6 @@ class DriveSubsystem(Subsystem):
 
         swerveModuleStates = SwerveDrive4Kinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond)
 
-        print(self.gyro.getAngle())
 
         self.frontLeft.setDesiredState(swerveModuleStates[0])
         self.frontRight.setDesiredState(swerveModuleStates[1])

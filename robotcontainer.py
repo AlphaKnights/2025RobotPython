@@ -20,6 +20,7 @@ from commands.drivecommand import DriveCommand
 
 from pathplannerlib.auto import AutoBuilder # type: ignore
 from pathplannerlib.auto import NamedCommands # type: ignore
+from pathplannerlib.auto import PathPlannerAuto # type: ignore
 
 class RobotContainer:
     """
@@ -34,9 +35,9 @@ class RobotContainer:
         self.robotDrive = DriveSubsystem()
         self.limelight = LimelightSystem()
         
-        # self.autoChooser = AutoBuilder.buildAutoChooser()
+        self.autoChooser = AutoBuilder.buildAutoChooser()
 
-        # SmartDashboard.putData("Auto Chooser", self.autoChooser)
+        SmartDashboard.putData("Auto Chooser", self.autoChooser)
 
         # The driver's controller
         self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
@@ -150,6 +151,7 @@ class RobotContainer:
 
         # https://github.com/robotpy/robotpy-rev/tree/384ca50b2ede3ab44e09f0c12b8c5db33dff7c9e/examples/maxswerve
 
-        return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))
+        # return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))
 
-        # return self.autoChooser.getSelected()
+        return self.autoChooser.getSelected()
+        # return PathPlannerAuto('New Auto')

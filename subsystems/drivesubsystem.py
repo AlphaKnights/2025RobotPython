@@ -61,7 +61,7 @@ class DriveSubsystem(Subsystem):
         )
 
         # The gyro sensor
-        self.gyro = AHRS(AHRS.NavXComType.kMXP_UART)
+        self.gyro = AHRS(AHRS.NavXComType.kMXP_SPI)
         # self.gyro = wpilib.ADXRS450_Gyro()
 
         # Slew rate filter variables for controlling lateral acceleration

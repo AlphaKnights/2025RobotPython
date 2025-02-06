@@ -61,7 +61,7 @@ class DriveSubsystem(Subsystem):
         )
 
         # The gyro sensor
-        self.gyro = AHRS(AHRS.NavXComType.kMXP_UART)
+        self.gyro = AHRS(AHRS.NavXComType.kMXP_SPI)
         # self.gyro = wpilib.ADXRS450_Gyro()
 
         # Slew rate filter variables for controlling lateral acceleration
@@ -162,7 +162,8 @@ class DriveSubsystem(Subsystem):
         :param rateLimit:     Whether to enable rate limiting for smoother control.
         """
         if fieldRelative:
-            swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, Rotation2d(self.gyro.getAngle)))
+            print(self.gyro.getAngle())
+            swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, Rotation2d.fromDegrees(-self.gyro.getAngle())))
         else:
             swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds)
 

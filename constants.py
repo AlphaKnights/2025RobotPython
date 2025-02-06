@@ -124,6 +124,8 @@ class ModuleConstants:
 class OIConstants:
     kDriverControllerPort = 1
     kDriveDeadband = 0.2
+
+    kJoystickDrive = True
     
 
 class AutoConstants:

@@ -38,35 +38,61 @@ class RobotContainer:
         self.autoChooser = AutoBuilder.buildAutoChooser()
 
         SmartDashboard.putData("Auto Chooser", self.autoChooser)
-
+        joystickDrive = False
+        if wpilib.Joystick(OIConstants.kDriverControllerPort).getName() == "Logitech Extreme 3D":
+            joystickDrive = True
         # The driver's controller
-        self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
+        if joystickDrive:
+            self.driverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
+        else:
+            self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
 
         # Configure the button bindings
         self.configureButtonBindings()
 
         # Configure default commands
-        self.robotDrive.setDefaultCommand(
-            # The left stick controls translation of the robot.
-            # Turning is controlled by the X axis of the right stick.
-            DriveCommand(
-                self.robotDrive,
-                self.limelight,
-                lambda:
-                    -wpimath.applyDeadband(
-                        self.driverController.getLeftY(), OIConstants.kDriveDeadband
+        if joystickDrive:
+            self.robotDrive.setDefaultCommand(
+                DriveCommand(
+                    self.robotDrive,
+                    self.limelight,
+                    lambda:
+                        -wpimath.applyDeadband(
+                            self.driverController.getY() * (self.driverController.getRawAxis(3) + 1)/2, OIConstants.kDriveDeadband
+                        ),
+                    lambda:
+                        -wpimath.applyDeadband(
+                            self.driverController.getX() * (self.driverController.getRawAxis(3) + 1)/2, OIConstants.kDriveDeadband
+                        ),
+                    lambda:
+                        -wpimath.applyDeadband(
+                            self.driverController.getZ() * (self.driverController.getRawAxis(3) + 1)/2, OIConstants.kDriveDeadband
+                        ),
+                    self.driverController.getTrigger
                     ),
-                lambda:
-                    -wpimath.applyDeadband(
-                        self.driverController.getLeftX(), OIConstants.kDriveDeadband
+                )
+        else:
+            self.robotDrive.setDefaultCommand(
+                # The left stick controls translation of the robot.
+                # Turning is controlled by the X axis of the right stick.
+                DriveCommand(
+                    self.robotDrive,
+                    self.limelight,
+                    lambda:
+                        -wpimath.applyDeadband(
+                            self.driverController.getLeftY(), OIConstants.kDriveDeadband
+                        ),
+                    lambda:
+                        -wpimath.applyDeadband(
+                            self.driverController.getLeftX(), OIConstants.kDriveDeadband
+                        ),
+                    lambda:
+                        -wpimath.applyDeadband(
+                            self.driverController.getRawAxis(2), OIConstants.kDriveDeadband
+                        ),
+                    self.driverController.getAButton
                     ),
-                lambda:
-                    -wpimath.applyDeadband(
-                        self.driverController.getRawAxis(2), OIConstants.kDriveDeadband
-                    ),
-                self.driverController.getAButton
-                ),
-            )
+                )
 
     def configureButtonBindings(self) -> None:
         """

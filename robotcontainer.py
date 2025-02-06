@@ -14,6 +14,7 @@ from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 from commands.auto_align import AutoAlign
 from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
+
 from subsystems.limelight_subsystem import LimelightSystem
 from commands.auto_rotate import AutoRotate
 from commands.drivecommand import DriveCommand
@@ -33,6 +34,7 @@ class RobotContainer:
     def __init__(self) -> None:
         # The robot's subsystems
         self.robotDrive = DriveSubsystem()
+
         self.limelight = LimelightSystem()
         
         self.autoChooser = AutoBuilder.buildAutoChooser()

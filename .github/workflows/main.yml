@@ -22,7 +22,7 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
-          python3 -m pip install "robotpy==2025.2.1.0"
+          python3 -m pip install robotpy
           python3 -m robotpy sync
 
       - name: Run mypy

@@ -24,13 +24,13 @@ class MAXSwerveModule:
         drivingConfig.IdleMode(int(ModuleConstants.kDrivingMotorIdleMode)) 
         drivingConfig.smartCurrentLimit(ModuleConstants.kDrivingMotorCurrentLimit)
 
-        drivingConfig.encoder.positionConversionFactor(ModuleConstants.kDrivingEncoderPositionFactor)
-        drivingConfig.encoder.velocityConversionFactor(ModuleConstants.kDrivingEncoderVelocityFactor)
+        drivingConfig.encoder.positionConversionFactor(ModuleConstants.kDrivingEncoderPositionFactor) \
+            .velocityConversionFactor(ModuleConstants.kDrivingEncoderVelocityFactor)
 
-        drivingConfig.closedLoop.setFeedbackSensor(ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder)
-        drivingConfig.closedLoop.pid(ModuleConstants.kDrivingP, ModuleConstants.kDrivingI, ModuleConstants.kDrivingD)
-        drivingConfig.closedLoop.velocityFF(ModuleConstants.kDrivingFF)
-        drivingConfig.closedLoop.outputRange(ModuleConstants.kDrivingMinOutput, ModuleConstants.kDrivingMaxOutput)
+        drivingConfig.closedLoop.setFeedbackSensor(ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder) \
+            .pid(ModuleConstants.kDrivingP, ModuleConstants.kDrivingI, ModuleConstants.kDrivingD) \
+            .velocityFF(ModuleConstants.kDrivingFF) \
+            .outputRange(ModuleConstants.kDrivingMinOutput, ModuleConstants.kDrivingMaxOutput) 
 
 
         turningConfig = SparkMaxConfig()
@@ -38,15 +38,15 @@ class MAXSwerveModule:
         turningConfig.IdleMode(int(ModuleConstants.kTurningMotorIdleMode))
         turningConfig.smartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit)
 
-        turningConfig.absoluteEncoder.inverted(True)
-        turningConfig.absoluteEncoder.positionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor)
-        turningConfig.absoluteEncoder.velocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor)
+        turningConfig.absoluteEncoder.inverted(True) \
+            .positionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor) \
+            .velocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor)
 
-        turningConfig.closedLoop.setFeedbackSensor(ClosedLoopConfig.FeedbackSensor.kAbsoluteEncoder)
-        turningConfig.closedLoop.pid(ModuleConstants.kTurningP, ModuleConstants.kTurningI, ModuleConstants.kTurningD)
-        turningConfig.closedLoop.outputRange(-1, 1)
-        turningConfig.closedLoop.positionWrappingEnabled(True)
-        turningConfig.closedLoop.positionWrappingInputRange(0, ModuleConstants.kTurningEncoderPositionPIDMaxInput)
+        turningConfig.closedLoop.setFeedbackSensor(ClosedLoopConfig.FeedbackSensor.kAbsoluteEncoder) \
+            .pid(ModuleConstants.kTurningP, ModuleConstants.kTurningI, ModuleConstants.kTurningD) \
+            .outputRange(-1, 1) \
+            .positionWrappingEnabled(True) \
+            .positionWrappingInputRange(0, ModuleConstants.kTurningEncoderPositionPIDMaxInput)
 
         self.drive_motor.configure(drivingConfig, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
         self.turn_motor.configure(turningConfig, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)

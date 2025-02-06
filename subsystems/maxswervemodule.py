@@ -29,6 +29,8 @@ class MAXSwerveModule:
 
         drivingConfig.closedLoop.setFeedbackSensor(ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder)
         drivingConfig.closedLoop.pid(ModuleConstants.kDrivingP, ModuleConstants.kDrivingI, ModuleConstants.kDrivingD)
+        drivingConfig.closedLoop.velocityFF(ModuleConstants.kDrivingFF)
+        drivingConfig.closedLoop.outputRange(ModuleConstants.kDrivingMinOutput, ModuleConstants.kDrivingMaxOutput)
 
 
         turningConfig = SparkMaxConfig()

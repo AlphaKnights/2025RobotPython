@@ -18,7 +18,7 @@ from wpimath.kinematics import (
     SwerveDrive4Odometry,
 )
 
-from constants import AutoConstants, DriveConstants
+from constants import AutoConstants, DriveConstants, ModuleConstants
 import swerveutils
 from .maxswervemodule import MAXSwerveModule
 
@@ -94,8 +94,8 @@ class DriveSubsystem(Subsystem):
             self.getCurrentSpeeds, # ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             lambda speeds, feedforwards: self.drive(speeds, False, False), # Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also outputs individual module feedforwards
             PPHolonomicDriveController( # PPHolonomicController is the built in path following controller for holonomic drive trains
-                PIDConstants(5.0, 0.0, 0.0), # Translation PID constants
-                PIDConstants(5.0, 0.0, 0.0), # Rotation PID constants
+                PIDConstants(5, 0, 0), # Translation PID constants
+                PIDConstants(5, 0, 0), # Rotation PID constants
                 1,
             ),
             config, # The robot configuration
@@ -155,6 +155,7 @@ class DriveSubsystem(Subsystem):
         fieldRelative: bool,
         rateLimit: bool,
     ) -> None:
+        # print(speeds.vx, " ", speeds.vy)
         """Method to drive the robot using joystick info.
 
         :param xSpeed:        Speed of the robot in the x direction (forward).
@@ -167,13 +168,17 @@ class DriveSubsystem(Subsystem):
 
         xSpeed = speeds.vx * DriveConstants.kMaxSpeedMetersPerSecond
         ySpeed = speeds.vy * DriveConstants.kMaxSpeedMetersPerSecond
-        rot = speeds.omega
+        rot = speeds.omega * DriveConstants.kMaxAngularSpeed
 
         swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
             ChassisSpeeds(xSpeed, ySpeed, rot)
         )
 
-        swerveModuleStates = SwerveDrive4Kinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond)
+        swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+            speeds
+        )
+
+        # swerveModuleStates = SwerveDrive4Kinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond)
 
 
         self.frontLeft.setDesiredState(swerveModuleStates[0])

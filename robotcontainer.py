@@ -62,7 +62,7 @@ class RobotContainer:
                     ),
                 lambda:
                     -wpimath.applyDeadband(
-                        self.driverController.getRightX(), OIConstants.kDriveDeadband
+                        self.driverController.getRawAxis(2), OIConstants.kDriveDeadband
                     ),
                 self.driverController.getAButton
                 ),

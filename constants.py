@@ -14,7 +14,8 @@ from wpimath.geometry import Translation2d
 from wpimath.kinematics import SwerveDrive4Kinematics
 from wpimath.trajectory import TrapezoidProfileRadians
 
-from rev import CANSparkMax
+# from rev import CANSparkMax
+from rev import SparkMax, SparkBaseConfig
 
 
 class NeoMotorConstants:
@@ -24,7 +25,7 @@ class NeoMotorConstants:
 class DriveConstants:
     # Driving Parameters - Note that these are not the maximum capable speeds of
     # the robot, rather the allowed maximum speeds
-    kMaxSpeedMetersPerSecond = 4.8
+    kMaxSpeedMetersPerSecond = 7
     kMaxAngularSpeed = math.tau  # radians per second
 
     kDirectionSlewRate = 1.2  # radians per second
@@ -47,9 +48,10 @@ class DriveConstants:
 
     # Angular offsets of the modules relative to the chassis in radians
     kFrontLeftChassisAngularOffset = math.radians(-120) #(-60 - 45)*(math.pi/180)
-    kFrontRightChassisAngularOffset = 0#(43-180 - 45)*(math.pi/180)
-    kBackLeftChassisAngularOffset = 0#(45 - 45)*(math.pi/180)
-    kBackRightChassisAngularOffset = math.radians(70)#(270 - 45)*(math.pi/180)
+    kFrontRightChassisAngularOffset = math.radians(-25)
+    kBackLeftChassisAngularOffset = math.radians(-205)
+    kBackRightChassisAngularOffset = math.radians(70)
+
 
     # SPARK MAX CAN IDs
     kFrontLeftDrivingCanId = 32
@@ -112,8 +114,8 @@ class ModuleConstants:
     kTurningMinOutput = -1
     kTurningMaxOutput = 1
 
-    kDrivingMotorIdleMode = CANSparkMax.IdleMode.kBrake
-    kTurningMotorIdleMode = CANSparkMax.IdleMode.kBrake
+    kDrivingMotorIdleMode = SparkBaseConfig.IdleMode.kBrake
+    kTurningMotorIdleMode = SparkBaseConfig.IdleMode.kBrake
 
     kDrivingMotorCurrentLimit = 50  # amp
     kTurningMotorCurrentLimit = 20  # amp
@@ -121,12 +123,12 @@ class ModuleConstants:
 
 class OIConstants:
     kDriverControllerPort = 1
-    kDriveDeadband = 0.025
+    kDriveDeadband = 0.2
     
 
 class AutoConstants:
-    kMaxSpeedMetersPerSecond = 3
-    kMaxAccelerationMetersPerSecondSquared = 3
+    kMaxSpeedMetersPerSecond = 10
+    kMaxAccelerationMetersPerSecondSquared = 10
     kMaxAngularSpeedRadiansPerSecond = math.pi
     kMaxAngularSpeedRadiansPerSecondSquared = math.pi
 

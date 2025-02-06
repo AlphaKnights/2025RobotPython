@@ -1,11 +1,16 @@
 import math
 import typing
+from typing import Callable, Sequence
 
+import wpimath.kinematics
 import wpilib
+from navx import AHRS 
 
 from commands2 import Subsystem
 from wpimath.filter import SlewRateLimiter
-from wpimath.geometry import Pose2d, Rotation2d
+from wpimath.controller import ProfiledPIDControllerRadians
+from wpimath.geometry import Pose2d, Rotation2d, Translation2d
+from wpimath.trajectory import TrajectoryConfig, Trajectory, TrajectoryGenerator
 from wpimath.kinematics import (
     ChassisSpeeds,
     SwerveModuleState,
@@ -13,12 +18,20 @@ from wpimath.kinematics import (
     SwerveDrive4Odometry,
 )
 
-from constants import DriveConstants
+from constants import AutoConstants, DriveConstants, ModuleConstants
 import swerveutils
 from .maxswervemodule import MAXSwerveModule
 
+from pathplannerlib.auto import AutoBuilder # type: ignore
+from pathplannerlib.controller import PPHolonomicDriveController  # type: ignore
+from pathplannerlib.config import RobotConfig, PIDConstants # type: ignore
+from wpilib import DriverStation
+
 
 class DriveSubsystem(Subsystem):
+    """
+    The DriveSubsystem class is a subsystem that controls the swerve drive of the robot.
+    """
     def __init__(self) -> None:
         super().__init__()
 
@@ -48,7 +61,8 @@ class DriveSubsystem(Subsystem):
         )
 
         # The gyro sensor
-        self.gyro = wpilib.ADIS16448_IMU()
+        self.gyro = AHRS(AHRS.NavXComType.kMXP_UART)
+        # self.gyro = wpilib.ADXRS450_Gyro()
 
         # Slew rate filter variables for controlling lateral acceleration
         self.currentRotation = 0.0
@@ -69,6 +83,24 @@ class DriveSubsystem(Subsystem):
                 self.rearLeft.getPosition(),
                 self.rearRight.getPosition(),
             ),
+        )
+
+        config = RobotConfig.fromGUISettings()
+
+        # Configure the AutoBuilder last
+        AutoBuilder.configure(
+            self.getPose, # Robot pose supplier
+            self.resetPose, # Method to reset odometry (will be called if your auto has a starting pose)
+            self.getCurrentSpeeds, # ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            lambda speeds, feedforwards: self.drive(speeds, False, False), # Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also outputs individual module feedforwards
+            PPHolonomicDriveController( # PPHolonomicController is the built in path following controller for holonomic drive trains
+                PIDConstants(5, 0, 0), # Translation PID constants
+                PIDConstants(5, 0, 0), # Rotation PID constants
+                1,
+            ),
+            config, # The robot configuration
+            self.shouldFlipPath, # Supplier to control path flipping based on alliance color
+            self # Reference to this subsystem to set requirements
         )
 
     def periodic(self) -> None:
@@ -107,11 +139,16 @@ class DriveSubsystem(Subsystem):
             pose,
         )
 
+    def resetPose(self, pose: Pose2d) -> None:
+        """Resets the pose of the robot.
+
+        :param pose: The pose to which to set the robot.
+        """
+        self.resetOdometry(pose)
+
     def drive(
         self,
-        xSpeed: float,
-        ySpeed: float,
-        rot: float,
+        speeds: ChassisSpeeds,
         fieldRelative: bool,
         rateLimit: bool,
     ) -> None:
@@ -125,94 +162,15 @@ class DriveSubsystem(Subsystem):
         :param rateLimit:     Whether to enable rate limiting for smoother control.
         """
 
-        xSpeedCommanded = xSpeed
-        ySpeedCommanded = ySpeed
+        swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds)
 
-        if rateLimit:
-            # Convert XY to polar for rate limiting
-            inputTranslationDir = math.atan2(ySpeed, xSpeed)
-            inputTranslationMag = math.hypot(xSpeed, ySpeed)
+        # swerveModuleStates = SwerveDrive4Kinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond)
 
-            # Calculate the direction slew rate based on an estimate of the lateral acceleration
-            if self.currentTranslationMag != 0.0:
-                directionSlewRate = abs(
-                    DriveConstants.kDirectionSlewRate / self.currentTranslationMag
-                )
-            else:
-                directionSlewRate = 500.0
-                # some high number that means the slew rate is effectively instantaneous
 
-            currentTime = wpilib.Timer.getFPGATimestamp()
-            elapsedTime = currentTime - self.prevTime
-            angleDif = swerveutils.angleDifference(
-                inputTranslationDir, self.currentTranslationDir
-            )
-            if angleDif < 0.45 * math.pi:
-                self.currentTranslationDir = swerveutils.stepTowardsCircular(
-                    self.currentTranslationDir,
-                    inputTranslationDir,
-                    directionSlewRate * elapsedTime,
-                )
-                self.currentTranslationMag = self.magLimiter.calculate(
-                    inputTranslationMag
-                )
-
-            elif angleDif > 0.85 * math.pi:
-                # some small number to avoid floating-point errors with equality checking
-                # keep currentTranslationDir unchanged
-                if self.currentTranslationMag > 1e-4:
-                    self.currentTranslationMag = self.magLimiter.calculate(0.0)
-                else:
-                    self.currentTranslationDir = swerveutils.wrapAngle(
-                        self.currentTranslationDir + math.pi
-                    )
-                    self.currentTranslationMag = self.magLimiter.calculate(
-                        inputTranslationMag
-                    )
-
-            else:
-                self.currentTranslationDir = swerveutils.stepTowardsCircular(
-                    self.currentTranslationDir,
-                    inputTranslationDir,
-                    directionSlewRate * elapsedTime,
-                )
-                self.currentTranslationMag = self.magLimiter.calculate(0.0)
-
-            self.prevTime = currentTime
-
-            xSpeedCommanded = self.currentTranslationMag * math.cos(
-                self.currentTranslationDir
-            )
-            ySpeedCommanded = self.currentTranslationMag * math.sin(
-                self.currentTranslationDir
-            )
-            self.currentRotation = self.rotLimiter.calculate(rot)
-
-        else:
-            self.currentRotation = rot
-
-        # Convert the commanded speeds into the correct units for the drivetrain
-        xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond
-        ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond
-        rotDelivered = self.currentRotation * DriveConstants.kMaxAngularSpeed
-
-        swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-            ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeedDelivered,
-                ySpeedDelivered,
-                rotDelivered,
-                Rotation2d.fromDegrees(self.gyro.getAngle()),
-            )
-            if fieldRelative
-            else ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered)
-        )
-        fl, fr, rl, rr = SwerveDrive4Kinematics.desaturateWheelSpeeds(
-            swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond
-        )
-        self.frontLeft.setDesiredState(fl)
-        self.frontRight.setDesiredState(fr)
-        self.rearLeft.setDesiredState(rl)
-        self.rearRight.setDesiredState(rr)
+        self.frontLeft.setDesiredState(swerveModuleStates[0])
+        self.frontRight.setDesiredState(swerveModuleStates[1])
+        self.rearLeft.setDesiredState(swerveModuleStates[2])
+        self.rearRight.setDesiredState(swerveModuleStates[3])
 
     def setX(self) -> None:
         """Sets the wheels into an X formation to prevent movement."""
@@ -225,14 +183,20 @@ class DriveSubsystem(Subsystem):
 
     def setModuleStates(
         self,
-        desiredStates: typing.Tuple[
-            SwerveModuleState, SwerveModuleState, SwerveModuleState, SwerveModuleState
-        ],
+        desiredStates: typing.Sequence[SwerveModuleState],
     ) -> None:
         """Sets the swerve ModuleStates.
 
-        :param desiredStates: The desired SwerveModule states.
+        :param desiredStates: The desired SwerveModule states. Must be 4 states
         """
+        
+        desiredStates = (
+            desiredStates[0],
+            desiredStates[1],
+            desiredStates[2],
+            desiredStates[3],
+        )
+
         fl, fr, rl, rr = SwerveDrive4Kinematics.desaturateWheelSpeeds(
             desiredStates, DriveConstants.kMaxSpeedMetersPerSecond
         )
@@ -240,6 +204,8 @@ class DriveSubsystem(Subsystem):
         self.frontRight.setDesiredState(fr)
         self.rearLeft.setDesiredState(rl)
         self.rearRight.setDesiredState(rr)
+
+        # return self.setStates
 
     def resetEncoders(self) -> None:
         """Resets the drive encoders to currently read a position of 0."""
@@ -258,10 +224,30 @@ class DriveSubsystem(Subsystem):
         :returns: the robot's heading in degrees, from -180 to 180
         """
         return Rotation2d.fromDegrees(self.gyro.getAngle()).degrees()
+    
+    def getCurrentSpeeds(self) -> ChassisSpeeds:
+        """Returns the current speeds of the robot.
 
+        :returns: The current speeds of the robot
+        """
+        moduleStates = (
+            self.frontLeft.getState(),
+            self.frontRight.getState(),
+            self.rearLeft.getState(),
+            self.rearRight.getState(),
+        )
+
+        return DriveConstants.kDriveKinematics.toChassisSpeeds(moduleStates)
+    
     def getTurnRate(self) -> float:
         """Returns the turn rate of the robot.
 
         :returns: The turn rate of the robot, in degrees per second
         """
         return self.gyro.getRate() * (-1.0 if DriveConstants.kGyroReversed else 1.0)
+
+    def shouldFlipPath(self) -> bool:
+    # Boolean supplier that controls when the path will be mirrored for the red alliance
+    # This will flip the path being followed to the red side of the field.
+    # THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        return DriverStation.getAlliance() == DriverStation.Alliance.kRed

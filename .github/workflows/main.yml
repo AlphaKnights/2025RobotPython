@@ -15,13 +15,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: 3.12.7
+          python-version: 3.13.1
 
       - name: Install dependencies
         run: |
           python -m venv venv
           source venv/bin/activate
-          python3 -m pip install "robotpy==2024.3.2.2"
+          python3 -m pip install "robotpy==2025.2.1.0"
           python3 -m robotpy sync
 
       - name: Run mypy

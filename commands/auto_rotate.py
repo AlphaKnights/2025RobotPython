@@ -3,6 +3,12 @@ import typing
 
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
+from wpimath.kinematics import (
+    ChassisSpeeds,
+    SwerveModuleState,
+    SwerveDrive4Kinematics,
+    SwerveDrive4Odometry,
+)
 
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.limelight_subsystem import LimelightSystem
@@ -34,7 +40,8 @@ class AutoRotate(commands2.Command):
         if abs(a) < 0.01:
             a = 0
 
-        self.drive_subsystem.drive(0, 0, a, False, False)
+        # self.drive_subsystem.drive(0, 0, a, False, False)
+        self.drive_subsystem.drive(ChassisSpeeds(0, 0, a), False, False)
 
 
     def isFinished(self) -> bool:

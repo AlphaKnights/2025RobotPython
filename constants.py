@@ -14,7 +14,8 @@ from wpimath.geometry import Translation2d
 from wpimath.kinematics import SwerveDrive4Kinematics
 from wpimath.trajectory import TrapezoidProfileRadians
 
-from rev import CANSparkMax
+# from rev import CANSparkMax
+from rev import SparkMax, SparkBaseConfig
 
 
 class NeoMotorConstants:
@@ -24,7 +25,7 @@ class NeoMotorConstants:
 class DriveConstants:
     # Driving Parameters - Note that these are not the maximum capable speeds of
     # the robot, rather the allowed maximum speeds
-    kMaxSpeedMetersPerSecond = 4.8
+    kMaxSpeedMetersPerSecond = 7
     kMaxAngularSpeed = math.tau  # radians per second
 
     kDirectionSlewRate = 1.2  # radians per second
@@ -113,8 +114,8 @@ class ModuleConstants:
     kTurningMinOutput = -1
     kTurningMaxOutput = 1
 
-    kDrivingMotorIdleMode = CANSparkMax.IdleMode.kBrake
-    kTurningMotorIdleMode = CANSparkMax.IdleMode.kBrake
+    kDrivingMotorIdleMode = SparkBaseConfig.IdleMode.kBrake
+    kTurningMotorIdleMode = SparkBaseConfig.IdleMode.kBrake
 
     kDrivingMotorCurrentLimit = 50  # amp
     kTurningMotorCurrentLimit = 20  # amp
@@ -126,8 +127,8 @@ class OIConstants:
     
 
 class AutoConstants:
-    kMaxSpeedMetersPerSecond = 3
-    kMaxAccelerationMetersPerSecondSquared = 3
+    kMaxSpeedMetersPerSecond = 10
+    kMaxAccelerationMetersPerSecondSquared = 10
     kMaxAngularSpeedRadiansPerSecond = math.pi
     kMaxAngularSpeedRadiansPerSecondSquared = math.pi
 

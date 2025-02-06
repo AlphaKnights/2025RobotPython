@@ -11,6 +11,8 @@ from wpimath.kinematics import (
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.limelight_subsystem import LimelightSystem
 
+from constants import DriveConstants
+
 class DriveCommand(commands2.Command):
     def __init__(self, swerve_subsystem: DriveSubsystem, limelight_susbsystem: LimelightSystem, x: typing.Callable[[], float], y: typing.Callable[[], float], rot: typing.Callable[[], float], align: typing.Callable[[], bool]) -> None:
         super().__init__()
@@ -26,7 +28,12 @@ class DriveCommand(commands2.Command):
     def execute(self) -> None:
         align = self.align()
         if not align:
-            self.swerve.drive(ChassisSpeeds(self.x(), self.y(), self.rot()), True, True)
+            self.swerve.drive(
+                ChassisSpeeds(
+                    self.x() * DriveConstants.kMaxSpeedMetersPerSecond, 
+                    self.y()* DriveConstants.kMaxSpeedMetersPerSecond, 
+                    self.rot() * DriveConstants.kMaxAngularSpeed
+                ), True, True)
             return
         
         results = self.limelight.get_results()

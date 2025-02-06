@@ -148,14 +148,10 @@ class DriveSubsystem(Subsystem):
 
     def drive(
         self,
-        # xSpeed: float,
-        # ySpeed: float,
-        # rot: float,
         speeds: ChassisSpeeds,
         fieldRelative: bool,
         rateLimit: bool,
     ) -> None:
-        # print(speeds.vx, " ", speeds.vy)
         """Method to drive the robot using joystick info.
 
         :param xSpeed:        Speed of the robot in the x direction (forward).
@@ -166,17 +162,7 @@ class DriveSubsystem(Subsystem):
         :param rateLimit:     Whether to enable rate limiting for smoother control.
         """
 
-        xSpeed = speeds.vx * DriveConstants.kMaxSpeedMetersPerSecond
-        ySpeed = speeds.vy * DriveConstants.kMaxSpeedMetersPerSecond
-        rot = speeds.omega * DriveConstants.kMaxAngularSpeed
-
-        swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-            ChassisSpeeds(xSpeed, ySpeed, rot)
-        )
-
-        swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-            speeds
-        )
+        swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds)
 
         # swerveModuleStates = SwerveDrive4Kinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond)
 

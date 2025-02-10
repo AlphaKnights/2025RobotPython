@@ -30,13 +30,12 @@ class MyRobot(commands2.TimedCommandRobot):
     def teleopInit(self) -> None:
         if self.autonomousCommand:
             self.autonomousCommand.cancel()
- 
+
     def teleopPeriodic(self) -> None:
         self.results = self.limelight.get_results()
-        if self.results is None:
-            return
+
         
-        print(str(self.results))
+       # print(self.results)
 
     def testInit(self) -> None:
         commands2.CommandScheduler.getInstance().cancelAll()

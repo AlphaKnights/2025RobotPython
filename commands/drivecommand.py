@@ -26,7 +26,8 @@ class DriveCommand(commands2.Command):
         self.addRequirements(limelight_susbsystem)
 
     def execute(self) -> None:
-        align = self.align()
+        #align = self.align()
+        align = False
         if not align:
             self.swerve.drive(
                 ChassisSpeeds(

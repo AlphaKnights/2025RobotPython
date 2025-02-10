@@ -18,7 +18,7 @@ class LimelightSystem(commands2.Subsystem):
 
     def get_results(self) -> typing.Optional[LimelightResults]:
         results = self.limelight.get_results()
-
+        print(results)
         if results["botpose_tagcount"] == 0:
             return None
 

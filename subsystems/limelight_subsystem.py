@@ -19,12 +19,13 @@ class LimelightSystem(commands2.Subsystem):
 
     def get_results(self) -> typing.Optional[LimelightResults]:
         results = self.limelight.get_results()
-        limelight_table = NetworkTables.getTable("limelight") #check to see if this is the correct limelight name
-        botpose = limelight_table.getNumberArray("botpose_wpiblue", [0]*7)
-        x = botpose[0]
-        y = botpose[1] 
-        yaw = botpose[5]
-        print(x, y, yaw)
+        #limelight_table = NetworkTables.getTable("main_limelight") #check to see if this is the correct limelight name
+        #botpose = limelight_table.getNumberArray("t6r_fs", [0]*7)
+        #x = botpose[0]
+        #y = botpose[1] 
+        #yaw = botpose[5]
+        #print(x, y, yaw)
+        #print(results)
         if results["botpose_tagcount"] == 0:
             return None
 

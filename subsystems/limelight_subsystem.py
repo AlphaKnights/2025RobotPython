@@ -3,6 +3,7 @@
 import typing
 import commands2
 import limelight  # type: ignore
+from networktables import NetworkTables
 from interfaces.limelight_results import LimelightResults
 
 class LimelightSystem(commands2.Subsystem):
@@ -18,7 +19,12 @@ class LimelightSystem(commands2.Subsystem):
 
     def get_results(self) -> typing.Optional[LimelightResults]:
         results = self.limelight.get_results()
-        print(results)
+        limelight_table = NetworkTables.getTable("limelight") #check to see if this is the correct limelight name
+        botpose = limelight_table.getNumberArray("botpose_wpiblue", [0]*7)
+        x = botpose[0]
+        y = botpose[1] 
+        yaw = botpose[5]
+        print(x, y, yaw)
         if results["botpose_tagcount"] == 0:
             return None
 

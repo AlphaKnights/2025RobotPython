@@ -8,7 +8,8 @@
 from typing import Optional
 import commands2
 import wpilib
-
+from interfaces.limelight_results import LimelightResults
+from subsystems.limelight_subsystem import LimelightSystem
 from robotcontainer import RobotContainer
 
 
@@ -17,6 +18,7 @@ class MyRobot(commands2.TimedCommandRobot):
         # Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         # autonomous chooser on the dashboard.
         self.container = RobotContainer()
+        self.limelight = LimelightSystem()
         self.autonomousCommand: Optional[commands2.Command] = None
 
     def autonomousInit(self) -> None:
@@ -28,6 +30,12 @@ class MyRobot(commands2.TimedCommandRobot):
     def teleopInit(self) -> None:
         if self.autonomousCommand:
             self.autonomousCommand.cancel()
+
+    def teleopPeriodic(self) -> None:
+        self.results = self.limelight.get_results()
+
+        
+       # print(self.results)
 
     def testInit(self) -> None:
         commands2.CommandScheduler.getInstance().cancelAll()

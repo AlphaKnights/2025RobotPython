@@ -5,28 +5,26 @@
 # the WPILib BSD license file in the root directory of this project.
 #
 
-from typing import Optional
-import commands2
 import wpilib
 from wpilib.shuffleboard import Shuffleboard
 from wpilib import SmartDashboard
-from robotcontainer import RobotContainer
 
 
-class MyRobot(commands2.TimedCommandRobot):
-    def robotInit(self) -> None:
-        # Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-        # autonomous chooser on the dashboard.
-        self.container = RobotContainer()
-        self.autonomousCommand: Optional[commands2.Command] = None
-                # Creates a ping-response Ultrasonic object on DIO 1 and 2.
+class MyRobot(wpilib.TimedRobot):
+    """
+    This is a sample program demonstrating how to read from a ping-response ultrasonic sensor with
+    the :class:`.Ultrasonic` class.
+    """
+
+    def robotInit(self):
+        # Creates a ping-response Ultrasonic object on DIO 1 and 2.
         self.rangeFinder = wpilib.Ultrasonic(1, 2)
 
         # Add the ultrasonic to the "Sensors" tab of the dashboard
         # Data will update automatically
         Shuffleboard.getTab("Sensors").add(self.rangeFinder)
 
-    def teleopPeriodic(self) -> None:
+    def teleopPeriodic(self):
         # We can read the distance in millimeters
         distanceMillimeters = self.rangeFinder.getRangeMM()
         # ... or in inches
@@ -36,24 +34,13 @@ class MyRobot(commands2.TimedCommandRobot):
         SmartDashboard.putNumber("Distance[mm]", distanceMillimeters)
         SmartDashboard.putNumber("Distance[in]", distanceInches)
 
-    def autonomousInit(self) -> None:
-        self.autonomousCommand = self.container.getAutonomousCommand()
-
-        if self.autonomousCommand:
-            self.autonomousCommand.schedule()
-
-    def teleopInit(self) -> None:
-        if self.autonomousCommand:
-            self.autonomousCommand.cancel()
+    def testInit(self):
         # By default, the Ultrasonic class polls all ultrasonic sensors every in a round-robin to prevent
         # them from interfering from one another.
         # However, manual polling is also possible -- notes that this disables automatic mode!
         self.rangeFinder.ping()
 
-    def testInit(self) -> None:
-        commands2.CommandScheduler.getInstance().cancelAll()
-
-    def testPeriodic(self) -> None:
+    def testPeriodic(self):
         if self.rangeFinder.isRangeValid():
             # Data is valid, publish it
             SmartDashboard.putNumber("Distance[mm]", self.rangeFinder.getRangeMM())
@@ -62,9 +49,6 @@ class MyRobot(commands2.TimedCommandRobot):
             # Ping for next measurement
             self.rangeFinder.ping()
 
-    def testExit(self) -> None:
+    def testExit(self):
         # Enable automatic mode
         self.rangeFinder.setAutomaticMode(True)
-
-if __name__ == "__main__":
-    wpilib.run(MyRobot)

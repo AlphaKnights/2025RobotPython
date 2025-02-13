@@ -33,7 +33,12 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def teleopPeriodic(self) -> None:
         self.results = self.limelight.get_results()
-
+        if self.results is None:
+            return
+        x = self.results.tx
+        y = self.results.ty
+        a = self.results.ta
+        print(x,y,a)
         
        # print(self.results)
 

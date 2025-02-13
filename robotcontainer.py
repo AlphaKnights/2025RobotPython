@@ -16,12 +16,15 @@ from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
 
 from subsystems.limelight_subsystem import LimelightSystem
+from subsystems.ultrasonic import UltrasonicSubsystem
 from commands.auto_rotate import AutoRotate
 from commands.drivecommand import DriveCommand
 
 from pathplannerlib.auto import AutoBuilder # type: ignore
 from pathplannerlib.auto import NamedCommands # type: ignore
 from pathplannerlib.auto import PathPlannerAuto # type: ignore
+
+import commands2.waitcommand
 
 class RobotContainer:
     """
@@ -33,42 +36,44 @@ class RobotContainer:
 
     def __init__(self) -> None:
         # The robot's subsystems
-        self.robotDrive = DriveSubsystem()
+        # self.robotDrive = DriveSubsystem()
 
-        self.limelight = LimelightSystem()
+        # self.limelight = LimelightSystem()
         
-        self.autoChooser = AutoBuilder.buildAutoChooser()
+       # self.autoChooser = AutoBuilder.buildAutoChooser()
 
-        SmartDashboard.putData("Auto Chooser", self.autoChooser)
+        #SmartDashboard.putData("Auto Chooser", self.autoChooser)
 
+        self.ultrasonic = UltrasonicSubsystem()
         # The driver's controller
         self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
 
         # Configure the button bindings
         self.configureButtonBindings()
 
+
         # Configure default commands
-        self.robotDrive.setDefaultCommand(
+        # self.robotDrive.setDefaultCommand(
             # The left stick controls translation of the robot.
             # Turning is controlled by the X axis of the right stick.
-            DriveCommand(
-                self.robotDrive,
-                self.limelight,
-                lambda:
-                    -wpimath.applyDeadband(
-                        self.driverController.getLeftY(), OIConstants.kDriveDeadband
-                    ),
-                lambda:
-                    -wpimath.applyDeadband(
-                        self.driverController.getLeftX(), OIConstants.kDriveDeadband
-                    ),
-                lambda:
-                    -wpimath.applyDeadband(
-                        self.driverController.getRawAxis(2), OIConstants.kDriveDeadband
-                    ),
-                self.driverController.getAButton
-                ),
-            )
+            # DriveCommand(
+                # self.robotDrive,
+                # self.limelight,
+                # lambda:
+                    # -wpimath.applyDeadband(
+                        # self.driverController.getLeftY(), OIConstants.kDriveDeadband
+                    # ),
+            #    lambda:
+                    # -wpimath.applyDeadband(
+                        # self.driverController.getLeftX(), OIConstants.kDriveDeadband
+                    # ),
+                # lambda:
+                    # -wpimath.applyDeadband(
+                        # self.driverController.getRawAxis(2), OIConstants.kDriveDeadband
+                    # ),
+                # self.driverController.getAButton
+                # ),
+            # )
 
     def configureButtonBindings(self) -> None:
         """
@@ -155,5 +160,5 @@ class RobotContainer:
 
         # return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))
 
-        return self.autoChooser.getSelected()
+        return commands2.waitcommand(0.1)#self.autoChooser.getSelected()
         # return PathPlannerAuto('New Auto')

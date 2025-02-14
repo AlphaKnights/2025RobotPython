@@ -24,7 +24,6 @@ class MyRobot(commands2.TimedCommandRobot):
         self.cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection")
         wpilib.CameraServer.launch("vision.py:main")
 
-
     # def autonomousInit(self) -> None:
     #     self.autonomousCommand = self.container.getAutonomousCommand()
 
@@ -37,12 +36,11 @@ class MyRobot(commands2.TimedCommandRobot):
     
     def teleopPeridodic(self) -> None:
         if self.driverController.getLeftY() < 0:
-            print("Settiomg camera 2")
+            print("Setting camera 2")
             self.cameraSelection.setString("USB Camera 1")
         else:
-            print("settopm caera uno")
+            print("Setting camera 1")
             self.cameraSelection.setString("USB Camera 0")
-
     def testInit(self) -> None:
         commands2.CommandScheduler.getInstance().cancelAll()
 

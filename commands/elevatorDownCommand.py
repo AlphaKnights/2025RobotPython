@@ -1,5 +1,5 @@
 import commands2
-from subsystems.elevatorsubsystem import ElevatorSubsystem
+from subsystems.elevator import ElevatorSubsystem
 
 class ElevatorDownCommand(commands2.Command):
     def __init__(self, elevator_subsystem: ElevatorSubsystem) -> None:

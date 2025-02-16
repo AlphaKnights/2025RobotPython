@@ -10,12 +10,13 @@ from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 
 from constants import AutoConstants, DriveConstants, OIConstants
-from subsystems.drivesubsystem import DriveSubsystem
-from commands.drivecommand import DriveCommand
+# from subsystems.drivesubsystem import DriveSubsystem
+# from commands.drivecommand import DriveCommand
 
-from subsystems.elevatorsubsystem import ElevatorSubsystem
+from subsystems.elevator import ElevatorSubsystem
 from commands.elevatorUpCommand import ElevatorUpCommand
 from commands.elevatorDownCommand import ElevatorDownCommand
+from commands.elevatorPos import ElevatorPosCommand
 
 class RobotContainer:
     """
@@ -68,6 +69,7 @@ class RobotContainer:
         """
         self.buttonBoard.button(OIConstants.kElevatorUpButton).whileTrue(ElevatorUpCommand(self.elevator))
         self.buttonBoard.button(OIConstants.kElevatorDownButton).whileTrue(ElevatorDownCommand(self.elevator))
+        # self.buttonBoard.button(OIConstants.kElevatorDownButton).whileTrue(ElevatorPosCommand(self.elevator))
 
 
 

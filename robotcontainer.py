@@ -10,6 +10,9 @@ from wpimath.controller import HolonomicDriveController
 from wpimath.controller import PIDController, ProfiledPIDControllerRadians, HolonomicDriveController
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
+from wpimath.units import rotationsToRadians
+
+from phoenix6 import swerve, units
 
 from commands.auto_align import AutoAlign
 from constants import AutoConstants, DriveConstants, OIConstants
@@ -18,8 +21,11 @@ from subsystems.limelight_subsystem import LimelightSystem
 from commands.auto_rotate import AutoRotate
 from commands.drivecommand import DriveCommand
 
+from generated.tuner_constants import TunerConstants # type: ignore
 from pathplannerlib.auto import AutoBuilder # type: ignore
 from pathplannerlib.auto import NamedCommands # type: ignore
+
+
 
 class RobotContainer:
     """
@@ -31,9 +37,21 @@ class RobotContainer:
 
     def __init__(self) -> None:
         # The robot's subsystems
-        self.robotDrive = DriveSubsystem()
+        self.robotDrive = TunerConstants.create_drivetrain()
         self.limelight = LimelightSystem()
         
+        self.max_speed = TunerConstants.speed_at_12_volts
+
+        self._drive = (
+            swerve.requests.FieldCentric()
+            .with_deadband(self.max_speed * 0.1)
+            .with_rotational_deadband(
+                rotationsToRadians(0.75) * 0.1
+            )  # Add a 10% deadband
+            .with_drive_request_type(
+                swerve.SwerveModule.DriveRequestType.OPEN_LOOP_VOLTAGE
+            )  # Use open-loop control for drive motors
+        )
         # self.autoChooser = AutoBuilder.buildAutoChooser()
 
         # SmartDashboard.putData("Auto Chooser", self.autoChooser)
@@ -46,26 +64,21 @@ class RobotContainer:
 
         # Configure default commands
         self.robotDrive.setDefaultCommand(
-            # The left stick controls translation of the robot.
-            # Turning is controlled by the X axis of the right stick.
-            DriveCommand(
-                self.robotDrive,
-                self.limelight,
-                lambda:
-                    -wpimath.applyDeadband(
-                        self.driverController.getLeftY(), OIConstants.kDriveDeadband
-                    ),
-                lambda:
-                    -wpimath.applyDeadband(
-                        self.driverController.getLeftX(), OIConstants.kDriveDeadband
-                    ),
-                lambda:
-                    -wpimath.applyDeadband(
-                        self.driverController.getRightX(), OIConstants.kDriveDeadband
-                    ),
-                self.driverController.getAButton
-                ),
+            # Drivetrain will execute this command periodically
+            self.robotDrive.apply_request(
+                lambda: (
+                    self._drive.with_velocity_x(
+                        -self.driverController.getLeftY() * self.max_speed
+                    )  # Drive forward with negative Y (forward)
+                    .with_velocity_y(
+                        -self.driverController.getLeftX() * self.max_speed
+                    )  # Drive left with negative X (left)
+                    .with_rotational_rate(
+                        -self.driverController.getRightX() * rotationsToRadians(0.75)
+                    )  # Drive counterclockwise with negative X (left)
+                )
             )
+        )
 
     def configureButtonBindings(self) -> None:
         """

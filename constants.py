@@ -64,7 +64,29 @@ class DriveConstants:
     kFrontRightTurningCanId = 12
     kRearRightTurningCanId = 14
 
+    # Kraken IDs
+    kFrontLeftDrivingId = 1
+    kRearLeftDrivingId = 2
+    kFrontRightDrivingId = 3
+    kRearRightDrivingId = 4
+
+    kFrontLeftTurningId = 5
+    kRearLeftTurningId = 6
+    kFrontRightTurningId = 7
+    kRearRightTurningId = 8
+
+    kFrontLeftCANCoderId = 9
+    kRearLeftCANCoderId = 10
+    kFrontRightCANCoderId = 11
+    kRearRightCANCoderId = 12
+
     kGyroReversed = True
+
+    # Kraken Positions
+    kFrontLeftPosition = Translation2d(-kWheelBase / 2, kTrackWidth / 2)
+    kFrontRightPosition = Translation2d(-kWheelBase / 2, -kTrackWidth / 2)
+    kRearLeftPosition = Translation2d(kWheelBase / 2, kTrackWidth / 2)
+    kRearRightPosition = Translation2d(kWheelBase / 2, -kTrackWidth / 2)
 
 
 class ModuleConstants:

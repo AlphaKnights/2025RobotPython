@@ -9,7 +9,7 @@ class ElevatorUpCommand(commands2.Command):
         self.addRequirements(elevator_subsystem)
 
     def execute(self) -> None:
-        self.elevator.move(0.3)
+        self.elevator.move(0.1)
 
     def isFinished(self) -> bool:
         return False

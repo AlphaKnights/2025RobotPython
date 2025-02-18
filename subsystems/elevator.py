@@ -13,13 +13,13 @@ class ElevatorSubsystem(Subsystem):
         self.elevatorMotorL = SparkMax(ElevatorConstants.kLeftMotorCanId, SparkMax.MotorType.kBrushless)
         self.elevatorMotorR = SparkMax(ElevatorConstants.kRightMotorCanId, SparkMax.MotorType.kBrushless)
 
-        self.elevatorMotorLEncoder = self.elevatorMotorL.getAbsoluteEncoder()
+        self.elevatorMotorLEncoder = self.elevatorMotorL.getEncoder()
         self.elevatorMotorLPID = self.elevatorMotorL.getClosedLoopController()
 
         l_config = SparkMaxConfig()
         l_config.IdleMode(int(SparkMax.IdleMode.kBrake))
-        l_config.softLimit.forwardSoftLimit(10) \
-            .reverseSoftLimit(10)
+        l_config.softLimit.forwardSoftLimit(10000000) \
+            .reverseSoftLimit(-10000)
         
         l_config.encoder.positionConversionFactor(ElevatorConstants.kEncoderPositionFactor) \
             .velocityConversionFactor(ElevatorConstants.kEncoderVelocityFactor)
@@ -31,7 +31,7 @@ class ElevatorSubsystem(Subsystem):
 
         r_config = SparkMaxConfig()
         r_config.IdleMode(int(SparkMax.IdleMode.kBrake))
-        r_config.follow(ElevatorConstants.kLeftMotorCanId)
+        r_config.follow(ElevatorConstants.kLeftMotorCanId, True)
 
         self.elevatorMotorL.configure(l_config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
         self.elevatorMotorR.configure(r_config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
@@ -63,6 +63,7 @@ class ElevatorSubsystem(Subsystem):
         self.elevatorMotorR.set(-speed)
 
     def setPosition(self, position: float) -> None:
+        print(self.elevatorMotorLEncoder.getPosition())
         self.elevatorMotorLPID.setReference(position, SparkMax.ControlType.kPosition)
 
     def stop(self) -> None:

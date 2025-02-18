@@ -126,6 +126,7 @@ class OIConstants:
     kButtonBoardPort = 0
     kElevatorUpButton = 12
     kElevatorDownButton = 11
+    kElevatorPosButton = 10
     
 
 class AutoConstants:
@@ -144,8 +145,8 @@ class AutoConstants:
     )
 
 class ElevatorConstants:
-    kLeftMotorCanId = 31
-    kRightMotorCanId = 30
+    kLeftMotorCanId = 11
+    kRightMotorCanId = 1
     kUpperLimit = 1
     kLowerLimit = 2
 

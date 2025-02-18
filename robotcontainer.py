@@ -69,7 +69,7 @@ class RobotContainer:
         """
         self.buttonBoard.button(OIConstants.kElevatorUpButton).whileTrue(ElevatorUpCommand(self.elevator))
         self.buttonBoard.button(OIConstants.kElevatorDownButton).whileTrue(ElevatorDownCommand(self.elevator))
-        # self.buttonBoard.button(OIConstants.kElevatorDownButton).whileTrue(ElevatorPosCommand(self.elevator))
+        self.buttonBoard.button(OIConstants.kElevatorPosButton).whileTrue(ElevatorPosCommand(self.elevator))
 
 
 

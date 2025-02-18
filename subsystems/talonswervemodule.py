@@ -4,7 +4,7 @@ import math
 from constants import ModuleConstants
 
 from wpimath.geometry import Rotation2d
-from wpimath.kinematics import SwerveModuleState
+from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 
 class TalonSwerveModule:
     def __init__(self,
@@ -58,13 +58,14 @@ class TalonSwerveModule:
         self.desired_state = SwerveModuleState(0.0, Rotation2d(self.encoder.get_position().value_as_double))
         self.encoder.set_position(0)
     
-    def get_state(self) -> SwerveModuleState:
-        return SwerveModuleState(self.encoder.get_velocity().value_as_double, Rotation2d(self.encoder.get_position().value_as_double - self.offset))
+    def getState(self) -> SwerveModuleState:
+        return SwerveModuleState(self.drive_motor.get_velocity().value_as_double, Rotation2d(self.encoder.get_position().value_as_double - self.offset))
     
-    def get_position(self) -> Rotation2d:
-        return Rotation2d(self.encoder.get_position().value_as_double - self.offset)
+    def getPosition(self) -> SwerveModulePosition:
+        # return Rotation2d(self.encoder.get_position().value_as_double - self.offset)
+        return SwerveModulePosition(self.drive_motor.get_position().value_as_double, Rotation2d(self.encoder.get_position().value_as_double - self.offset))
     
-    def set_desired_state(self, desired_state: SwerveModuleState) -> None:
+    def setDesiredState(self, desired_state: SwerveModuleState) -> None:
         corrected_state = SwerveModuleState()
         corrected_state.speed = desired_state.speed
         corrected_state.angle = Rotation2d(desired_state.angle.radians() + self.offset)
@@ -76,7 +77,8 @@ class TalonSwerveModule:
 
         self.desired_state = desired_state
 
-    def reset_encoders(self) -> None:
+    def resetEncoders(self) -> None:
+        self.drive_motor.set_position(0)
         self.encoder.set_position(0)
 
 

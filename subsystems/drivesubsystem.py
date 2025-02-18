@@ -20,7 +20,8 @@ from wpimath.kinematics import (
 
 from constants import AutoConstants, DriveConstants, ModuleConstants
 import swerveutils
-from .maxswervemodule import MAXSwerveModule
+# from .maxswervemodule import MAXSwerveModule
+from .talonswervemodule import TalonSwerveModule as MAXSwerveModule # type: ignore
 
 from pathplannerlib.auto import AutoBuilder # type: ignore
 from pathplannerlib.controller import PPHolonomicDriveController  # type: ignore
@@ -39,24 +40,28 @@ class DriveSubsystem(Subsystem):
         self.frontLeft = MAXSwerveModule(
             DriveConstants.kFrontLeftDrivingCanId,
             DriveConstants.kFrontLeftTurningCanId,
+            DriveConstants.kFrontLeftCANCoderId,
             DriveConstants.kFrontLeftChassisAngularOffset,
         )
 
         self.frontRight = MAXSwerveModule(
             DriveConstants.kFrontRightDrivingCanId,
             DriveConstants.kFrontRightTurningCanId,
+            DriveConstants.kFrontRightCANCoderId,
             DriveConstants.kFrontRightChassisAngularOffset,
         )
 
         self.rearLeft = MAXSwerveModule(
             DriveConstants.kRearLeftDrivingCanId,
             DriveConstants.kRearLeftTurningCanId,
+            DriveConstants.kRearLeftCANCoderId,
             DriveConstants.kBackLeftChassisAngularOffset,
         )
 
         self.rearRight = MAXSwerveModule(
             DriveConstants.kRearRightDrivingCanId,
             DriveConstants.kRearRightTurningCanId,
+            DriveConstants.kRearRightCANCoderId,
             DriveConstants.kBackRightChassisAngularOffset,
         )
 

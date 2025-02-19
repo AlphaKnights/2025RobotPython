@@ -16,10 +16,13 @@ class ElevatorSubsystem(Subsystem):
         self.elevatorMotorLEncoder = self.elevatorMotorL.getEncoder()
         self.elevatorMotorLPID = self.elevatorMotorL.getClosedLoopController()
 
+
         l_config = SparkMaxConfig()
         l_config.IdleMode(int(SparkMax.IdleMode.kCoast))
-        l_config.softLimit.forwardSoftLimit(10000000) \
-            .reverseSoftLimit(-10000)
+        l_config.softLimit.forwardSoftLimit(30) \
+            .reverseSoftLimit(-10)
+        l_config.softLimit.forwardSoftLimitEnabled(True) \
+            .reverseSoftLimitEnabled(True)
         
         l_config.encoder.positionConversionFactor(ElevatorConstants.kEncoderPositionFactor) \
             .velocityConversionFactor(ElevatorConstants.kEncoderVelocityFactor)
@@ -27,7 +30,7 @@ class ElevatorSubsystem(Subsystem):
         l_config.closedLoop.setFeedbackSensor(ClosedLoopConfig.FeedbackSensor.kAbsoluteEncoder) \
             .pid(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD) \
             .outputRange(-1, 1) \
-            
+            .positionWrappingEnabled(False)            
 
         r_config = SparkMaxConfig()
         r_config.IdleMode(int(SparkMax.IdleMode.kCoast))
@@ -72,9 +75,9 @@ class ElevatorSubsystem(Subsystem):
 
     def setPosition(self, position: float) -> None:
         print(self.elevatorMotorLEncoder.getPosition())
-        self.elevatorMotorLPID.setReference(position, SparkMax.ControlType.kPosition)
+        self.elevatorMotorLPID.setReference(position, SparkLowLevel.ControlType.kPosition)
 
     def stop(self) -> None:
-        pass
+        print("Stop")
         self.elevatorMotorL.stopMotor()
         self.elevatorMotorR.stopMotor()

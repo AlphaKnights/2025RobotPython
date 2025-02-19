@@ -17,7 +17,7 @@ class ElevatorSubsystem(Subsystem):
         self.elevatorMotorLPID = self.elevatorMotorL.getClosedLoopController()
 
         l_config = SparkMaxConfig()
-        l_config.IdleMode(int(SparkMax.IdleMode.kBrake))
+        l_config.IdleMode(int(SparkMax.IdleMode.kCoast))
         l_config.softLimit.forwardSoftLimit(10000000) \
             .reverseSoftLimit(-10000)
         
@@ -30,7 +30,7 @@ class ElevatorSubsystem(Subsystem):
             
 
         r_config = SparkMaxConfig()
-        r_config.IdleMode(int(SparkMax.IdleMode.kBrake))
+        r_config.IdleMode(int(SparkMax.IdleMode.kCoast))
         r_config.follow(ElevatorConstants.kLeftMotorCanId, True)
 
         self.elevatorMotorL.configure(l_config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
@@ -41,23 +41,31 @@ class ElevatorSubsystem(Subsystem):
     
     def periodic(self) -> None:
         if (not self.upperLimit.get() and self.elevatorMotorL.get() > 0):
-            self.elevatorMotorL.stopMotor()
-            self.elevatorMotorR.stopMotor()
+            # self.elevatorMotorL.stopMotor()
+            # self.elevatorMotorR.stopMotor()
+            return
         
         if (not self.lowerLimit.get() and self.elevatorMotorL.get() < 0):
-            self.elevatorMotorL.stopMotor()
-            self.elevatorMotorR.stopMotor()
+            # self.elevatorMotorL.stopMotor()
+            # self.elevatorMotorR.stopMotor()
+            return
+
+        if (not self.lowerLimit.get()):
+            print ("Lower On")
+        
+        if (not self.upperLimit.get()):
+            print ("Upper On")
 
     def move(self, speed: float) -> None:
-        if (not self.upperLimit.get() and speed > 0):
-            self.elevatorMotorL.stopMotor()
-            self.elevatorMotorR.stopMotor()
-            return
+        # if (not self.upperLimit.get() and speed > 0):
+            # self.elevatorMotorL.stopMotor()
+            # self.elevatorMotorR.stopMotor()
+            # return
         
-        if (not self.lowerLimit.get() and speed < 0):
-            self.elevatorMotorL.stopMotor()
-            self.elevatorMotorR.stopMotor()
-            return
+        # if (not self.lowerLimit.get() and speed < 0):
+            # self.elevatorMotorL.stopMotor()
+            # self.elevatorMotorR.stopMotor()
+            # return
     
         self.elevatorMotorL.set(speed)
         self.elevatorMotorR.set(-speed)
@@ -67,5 +75,6 @@ class ElevatorSubsystem(Subsystem):
         self.elevatorMotorLPID.setReference(position, SparkMax.ControlType.kPosition)
 
     def stop(self) -> None:
+        pass
         self.elevatorMotorL.stopMotor()
         self.elevatorMotorR.stopMotor()

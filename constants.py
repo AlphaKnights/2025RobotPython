@@ -65,20 +65,20 @@ class DriveConstants:
     kRearRightTurningCanId = 14
 
     # Kraken IDs
-    kFrontLeftDrivingId = 1
-    kRearLeftDrivingId = 2
-    kFrontRightDrivingId = 3
-    kRearRightDrivingId = 4
+    kFrontLeftDrivingId = 5
+    kRearLeftDrivingId = 8
+    kFrontRightDrivingId = 4
+    kRearRightDrivingId = 1
 
-    kFrontLeftTurningId = 5
-    kRearLeftTurningId = 6
-    kFrontRightTurningId = 7
-    kRearRightTurningId = 8
+    kFrontLeftTurningId = 6
+    kRearLeftTurningId = 7
+    kFrontRightTurningId = 3
+    kRearRightTurningId = 2
 
-    kFrontLeftCANCoderId = 9
-    kRearLeftCANCoderId = 10
-    kFrontRightCANCoderId = 11
-    kRearRightCANCoderId = 12
+    kFrontLeftCANCoderId = 3
+    kRearLeftCANCoderId = 4
+    kFrontRightCANCoderId = 2
+    kRearRightCANCoderId = 1
 
     kGyroReversed = True
 

@@ -35,52 +35,52 @@ class RobotContainer:
 
     def __init__(self) -> None:
         # The robot's subsystems
-        # self.robotDrive = DriveSubsystem()
+        self.robotDrive = DriveSubsystem()
 
-        # self.limelight = LimelightSystem()
+        self.limelight = LimelightSystem()
         
-        # self.autoChooser = AutoBuilder.buildAutoChooser()
+        self.autoChooser = AutoBuilder.buildAutoChooser()
 
-        # SmartDashboard.putData("Auto Chooser", self.autoChooser)
+        SmartDashboard.putData("Auto Chooser", self.autoChooser)
 
-        self.talonSubsystem = TalonSubsystem()
+        # self.talonSubsystem = TalonSubsystem()
 
         # The driver's controller
-        self.driverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
+        self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
 
         # Configure the button bindings
         self.configureButtonBindings()
 
         # Configure default commands
-        # self.robotDrive.setDefaultCommand(
-        #     # The left stick controls translation of the robot.
-        #     # Turning is controlled by the X axis of the right stick.
-        #     DriveCommand(
-        #         self.robotDrive,
-        #         self.limelight,
-        #         lambda:
-        #             -wpimath.applyDeadband(
-        #                 self.driverController.getLeftY(), OIConstants.kDriveDeadband
-        #             ),
-        #         lambda:
-        #             -wpimath.applyDeadband(
-        #                 self.driverController.getLeftX(), OIConstants.kDriveDeadband
-        #             ),
-        #         lambda:
-        #             -wpimath.applyDeadband(
-        #                 self.driverController.getRawAxis(2), OIConstants.kDriveDeadband
-        #             ),
-        #         self.driverController.getAButton
-        #         ),
-        #     )
-
-        self.talonSubsystem.setDefaultCommand(
-            RunMotor(self.talonSubsystem, lambda:
+        self.robotDrive.setDefaultCommand(
+            # The left stick controls translation of the robot.
+            # Turning is controlled by the X axis of the right stick.
+            DriveCommand(
+                self.robotDrive,
+                self.limelight,
+                lambda:
                     -wpimath.applyDeadband(
-                        self.driverController.getY(), OIConstants.kDriveDeadband
+                        self.driverController.getLeftY(), OIConstants.kDriveDeadband
                     ),
-                )
-        )
+                lambda:
+                    -wpimath.applyDeadband(
+                        self.driverController.getLeftX(), OIConstants.kDriveDeadband
+                    ),
+                lambda:
+                    -wpimath.applyDeadband(
+                        self.driverController.getRawAxis(2), OIConstants.kDriveDeadband
+                    ),
+                self.driverController.getAButton
+                ),
+            )
+
+        # self.talonSubsystem.setDefaultCommand(
+        #     RunMotor(self.talonSubsystem, lambda:
+        #             -wpimath.applyDeadband(
+        #                 self.driverController.getY(), OIConstants.kDriveDeadband
+        #             ),
+        #         )
+        # )
 
 
 
@@ -99,7 +99,7 @@ class RobotContainer:
 
     
     def getAutonomousCommand(self) -> commands2.Command:
-        return RunMotor(self.talonSubsystem, lambda: self.driverController.getRawAxis(1))
+        # return RunMotor(self.talonSubsystem, lambda: self.driverController.getRawAxis(1))
         # """Use this to pass the autonomous command to the main {@link Robot} class.
 
         # :returns: the command to run in autonomous
@@ -172,6 +172,6 @@ class RobotContainer:
 
         # return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))
 
-        # return self.autoChooser.getSelected()
+        return self.autoChooser.getSelected()
         # return PathPlannerAuto('New Auto')
-        return RunMotor(self.talonSubsystem, lambda: self.driverController.getRawAxis(1))
+        # return RunMotor(self.talonSubsystem, lambda: self.driverController.getRawAxis(1))

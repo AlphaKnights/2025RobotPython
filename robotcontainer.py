@@ -69,8 +69,8 @@ class RobotContainer:
         """
         self.buttonBoard.button(OIConstants.kElevatorUpButton).whileTrue(ElevatorUpCommand(self.elevator))
         self.buttonBoard.button(OIConstants.kElevatorDownButton).whileTrue(ElevatorDownCommand(self.elevator))
-
-        self.elevator.setDefaultCommand(ElevatorPosCommand(self.elevator))
+        self.buttonBoard.button(OIConstants.kElevatorPosButton).whileTrue(ElevatorPosCommand(self.elevator))
+        # self.elevator.setDefaultCommand(ElevatorPosCommand(self.elevator))
 
 
     def disablePIDSubsystems(self) -> None:

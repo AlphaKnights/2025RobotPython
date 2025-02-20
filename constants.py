@@ -153,6 +153,6 @@ class ElevatorConstants:
     kEncoderPositionFactor = 1
     kEncoderVelocityFactor = 1
 
-    kP = 1
+    kP = 0.01
     kI = 0
     kD = 0

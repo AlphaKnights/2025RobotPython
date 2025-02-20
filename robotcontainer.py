@@ -23,6 +23,8 @@ from pathplannerlib.auto import AutoBuilder # type: ignore
 from pathplannerlib.auto import NamedCommands # type: ignore
 from pathplannerlib.auto import PathPlannerAuto # type: ignore
 
+from talontest import *
+
 class RobotContainer:
     """
     This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -33,42 +35,54 @@ class RobotContainer:
 
     def __init__(self) -> None:
         # The robot's subsystems
-        self.robotDrive = DriveSubsystem()
+        # self.robotDrive = DriveSubsystem()
 
-        self.limelight = LimelightSystem()
+        # self.limelight = LimelightSystem()
         
-        self.autoChooser = AutoBuilder.buildAutoChooser()
+        # self.autoChooser = AutoBuilder.buildAutoChooser()
 
-        SmartDashboard.putData("Auto Chooser", self.autoChooser)
+        # SmartDashboard.putData("Auto Chooser", self.autoChooser)
+
+        self.talonSubsystem = TalonSubsystem()
 
         # The driver's controller
-        self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
+        self.driverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
 
         # Configure the button bindings
         self.configureButtonBindings()
 
         # Configure default commands
-        self.robotDrive.setDefaultCommand(
-            # The left stick controls translation of the robot.
-            # Turning is controlled by the X axis of the right stick.
-            DriveCommand(
-                self.robotDrive,
-                self.limelight,
-                lambda:
+        # self.robotDrive.setDefaultCommand(
+        #     # The left stick controls translation of the robot.
+        #     # Turning is controlled by the X axis of the right stick.
+        #     DriveCommand(
+        #         self.robotDrive,
+        #         self.limelight,
+        #         lambda:
+        #             -wpimath.applyDeadband(
+        #                 self.driverController.getLeftY(), OIConstants.kDriveDeadband
+        #             ),
+        #         lambda:
+        #             -wpimath.applyDeadband(
+        #                 self.driverController.getLeftX(), OIConstants.kDriveDeadband
+        #             ),
+        #         lambda:
+        #             -wpimath.applyDeadband(
+        #                 self.driverController.getRawAxis(2), OIConstants.kDriveDeadband
+        #             ),
+        #         self.driverController.getAButton
+        #         ),
+        #     )
+
+        self.talonSubsystem.setDefaultCommand(
+            RunMotor(self.talonSubsystem, lambda:
                     -wpimath.applyDeadband(
-                        self.driverController.getLeftY(), OIConstants.kDriveDeadband
+                        self.driverController.getY(), OIConstants.kDriveDeadband
                     ),
-                lambda:
-                    -wpimath.applyDeadband(
-                        self.driverController.getLeftX(), OIConstants.kDriveDeadband
-                    ),
-                lambda:
-                    -wpimath.applyDeadband(
-                        self.driverController.getRawAxis(2), OIConstants.kDriveDeadband
-                    ),
-                self.driverController.getAButton
-                ),
-            )
+                )
+        )
+
+
 
     def configureButtonBindings(self) -> None:
         """
@@ -77,12 +91,15 @@ class RobotContainer:
         and then passing it to a JoystickButton.
         """
 
+
+
     def disablePIDSubsystems(self) -> None:
         """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.
         This should be called on robot disable to prevent integral windup."""
 
     
     def getAutonomousCommand(self) -> commands2.Command:
+        return RunMotor(self.talonSubsystem, lambda: self.driverController.getRawAxis(1))
         # """Use this to pass the autonomous command to the main {@link Robot} class.
 
         # :returns: the command to run in autonomous
@@ -155,5 +172,6 @@ class RobotContainer:
 
         # return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))
 
-        return self.autoChooser.getSelected()
+        # return self.autoChooser.getSelected()
         # return PathPlannerAuto('New Auto')
+        return RunMotor(self.talonSubsystem, lambda: self.driverController.getRawAxis(1))

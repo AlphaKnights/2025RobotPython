@@ -8,7 +8,7 @@ class ElevatorPosCommand(commands2.Command):
         self.addRequirements(elevator_subsystem)
 
     def execute(self) -> None:
-        self.elevator.setPosition(50)
+        self.elevator.setPosition(10)
 
     def isFinished(self) -> bool:
         return False

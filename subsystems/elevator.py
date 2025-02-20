@@ -16,6 +16,8 @@ class ElevatorSubsystem(Subsystem):
         self.elevatorMotorLEncoder = self.elevatorMotorL.getEncoder()
         self.elevatorMotorLPID = self.elevatorMotorL.getClosedLoopController()
 
+        self.elevatorMotorREncoder = self.elevatorMotorR.getEncoder()
+        self.elevatorMotorRPID = self.elevatorMotorR.getClosedLoopController()
 
         l_config = SparkMaxConfig()
         l_config.IdleMode(int(SparkMax.IdleMode.kCoast))
@@ -35,8 +37,20 @@ class ElevatorSubsystem(Subsystem):
 
         r_config = SparkMaxConfig()
         r_config.IdleMode(int(SparkMax.IdleMode.kCoast))
-        r_config.follow(ElevatorConstants.kLeftMotorCanId, True)
-
+        r_config.softLimit.forwardSoftLimit(30) \
+            .reverseSoftLimit(-10)
+        r_config.softLimit.forwardSoftLimitEnabled(True) \
+            .reverseSoftLimitEnabled(True)
+        
+        r_config.encoder.positionConversionFactor(ElevatorConstants.kEncoderPositionFactor) \
+            .velocityConversionFactor(ElevatorConstants.kEncoderVelocityFactor)
+        
+        r_config.closedLoop.setFeedbackSensor(ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder) \
+            .pid(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD) \
+            .outputRange(-1, 1) \
+            .positionWrappingEnabled(False)
+        # r_config.follow(ElevatorConstants.kLeftMotorCanId, True)
+# 
         self.elevatorMotorL.configure(l_config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
         self.elevatorMotorR.configure(r_config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
 
@@ -77,6 +91,8 @@ class ElevatorSubsystem(Subsystem):
     def setPosition(self, position: float) -> None:
         print(self.elevatorMotorLEncoder.getPosition())
         self.elevatorMotorLPID.setReference(position, SparkMax.ControlType.kPosition)
+        self.elevatorMotorRPID.setReference(position, SparkMax.ControlType.kPosition)
+
 
     def stop(self) -> None:
         print("Stop")

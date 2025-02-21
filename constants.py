@@ -122,7 +122,7 @@ class ModuleConstants:
     kTurningEncoderPositionPIDMinInput = 0  # radian
     kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor  # radian
 
-    kDrivingP = 0.04
+    kDrivingP = 0.02
     kDrivingI = 0
     kDrivingD = 0
     kDrivingFF = 1 / kDriveWheelFreeSpeedRps

@@ -37,33 +37,71 @@ class DriveSubsystem(Subsystem):
         super().__init__()
 
         # Create MAXSwerveModules
+        # self.frontLeft = MAXSwerveModule(
+            #  DriveConstants.kFrontLeftDrivingCanId,
+        #     DriveConstants.kFrontLeftTurningCanId,
+        #     DriveConstants.kFrontLeftCANCoderId,
+        #     DriveConstants.kFrontLeftChassisAngularOffset,
+        # )
+
+        # self.frontRight = MAXSwerveModule(
+        #     DriveConstants.kFrontRightDrivingCanId,
+        #     DriveConstants.kFrontRightTurningCanId,
+        #     DriveConstants.kFrontRightCANCoderId,
+        #     DriveConstants.kFrontRightChassisAngularOffset,
+        # )
+
+        # self.rearLeft = MAXSwerveModule(
+        #     DriveConstants.kRearLeftDrivingCanId,
+        #     DriveConstants.kRearLeftTurningCanId,
+        #     DriveConstants.kRearLeftCANCoderId,
+        #     DriveConstants.kBackLeftChassisAngularOffset,
+        # )
+
+        # self.rearRight = MAXSwerveModule(
+        #     DriveConstants.kRearRightDrivingCanId,
+        #     DriveConstants.kRearRightTurningCanId,
+        #     DriveConstants.kRearRightCANCoderId,
+        #     DriveConstants.kBackRightChassisAngularOffset,
+        # )
+
         self.frontLeft = MAXSwerveModule(
-            DriveConstants.kFrontLeftDrivingCanId,
-            DriveConstants.kFrontLeftTurningCanId,
+            DriveConstants.kFrontLeftDrivingId,
+            DriveConstants.kFrontLeftTurningId,
             DriveConstants.kFrontLeftCANCoderId,
             DriveConstants.kFrontLeftChassisAngularOffset,
+            # 1,
+            # DriveConstants.kFrontLeftPosition,
         )
 
         self.frontRight = MAXSwerveModule(
-            DriveConstants.kFrontRightDrivingCanId,
-            DriveConstants.kFrontRightTurningCanId,
+            DriveConstants.kFrontRightDrivingId,
+            DriveConstants.kFrontRightTurningId,
             DriveConstants.kFrontRightCANCoderId,
             DriveConstants.kFrontRightChassisAngularOffset,
+            # 2,
+            # DriveConstants.kFrontRightPosition,
         )
 
         self.rearLeft = MAXSwerveModule(
-            DriveConstants.kRearLeftDrivingCanId,
-            DriveConstants.kRearLeftTurningCanId,
+            DriveConstants.kRearLeftDrivingId,
+            DriveConstants.kRearLeftTurningId,
             DriveConstants.kRearLeftCANCoderId,
             DriveConstants.kBackLeftChassisAngularOffset,
+            # 3,
+            # DriveConstants.kRearLeftPosition,
         )
 
         self.rearRight = MAXSwerveModule(
-            DriveConstants.kRearRightDrivingCanId,
-            DriveConstants.kRearRightTurningCanId,
+            DriveConstants.kRearRightDrivingId,
+            DriveConstants.kRearRightTurningId,
             DriveConstants.kRearRightCANCoderId,
             DriveConstants.kBackRightChassisAngularOffset,
+            # 4,
+            # DriveConstants.kRearRightPosition
         )
+
+
 
         # The gyro sensor
         self.gyro = AHRS(AHRS.NavXComType.kMXP_SPI)

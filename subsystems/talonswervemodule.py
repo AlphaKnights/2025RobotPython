@@ -1,6 +1,10 @@
 import phoenix6
 import math
 
+import phoenix6.swerve
+from phoenix6.swerve.swerve_module_constants import SteerFeedbackType
+from phoenix6.signals.spn_enums import FeedbackSensorSourceValue
+
 from constants import ModuleConstants
 
 from wpimath.geometry import Rotation2d
@@ -16,6 +20,7 @@ class TalonSwerveModule:
         self.drive_motor = phoenix6.hardware.TalonFX(drive_motor_id)
         self.turn_motor = phoenix6.hardware.TalonFX(turn_motor_id)
         self.encoder = phoenix6.hardware.CANcoder(encoder_id)
+        
 
         drive_motor_config = phoenix6.configs.TalonFXConfiguration()
 
@@ -38,6 +43,11 @@ class TalonSwerveModule:
 
         turn_motor_config = phoenix6.configs.TalonFXConfiguration()
 
+        turn_motor_config.feedback.feedback_remote_sensor_id = encoder_id
+        turn_motor_config.feedback.feedback_sensor_source = FeedbackSensorSourceValue.REMOTE_CANCODER
+
+        phoenix6.swerve.SwerveDrivetrain
+
         turn_motor_config.current_limits.supply_current_limit_enable = True
         turn_motor_config.current_limits.supply_current_limit = ModuleConstants.kTurningMotorCurrentLimit
 
@@ -50,7 +60,8 @@ class TalonSwerveModule:
 
         turn_motor_config.motor_output.neutral_mode = phoenix6.signals.NeutralModeValue.BRAKE
 
-        turn_motor_config.feedback.sensor_to_mechanism_ratio = ModuleConstants.kTurningEncoderPositionFactor
+        turn_motor_config.feedback.sensor_to_mechanism_ratio = 1
+        turn_motor_config.closed_loop_general.continuous_wrap = True
 
         self.turn_motor.configurator.apply(turn_motor_config)
 
@@ -66,14 +77,18 @@ class TalonSwerveModule:
         return SwerveModulePosition(self.drive_motor.get_position().value_as_double, Rotation2d(self.encoder.get_position().value_as_double - self.offset))
     
     def setDesiredState(self, desired_state: SwerveModuleState) -> None:
+        # print('connected?: ', str(self.encoder.is_connected))
+        # print('pos', self.encoder.get_absolute_position().is_all_good())
         corrected_state = SwerveModuleState()
         corrected_state.speed = desired_state.speed
         corrected_state.angle = Rotation2d(desired_state.angle.radians() + self.offset)
 
         corrected_state.optimize(Rotation2d(self.encoder.get_position().value_as_double))
 
+        print(desired_state.angle.degrees())
+
         self.drive_motor.set(desired_state.speed)
-        self.turn_motor.set_position(desired_state.angle.radians() / (2* math.pi))
+        self.turn_motor.set_control(desired_state.angle.radians() / (2* math.pi))
 
         self.desired_state = desired_state
 

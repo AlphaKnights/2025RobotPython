@@ -70,8 +70,8 @@ class DriveSubsystem(Subsystem):
             DriveConstants.kFrontLeftTurningId,
             DriveConstants.kFrontLeftCANCoderId,
             DriveConstants.kFrontLeftChassisAngularOffset,
-            # 1,
-            # DriveConstants.kFrontLeftPosition,
+            1,
+            DriveConstants.kFrontLeftPosition,
         )
 
         self.frontRight = MAXSwerveModule(
@@ -79,26 +79,28 @@ class DriveSubsystem(Subsystem):
             DriveConstants.kFrontRightTurningId,
             DriveConstants.kFrontRightCANCoderId,
             DriveConstants.kFrontRightChassisAngularOffset,
-            # 2,
-            # DriveConstants.kFrontRightPosition,
+            2,
+            DriveConstants.kFrontRightPosition,
         )
+
 
         self.rearLeft = MAXSwerveModule(
             DriveConstants.kRearLeftDrivingId,
             DriveConstants.kRearLeftTurningId,
             DriveConstants.kRearLeftCANCoderId,
             DriveConstants.kBackLeftChassisAngularOffset,
-            # 3,
-            # DriveConstants.kRearLeftPosition,
+            3,
+            DriveConstants.kRearLeftPosition,
         )
+
 
         self.rearRight = MAXSwerveModule(
             DriveConstants.kRearRightDrivingId,
             DriveConstants.kRearRightTurningId,
             DriveConstants.kRearRightCANCoderId,
             DriveConstants.kBackRightChassisAngularOffset,
-            # 4,
-            # DriveConstants.kRearRightPosition
+            4,
+            DriveConstants.kRearRightPosition
         )
 
 

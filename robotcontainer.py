@@ -37,7 +37,7 @@ class RobotContainer:
         # The robot's subsystems
         self.robotDrive = DriveSubsystem()
 
-        self.limelight = LimelightSystem()
+        # self.limelight = LimelightSystem()
         
         self.autoChooser = AutoBuilder.buildAutoChooser()
 
@@ -57,7 +57,7 @@ class RobotContainer:
             # Turning is controlled by the X axis of the right stick.
             DriveCommand(
                 self.robotDrive,
-                self.limelight,
+                # self.limelight,
                 lambda:
                     -wpimath.applyDeadband(
                         self.driverController.getLeftY(), OIConstants.kDriveDeadband

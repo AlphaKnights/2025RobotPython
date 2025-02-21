@@ -4,6 +4,7 @@ import math
 import phoenix6.swerve
 from phoenix6.swerve.swerve_module_constants import SteerFeedbackType
 from phoenix6.signals.spn_enums import FeedbackSensorSourceValue
+from phoenix6.controls import VelocityVoltage, PositionVoltage
 
 from constants import ModuleConstants
 
@@ -46,8 +47,6 @@ class TalonSwerveModule:
         turn_motor_config.feedback.feedback_remote_sensor_id = encoder_id
         turn_motor_config.feedback.feedback_sensor_source = FeedbackSensorSourceValue.REMOTE_CANCODER
 
-        phoenix6.swerve.SwerveDrivetrain
-
         turn_motor_config.current_limits.supply_current_limit_enable = True
         turn_motor_config.current_limits.supply_current_limit = ModuleConstants.kTurningMotorCurrentLimit
 
@@ -87,8 +86,10 @@ class TalonSwerveModule:
 
         print(desired_state.angle.degrees())
 
-        self.drive_motor.set(desired_state.speed)
-        self.turn_motor.set_control(desired_state.angle.radians() / (2* math.pi))
+        # self.drive_motor.set(desired_state.speed)
+        # self.turn_motor.set_control(desired_state.angle.radians() / (2* math.pi))
+        self.drive_motor.set_control(VelocityVoltage(velocity=desired_state.speed))
+        self.turn_motor.set_control(PositionVoltage(position=desired_state.angle.radians() / (2* math.pi)))
 
         self.desired_state = desired_state
 

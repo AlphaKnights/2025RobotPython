@@ -1,10 +1,8 @@
 from cscore import CameraServer, VideoSource
 def main():
-    cs1 = CameraServer.getInstance()
-    cs1.enableLogging()
-    cs2 = CameraServer.getInstance()
-    cs2.enableLogging()
-    usb1 = cs1.startAutomaticCapture(dev=0)
-    usb2 = cs2.startAutomaticCapture(dev=1)
-    cs1.waitForever()
-    cs2.waitForever()
+    CameraServer.enableLogging()
+    camera1 = CameraServer.startAutomaticCapture(0)
+    camera2 = CameraServer.startAutomaticCapture(1)
+    camera1.setConnectionStrategy(VideoSource.ConnectionStrategy.kConnectionKeepOpen)
+    camera2.setConnectionStrategy(VideoSource.ConnectionStrategy.kConnectionKeepOpen)
+    CameraServer.waitForever()

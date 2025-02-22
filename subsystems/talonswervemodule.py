@@ -41,7 +41,6 @@ class TalonSwerveModule:
         drive_motor_config.motor_output.neutral_mode = phoenix6.signals.NeutralModeValue.BRAKE
 
         drive_motor_config.feedback.sensor_to_mechanism_ratio = -.19
-        # drive_motor_config.feedback.sensor_to_mechanism_ratio = ModuleConstants.kDrivingEncoderPositionFactor
 
         # Replace to_deserialize with string very weird workaround
         self.drive_motor.configurator.apply(drive_motor_config)
@@ -84,36 +83,14 @@ class TalonSwerveModule:
         return SwerveModulePosition(self.drive_motor.get_position().value_as_double, Rotation2d(self.encoder.get_position().value_as_double - self.offset))
     
     def setDesiredState(self, desired_state: SwerveModuleState) -> None:
-        # if self.encoder.device_id != 1:
-        #     return
-
-        # print('connected?: ', str(self.encoder.is_connected))
-        # print('pos', self.encoder.get_absolute_position().is_all_good())
-        # print('pos', self.turn_motor.get_position().value_as_double)
         corrected_state = SwerveModuleState()
         corrected_state.speed = desired_state.speed
         corrected_state.angle = Rotation2d(desired_state.angle.radians() + self.offset)
 
         corrected_state.optimize(Rotation2d(self.encoder.get_position().value_as_double))
 
-        # print(desired_state.angle.degrees())
-
-        # self.drive_motor.set(desired_state.speed)
-        # self.turn_motor.set_control(desired_state.angle.radians() / (2* math.pi))
-
-        # print(desired_state.speed)
-        # print(ModuleConstants.kDrivingEncoderPositionFactor)
-
-        # self.drive_motor.set(0.02)
-        # print(ModuleConstants.kDrivingFF)
-        # self.drive_motor.set_control(VelocityVoltage(velocity=1))
-
         self.drive_motor.set_control(VelocityVoltage(velocity=desired_state.speed))
-
-        print('desired state', desired_state.speed)
-
         self.turn_motor.set_control(PositionVoltage(position=desired_state.angle.radians() / (2* math.pi)))
-        # self.turn_motor.set_control(PositionVoltage(position=(math.pi/2) / (2* math.pi)))
 
         self.desired_state = desired_state
 

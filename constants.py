@@ -129,7 +129,7 @@ class ModuleConstants:
     kDrivingMinOutput = -1
     kDrivingMaxOutput = 1
 
-    kTurningP = 1
+    kTurningP = 40
     kTurningI = 0
     kTurningD = 0
     kTurningFF = 0

@@ -47,10 +47,10 @@ class DriveConstants:
     kDriveKinematics = SwerveDrive4Kinematics(*kModulePositions)
 
     # Angular offsets of the modules relative to the chassis in radians
-    kFrontLeftChassisAngularOffset = math.radians(-120) #(-60 - 45)*(math.pi/180)
-    kFrontRightChassisAngularOffset = math.radians(-25)
-    kBackLeftChassisAngularOffset = math.radians(-205)
-    kBackRightChassisAngularOffset = math.radians(70)
+    kFrontLeftChassisAngularOffset = math.radians(-90) #(-60 - 45)*(math.pi/180)
+    kFrontRightChassisAngularOffset = math.radians(-65)
+    kBackLeftChassisAngularOffset = math.radians(-40)
+    kBackRightChassisAngularOffset = math.radians(100)
 
 
     # SPARK MAX CAN IDs
@@ -66,16 +66,16 @@ class DriveConstants:
 
     # Kraken IDs
     kFrontLeftDrivingId = 5
-    kRearLeftDrivingId = 8
+    kRearLeftDrivingId = 7
     kFrontRightDrivingId = 4
     kRearRightDrivingId = 1
 
     kFrontLeftTurningId = 6
-    kRearLeftTurningId = 7
+    kRearLeftTurningId = 8
     kFrontRightTurningId = 3
     kRearRightTurningId = 2
 
-    kFrontLeftCANCoderId = 3
+    kFrontLeftCANCoderId = 3    
     kRearLeftCANCoderId = 4
     kFrontRightCANCoderId = 2
     kRearRightCANCoderId = 1
@@ -145,7 +145,8 @@ class ModuleConstants:
 
 class OIConstants:
     kDriverControllerPort = 1
-    kDriveDeadband = 0.2
+    # kDriveDeadband = 0.2
+    kDriveDeadband = 0.3
     
 
 class AutoConstants:

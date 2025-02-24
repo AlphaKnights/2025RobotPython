@@ -1,5 +1,6 @@
 import math
 import typing
+import time
 from typing import Callable, Sequence
 
 import wpimath.kinematics
@@ -74,6 +75,8 @@ class DriveSubsystem(Subsystem):
             # DriveConstants.kFrontLeftPosition,
         )
 
+        time.sleep(0.1)
+
         self.frontRight = MAXSwerveModule(
             DriveConstants.kFrontRightDrivingId,
             DriveConstants.kFrontRightTurningId,
@@ -83,6 +86,7 @@ class DriveSubsystem(Subsystem):
             # DriveConstants.kFrontRightPosition,
         )
 
+        time.sleep(0.1)
 
         self.rearLeft = MAXSwerveModule(
             DriveConstants.kRearLeftDrivingId,
@@ -93,6 +97,7 @@ class DriveSubsystem(Subsystem):
             # DriveConstants.kRearLeftPosition,
         )
 
+        time.sleep(0.1)
 
         self.rearRight = MAXSwerveModule(
             DriveConstants.kRearRightDrivingId,
@@ -220,6 +225,7 @@ class DriveSubsystem(Subsystem):
         self.rearRight.setDesiredState(swerveModuleStates[3])
 
     def setX(self) -> None:
+        return
         """Sets the wheels into an X formation to prevent movement."""
         self.frontLeft.setDesiredState(SwerveModuleState(0, Rotation2d.fromDegrees(45)))
         self.frontRight.setDesiredState(

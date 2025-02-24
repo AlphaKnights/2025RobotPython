@@ -73,7 +73,7 @@ class TalonSwerveModule:
 
         self.offset = offset
         self.desired_state = SwerveModuleState(0.0, Rotation2d(self.encoder.get_position().value_as_double))
-        self.encoder.set_position(0)
+        self.drive_motor.set_position(0)
     
     def getState(self) -> SwerveModuleState:
         return SwerveModuleState(self.drive_motor.get_velocity().value_as_double, Rotation2d(self.encoder.get_position().value_as_double - self.offset))

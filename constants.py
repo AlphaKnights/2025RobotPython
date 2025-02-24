@@ -48,7 +48,7 @@ class DriveConstants:
 
     # Angular offsets of the modules relative to the chassis in radians
     kFrontLeftChassisAngularOffset = math.radians(-90) #(-60 - 45)*(math.pi/180)
-    kFrontRightChassisAngularOffset = math.radians(-65)
+    kFrontRightChassisAngularOffset = math.radians(0)
     kBackLeftChassisAngularOffset = math.radians(-40)
     kBackRightChassisAngularOffset = math.radians(100)
 
@@ -146,7 +146,7 @@ class ModuleConstants:
 class OIConstants:
     kDriverControllerPort = 1
     # kDriveDeadband = 0.2
-    kDriveDeadband = 0.3
+    kDriveDeadband = 0.4
     
 
 class AutoConstants:

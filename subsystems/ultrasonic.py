@@ -10,7 +10,7 @@ from interfaces.limelight_results import LimelightResults
 class UltrasonicSubsystem(commands2.Subsystem):
     def __init__(self) -> None:
         super().__init__()
-        self.rangeFinder = wpilib.Ultrasonic(1, 2)
+        self.rangeFinder = wpilib.Ultrasonic(2, 1)
         self.rangeFinder.setAutomaticMode(True)
 
     def periodic(self) -> None:

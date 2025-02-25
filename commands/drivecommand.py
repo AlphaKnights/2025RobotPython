@@ -27,13 +27,18 @@ class DriveCommand(commands2.Command):
 
     def execute(self) -> None:
         align = self.align()
+
+        if align:
+            # self.swerve.resetEncoders()
+            return
+
         if not align:
             self.swerve.drive(
                 ChassisSpeeds(
                     self.x() * DriveConstants.kMaxSpeedMetersPerSecond, 
                     self.y()* DriveConstants.kMaxSpeedMetersPerSecond, 
                     self.rot() * DriveConstants.kMaxAngularSpeed
-                ), True, True)
+                ), False, False)
             return
         
         results = self.limelight.get_results()

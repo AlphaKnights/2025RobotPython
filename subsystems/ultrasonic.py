@@ -11,10 +11,8 @@ from constants import UltrasonicConstants
 class UltrasonicSubsystem(commands2.Subsystem):
     def __init__(self) -> None:
         super().__init__()
-        self.rangeFinder = wpilib.Ultrasonic(UltrasonicConstants.kPingChannel, UltrasonicConstants.kEchoChannel)
-        self.rangeFinder.setAutomaticMode(False)
-        self.rangeFinder.setEnabled(True)
-        
+        self.rangeFinder = wpilib.Ultrasonic(1, 2)
+        self.rangeFinder.setAutomaticMode(True)
 
     def periodic(self) -> None:
         if self.rangeFinder.isRangeValid():

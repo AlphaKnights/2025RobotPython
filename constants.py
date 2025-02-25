@@ -152,3 +152,8 @@ class LEDConstants:
     kBlueHue = 90
     kBlueSat = 220
     kBlueVal = 30
+
+class UltrasonicConstants:
+    kPingChannel = 2
+    kEchoChannel = 1
+

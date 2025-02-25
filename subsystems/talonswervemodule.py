@@ -53,7 +53,7 @@ class TalonSwerveModule:
         turn_motor_config.current_limits.supply_current_limit_enable = True
         turn_motor_config.current_limits.supply_current_limit = ModuleConstants.kTurningMotorCurrentLimit
 
-        turn_motor_config.motor_output.duty_cycle_neutral_deadband = 0.1
+        turn_motor_config.motor_output.duty_cycle_neutral_deadband = 0
 
         turn_motor_config.slot0.k_p = ModuleConstants.kTurningP
         turn_motor_config.slot0.k_i = ModuleConstants.kTurningI
@@ -72,7 +72,7 @@ class TalonSwerveModule:
         self.turn_motor.configurator.apply(turn_motor_config)
 
         self.offset = offset
-        self.desired_state = SwerveModuleState(0.0, Rotation2d(self.encoder.get_position().value_as_double))
+        self.desired_state = SwerveModuleState(0.0, Rotation2d(self.encoder.get_position().value_as_double + offset))
         self.drive_motor.set_position(0)
     
     def getState(self) -> SwerveModuleState:
@@ -85,7 +85,7 @@ class TalonSwerveModule:
     def setDesiredState(self, desired_state: SwerveModuleState) -> None:
         corrected_state = SwerveModuleState()
         corrected_state.speed = desired_state.speed
-        corrected_state.angle = Rotation2d(desired_state.angle.radians() + self.offset)
+        corrected_state.angle = Rotation2d(desired_state.angle.radians())
 
         corrected_state.optimize(Rotation2d(self.encoder.get_position().value_as_double))
 
@@ -96,7 +96,6 @@ class TalonSwerveModule:
 
     def resetEncoders(self) -> None:
         self.drive_motor.set_position(0)
-        self.encoder.set_position(0)
 
 
                  

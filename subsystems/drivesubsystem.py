@@ -19,6 +19,8 @@ from wpimath.kinematics import (
     SwerveDrive4Odometry,
 )
 
+from wpilib import SmartDashboard, SendableChooser
+
 from constants import AutoConstants, DriveConstants, ModuleConstants
 import swerveutils
 # from .maxswervemodule import MAXSwerveModule

@@ -1,6 +1,6 @@
 import commands2
 import typing
-
+import math
 from wpimath.kinematics import (
     ChassisSpeeds,
     SwerveModuleState,
@@ -103,6 +103,13 @@ class DriveCommand(commands2.Command):
 
     def execute(self) -> None:
         align = self.align()
+
+        if align:
+            self.swerve.resetEncoders()
+            # self.swerve.rearLeft.offset += math.radians(5)
+            # print(self.swerve.rearLeft.offset)
+            return
+
         if True:
             self.swerve.drive(
                 ChassisSpeeds(

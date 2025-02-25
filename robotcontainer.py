@@ -58,21 +58,22 @@ class RobotContainer:
             DriveCommand(
                 self.robotDrive,
                 # self.limelight,
-                # lambda:
-                #     -wpimath.applyDeadband(
-                #         self.driverController.getLeftY(), OIConstants.kDriveDeadband
-                #     ),
-                # lambda:
-                #     -wpimath.applyDeadband(
-                #         self.driverController.getLeftX(), OIConstants.kDriveDeadband
-                #     ),
-                lambda: 0,
-                lambda: 0.4,
+                lambda:
+                    -wpimath.applyDeadband(
+                        self.driverController.getLeftY(), OIConstants.kDriveDeadband
+                    ),
+                lambda:
+                    -wpimath.applyDeadband(
+                        self.driverController.getLeftX(), OIConstants.kDriveDeadband
+                    ),
+                # lambda: 0,
+                # lambda: 0.4 if self.driverController.getRawButton(11) else 0,
+                # lambda: 0,
                 lambda:
                     -wpimath.applyDeadband(
                         self.driverController.getRawAxis(2), OIConstants.kDriveDeadband
                     ),
-                self.driverController.getAButton
+                lambda: self.driverController.getRawButton(12)
                 ),
             )
 

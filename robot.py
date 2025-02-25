@@ -20,8 +20,8 @@ class MyRobot(commands2.TimedCommandRobot):
         self.container = RobotContainer()
         self.autonomousCommand = None
 
-        self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
-        self.cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection")
+        self.driverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
+        self.cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("Selected Camera Path")
         wpilib.CameraServer.launch("vision.py:main")
 
     # def autonomousInit(self) -> None:
@@ -35,7 +35,8 @@ class MyRobot(commands2.TimedCommandRobot):
             self.autonomousCommand.cancel()
     
     def teleopPeridodic(self) -> None:
-        if self.driverController.getLeftY() < 0:
+        print(self.driverController.getY())
+        if self.driverController.getY() > 0:
             print("Setting camera 2")
             self.cameraSelection.setString("USB Camera 1")
         else:

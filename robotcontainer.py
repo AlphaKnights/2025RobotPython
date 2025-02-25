@@ -23,8 +23,6 @@ from pathplannerlib.auto import AutoBuilder # type: ignore
 from pathplannerlib.auto import NamedCommands # type: ignore
 from pathplannerlib.auto import PathPlannerAuto # type: ignore
 
-from talontest import *
-
 class RobotContainer:
     """
     This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,7 +35,7 @@ class RobotContainer:
         # The robot's subsystems
         self.robotDrive = DriveSubsystem()
 
-        # self.limelight = LimelightSystem()
+        self.limelight = LimelightSystem()
         
         self.autoChooser = AutoBuilder.buildAutoChooser()
 
@@ -57,7 +55,7 @@ class RobotContainer:
             # Turning is controlled by the X axis of the right stick.
             DriveCommand(
                 self.robotDrive,
-                # self.limelight,
+                self.limelight,
                 lambda:
                     -wpimath.applyDeadband(
                         self.driverController.getLeftY(), OIConstants.kDriveDeadband
@@ -66,9 +64,6 @@ class RobotContainer:
                     -wpimath.applyDeadband(
                         self.driverController.getLeftX(), OIConstants.kDriveDeadband
                     ),
-                # lambda: 0,
-                # lambda: 0.4 if self.driverController.getRawButton(11) else 0,
-                # lambda: 0,
                 lambda:
                     -wpimath.applyDeadband(
                         self.driverController.getRawAxis(2), OIConstants.kDriveDeadband

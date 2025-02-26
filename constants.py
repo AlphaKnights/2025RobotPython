@@ -126,7 +126,11 @@ class OIConstants:
     kButtonBoardPort = 0
     kElevatorUpButton = 12
     kElevatorDownButton = 11
-    kElevatorPosButton = 10
+    kElevatorLvl0Button = 0
+    kElevatorLvl1Button = 1
+    kElevatorLvl2Button = 2
+    kElevatorLvl3Button = 3
+    kElevatorLvl4Button = 4
     
 
 class AutoConstants:
@@ -156,3 +160,16 @@ class ElevatorConstants:
     kP = 0.01
     kI = 0
     kD = 0
+
+    kLvl0Height = 0.0
+    
+    kLvl1Height = 0.0
+    
+    kLvl2Height = 0.0
+
+    kLvl3Height = 0.0
+    
+    kLvl4Height = 0.0
+
+    kForwardSoftLimit = 40
+    kReverseSoftLimit = -10

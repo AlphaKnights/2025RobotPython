@@ -9,7 +9,7 @@ from wpimath.controller import PIDController, ProfiledPIDControllerRadians
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 
-from constants import AutoConstants, DriveConstants, OIConstants
+from constants import AutoConstants, DriveConstants, OIConstants, ElevatorConstants
 # from subsystems.drivesubsystem import DriveSubsystem
 # from commands.drivecommand import DriveCommand
 
@@ -67,9 +67,25 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
+        #manual elevator
         self.buttonBoard.button(OIConstants.kElevatorUpButton).whileTrue(ElevatorUpCommand(self.elevator))
         self.buttonBoard.button(OIConstants.kElevatorDownButton).whileTrue(ElevatorDownCommand(self.elevator))
-        self.buttonBoard.button(OIConstants.kElevatorPosButton).whileTrue(ElevatorPosCommand(self.elevator))
+
+        #level 0
+        self.buttonBoard.button(OIConstants.kElevatorLvl0Button).whileTrue(ElevatorPosCommand(self.elevator, ElevatorConstants.kLvl0Height))
+
+        #level 1
+        self.buttonBoard.button(OIConstants.kElevatorLvl1Button).whileTrue(ElevatorPosCommand(self.elevator, ElevatorConstants.kLvl1Height))
+
+        #level 2
+        self.buttonBoard.button(OIConstants.kElevatorLvl2Button).whileTrue(ElevatorPosCommand(self.elevator, ElevatorConstants.kLvl2Height))
+
+        #level 3
+        self.buttonBoard.button(OIConstants.kElevatorLvl3Button).whileTrue(ElevatorPosCommand(self.elevator, ElevatorConstants.kLvl3Height))
+
+        #level 4
+        self.buttonBoard.button(OIConstants.kElevatorLvl4Button).whileTrue(ElevatorPosCommand(self.elevator, ElevatorConstants.kLvl4Height))
+
         # self.elevator.setDefaultCommand(ElevatorPosCommand(self.elevator))
 
 

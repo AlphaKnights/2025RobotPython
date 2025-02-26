@@ -37,8 +37,8 @@ class ElevatorSubsystem(Subsystem):
 
         r_config = SparkMaxConfig()
         r_config.IdleMode(int(SparkMax.IdleMode.kCoast))
-        r_config.softLimit.forwardSoftLimit(30) \
-            .reverseSoftLimit(-10)
+        r_config.softLimit.forwardSoftLimit(ElevatorConstants.kForwardSoftLimit) \
+            .reverseSoftLimit(ElevatorConstants.kReverseSoftLimit)
         r_config.softLimit.forwardSoftLimitEnabled(True) \
             .reverseSoftLimitEnabled(True)
         
@@ -54,36 +54,40 @@ class ElevatorSubsystem(Subsystem):
         self.elevatorMotorL.configure(l_config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
         self.elevatorMotorR.configure(r_config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
 
-        self.upperLimit = wpilib.DigitalInput(ElevatorConstants.kUpperLimit)
-        self.lowerLimit = wpilib.DigitalInput(ElevatorConstants.kLowerLimit)
+        # self.upperLimit = wpilib.DigitalInput(ElevatorConstants.kUpperLimit)
+        # self.lowerLimit = wpilib.DigitalInput(ElevatorConstants.kLowerLimit)
     
     def periodic(self) -> None:
-        if (not self.upperLimit.get() and self.elevatorMotorL.get() > 0):
-            self.elevatorMotorL.stopMotor()
-            self.elevatorMotorR.stopMotor()
-            return
+        # if (not self.upperLimit.get() and self.elevatorMotorL.get() > 0):
+        #     self.elevatorMotorL.stopMotor()
+        #     self.elevatorMotorR.stopMotor()
+        #     return
         
-        if (not self.lowerLimit.get() and self.elevatorMotorL.get() < 0):
-            self.elevatorMotorL.stopMotor()
-            self.elevatorMotorR.stopMotor()
-            return
+        # if (not self.lowerLimit.get() and self.elevatorMotorL.get() < 0):
+        #     self.elevatorMotorL.stopMotor()
+        #     self.elevatorMotorR.stopMotor()
+        #     return
 
-        if (not self.lowerLimit.get()):
-            print ("Lower On")
+        # if (not self.lowerLimit.get()):
+        #     print ("Lower On")
         
-        if (not self.upperLimit.get()):
-            print ("Upper On")
+        # if (not self.upperLimit.get()):
+        #     print ("Upper On")
+
+        print("Left Position: " + str(self.elevatorMotorLEncoder.getPosition()))
+        print("Right Position: " + str(self.elevatorMotorREncoder.getPosition()))
+
 
     def move(self, speed: float) -> None:
-        if (not self.upperLimit.get() and speed > 0):
-            self.elevatorMotorL.stopMotor()
-            self.elevatorMotorR.stopMotor()
-            return
+        # if (not self.upperLimit.get() and speed > 0):
+        #     self.elevatorMotorL.stopMotor()
+        #     self.elevatorMotorR.stopMotor()
+        #     return
         
-        if (not self.lowerLimit.get() and speed < 0):
-            self.elevatorMotorL.stopMotor()
-            self.elevatorMotorR.stopMotor()
-            return
+        # if (not self.lowerLimit.get() and speed < 0):
+        #     self.elevatorMotorL.stopMotor()
+        #     self.elevatorMotorR.stopMotor()
+        #     return
     
         self.elevatorMotorL.set(speed)
         self.elevatorMotorR.set(-speed)

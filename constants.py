@@ -153,6 +153,9 @@ class LEDConstants:
     kBlueSat = 220
     kBlueVal = 30
 
+    kGoodColor = [120, 255, 50]
+    kBadColor = [0, 100, 50]
+
 class UltrasonicConstants:
     kPingChannel = 2
     kEchoChannel = 1

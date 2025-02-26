@@ -19,6 +19,7 @@ from subsystems.limelight_subsystem import LimelightSystem
 from subsystems.ultrasonic import UltrasonicSubsystem
 from commands.auto_rotate import AutoRotate
 from commands.drivecommand import DriveCommand
+from subsystems.coral_manipulator import CoralManipulator
 
 from pathplannerlib.auto import AutoBuilder # type: ignore
 from pathplannerlib.auto import NamedCommands # type: ignore
@@ -44,7 +45,8 @@ class RobotContainer:
 
         #SmartDashboard.putData("Auto Chooser", self.autoChooser)
 
-        self.ultrasonic = UltrasonicSubsystem()
+        # self.ultrasonic = UltrasonicSubsystem()
+        self.coral_manipulator = CoralManipulator()
         # The driver's controller
         self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
 
@@ -161,5 +163,5 @@ class RobotContainer:
 
         # return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))
 
-        return commands2.waitcommand(0.1)#self.autoChooser.getSelected()
+        return commands2.WaitCommand(0.1)#self.autoChooser.getSelected()
         # return PathPlannerAuto('New Auto')

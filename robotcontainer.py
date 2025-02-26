@@ -53,6 +53,8 @@ class RobotContainer:
         if wpilib.Joystick(OIConstants.kDriverControllerPort).getName() == "Logitech Extreme 3D":
             joystickDrive = True
         # The driver's controller
+        joystickDrive = True
+
         if joystickDrive:
             self.driverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
         else:
@@ -79,9 +81,8 @@ class RobotContainer:
                         -wpimath.applyDeadband(
                             self.driverController.getRawAxis(2) * (self.driverController.getRawAxis(3) + 1)/2, OIConstants.kDriveDeadband
                         ),
-                    # lambda: 0,
                     # lambda: 0.4 if self.driverController.getRawButton(11) else 0,
-
+                    # lambda: 0,
                     # lambda: 0,
 
                     lambda: self.driverController.getRawButton(12)

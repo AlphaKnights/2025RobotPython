@@ -77,7 +77,6 @@ class DriveSubsystem(Subsystem):
             # DriveConstants.kFrontLeftPosition,
         )
 
-        time.sleep(0.1)
 
         self.frontRight = MAXSwerveModule(
             DriveConstants.kFrontRightDrivingId,
@@ -88,7 +87,6 @@ class DriveSubsystem(Subsystem):
             # DriveConstants.kFrontRightPosition,
         )
 
-        time.sleep(0.1)
 
         self.rearLeft = MAXSwerveModule(
             DriveConstants.kRearLeftDrivingId,
@@ -99,7 +97,6 @@ class DriveSubsystem(Subsystem):
             # DriveConstants.kRearLeftPosition,
         )
 
-        time.sleep(0.1)
 
         self.rearRight = MAXSwerveModule(
             DriveConstants.kRearRightDrivingId,
@@ -114,6 +111,9 @@ class DriveSubsystem(Subsystem):
 
         # The gyro sensor
         self.gyro = AHRS(AHRS.NavXComType.kMXP_SPI)
+        while abs(self.gyro.getAngle()) > 5:
+            print('wrong angle', self.gyro.getAngle())
+            self.gyro.reset()
         # self.gyro = wpilib.ADXRS450_Gyro()
 
         # Slew rate filter variables for controlling lateral acceleration
@@ -214,15 +214,16 @@ class DriveSubsystem(Subsystem):
         :param rateLimit:     Whether to enable rate limiting for smoother control.
         """
 
-        # speeds = ChassisSpeeds(30, 0, 0)
+        # speeds = ChassisSpeeds(10, 0, 0)
+
+        print('angle', self.gyro.getAngle())
 
         swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds)
 
         # swerveModuleStates = SwerveDrive4Kinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond)
 
         if fieldRelative:
-            swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, Rotation2d.fromDegrees(-self.gyro.getAngle())))
-
+            swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, Rotation2d.fromDegrees(self.gyro.getAngle())))
 
         self.frontLeft.setDesiredState(swerveModuleStates[0])
         self.frontRight.setDesiredState(swerveModuleStates[1])

@@ -30,6 +30,7 @@ class DriveCommand(commands2.Command):
 
         if align:
             # self.swerve.resetEncoders()
+            self.swerve.gyro.reset()
             return
 
         if not align:
@@ -38,7 +39,7 @@ class DriveCommand(commands2.Command):
                     self.x() * DriveConstants.kMaxSpeedMetersPerSecond, 
                     self.y()* DriveConstants.kMaxSpeedMetersPerSecond, 
                     self.rot() * DriveConstants.kMaxAngularSpeed
-                ), False, False)
+                ), True, True)
             return
         
         results = self.limelight.get_results()

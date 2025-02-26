@@ -88,8 +88,6 @@ class TalonSwerveModule:
 
         corrected_state.optimize(Rotation2d(self.encoder.get_position().value_as_double))
 
-        print(corrected_state.angle.degrees())
-
         self.drive_motor.set_control(VelocityVoltage(velocity=corrected_state.speed))
         self.turn_motor.set_control(PositionVoltage(position=corrected_state.angle.radians() / (2* math.pi)))
 
@@ -97,3 +95,4 @@ class TalonSwerveModule:
 
     def resetEncoders(self) -> None:
         self.drive_motor.set_position(0)
+        # self.encoder.set_position(0)

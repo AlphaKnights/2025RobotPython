@@ -40,7 +40,7 @@ class TalonSwerveModule:
 
         drive_motor_config.motor_output.neutral_mode = phoenix6.signals.NeutralModeValue.BRAKE
 
-        drive_motor_config.feedback.sensor_to_mechanism_ratio = -.19
+        drive_motor_config.feedback.sensor_to_mechanism_ratio = -.1865671641791045
 
         # Replace to_deserialize with string very weird workaround
         self.drive_motor.configurator.apply(drive_motor_config)

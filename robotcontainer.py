@@ -36,10 +36,14 @@ class RobotContainer:
         self.robotDrive = DriveSubsystem()
 
         self.limelight = LimelightSystem()
+
+        NamedCommands.registerCommand('Auto Position', AutoAlign(self.robotDrive, self.limelight))
+        NamedCommands.registerCommand('Auto Rotate', AutoRotate(self.robotDrive, self.limelight))
         
         self.autoChooser = AutoBuilder.buildAutoChooser()
 
         SmartDashboard.putData("Auto Chooser", self.autoChooser)
+
 
         # self.talonSubsystem = TalonSubsystem()
 

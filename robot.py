@@ -7,6 +7,7 @@
 
 import commands2
 import wpilib
+import cscore
 
 from robotcontainer import RobotContainer
 from ntcore import NetworkTableInstance
@@ -19,6 +20,7 @@ class MyRobot(commands2.TimedCommandRobot):
         # autonomous chooser on the dashboard.
         self.container = RobotContainer()
         self.autonomousCommand = None
+        self.time = 0
 
         self.driverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
         self.cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("Selected Camera Path")
@@ -35,8 +37,10 @@ class MyRobot(commands2.TimedCommandRobot):
             self.autonomousCommand.cancel()
     
     def teleopPeridodic(self) -> None:
-        print(self.driverController.getY())
-        if self.driverController.getY() > 0:
+        self.time += 1
+        if self.time >= 100:
+            self.time = 0
+        if self.time < 50:
             print("Setting camera 2")
             self.cameraSelection.setString("USB Camera 1")
         else:

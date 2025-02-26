@@ -3,15 +3,17 @@ import typing
 import time
 
 import wpilib
+import phoenix6
 
 from commands2 import Subsystem
-from constants import LEDConstants, UltrasonicConstants
+from constants import LEDConstants, UltrasonicConstants, MotorConstants
 
 class CoralManipulator(Subsystem):
     def __init__(self) -> None:
         super().__init__()
         self.led = wpilib.AddressableLED(LEDConstants.kLEDPort)
-        self.rangeFinder = wpilib.Ultrasonic(1, 2)
+        self.rangeFinder = wpilib.Ultrasonic(UltrasonicConstants.kPingChannel, UltrasonicConstants.kEchoChannel)
+        self.launch_motor = phoenix6.hardware.TalonFX(MotorConstants.KLAUNCHMOTOR)
 
         self.ledData = [wpilib.AddressableLED.LEDData() for _ in range(LEDConstants.kLEDBuffer)]
 

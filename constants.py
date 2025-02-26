@@ -157,6 +157,8 @@ class LEDConstants:
     kBadColor = [0, 100, 50]
 
 class UltrasonicConstants:
-    kPingChannel = 2
-    kEchoChannel = 1
+    kPingChannel = 1
+    kEchoChannel = 2
 
+class MotorConstants:
+    KLAUNCHMOTOR = 10

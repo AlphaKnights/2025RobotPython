@@ -16,9 +16,10 @@ from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
 
 from subsystems.limelight_subsystem import LimelightSystem
-from subsystems.ultrasonic import UltrasonicSubsystem
+# from subsystems.ultrasonic import UltrasonicSubsystem
 from commands.auto_rotate import AutoRotate
 from commands.drivecommand import DriveCommand
+from commands.launch import LaunchCommand
 from subsystems.coral_manipulator import CoralManipulator
 
 from pathplannerlib.auto import AutoBuilder # type: ignore
@@ -48,7 +49,7 @@ class RobotContainer:
         # self.ultrasonic = UltrasonicSubsystem()
         self.coral_manipulator = CoralManipulator()
         # The driver's controller
-        self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
+        self.driverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
 
         # Configure the button bindings
         self.configureButtonBindings()
@@ -83,6 +84,12 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
+
+        self.coral_manipulator.setDefaultCommand(
+                LaunchCommand(self.coral_manipulator)
+                    .onlyIf(lambda: self.driverController.getRawButton(OIConstants.kLaunchButton))\
+                    .onlyWhile(lambda: self.driverController.getRawButton(OIConstants.kLaunchButton))
+        )
 
     def disablePIDSubsystems(self) -> None:
         """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.

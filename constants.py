@@ -124,6 +124,8 @@ class ModuleConstants:
 class OIConstants:
     kDriverControllerPort = 1
     kDriveDeadband = 0.2
+
+    kLaunchButton = 0
     
 
 class AutoConstants:
@@ -160,5 +162,6 @@ class UltrasonicConstants:
     kPingChannel = 1
     kEchoChannel = 2
 
-class MotorConstants:
-    KLAUNCHMOTOR = 10
+class LaunchConstants:
+    kLaunchMotor = 10
+    kLaunchSpeed = 1.0

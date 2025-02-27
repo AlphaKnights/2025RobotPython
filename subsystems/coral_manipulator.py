@@ -6,14 +6,14 @@ import wpilib
 import phoenix6
 
 from commands2 import Subsystem
-from constants import LEDConstants, UltrasonicConstants, MotorConstants
+from constants import LEDConstants, UltrasonicConstants, LaunchConstants
 
 class CoralManipulator(Subsystem):
     def __init__(self) -> None:
         super().__init__()
         self.led = wpilib.AddressableLED(LEDConstants.kLEDPort)
         self.rangeFinder = wpilib.Ultrasonic(UltrasonicConstants.kPingChannel, UltrasonicConstants.kEchoChannel)
-        self.launch_motor = phoenix6.hardware.TalonFX(MotorConstants.KLAUNCHMOTOR)
+        self.launch_motor = phoenix6.hardware.TalonFX(LaunchConstants.kLaunchMotor)
 
         self.ledData = [wpilib.AddressableLED.LEDData() for _ in range(LEDConstants.kLEDBuffer)]
 
@@ -50,3 +50,11 @@ class CoralManipulator(Subsystem):
                 self.ledData[i].setHSV(LEDConstants.kSilverHue, LEDConstants.kSilverSat, LEDConstants.kSilverVal)
             else:
                 self.ledData[i].setHSV(LEDConstants.kBlueHue, LEDConstants.kBlueSat, LEDConstants.kBlueVal)
+
+    def launch(self, speed) -> None:
+        self.launch_motor.set(speed)
+
+    def stop(self) -> None:
+        self.launch_motor.stopMotor()
+
+    

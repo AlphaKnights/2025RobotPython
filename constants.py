@@ -170,6 +170,9 @@ class AutoConstants:
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared
     )
 
+    kTimedSpeed = 0.6
+    kTimedTime = 0.5
+
 class LEDConstants:
     kLEDPort = 0
     kLEDBuffer = 64

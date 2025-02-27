@@ -1,6 +1,8 @@
 import math
 
 import commands2
+import commands2.sequentialcommandgroup
+import commands2.waitcommand
 import wpimath
 import wpilib
 from wpilib import SmartDashboard
@@ -208,7 +210,10 @@ class RobotContainer:
         # https://github.com/robotpy/robotpy-rev/tree/384ca50b2ede3ab44e09f0c12b8c5db33dff7c9e/examples/maxswerve
 
         # return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))
-
-        return self.autoChooser.getSelected()
+        return commands2.SequentialCommandGroup(DriveCommand(self.robotDrive, self.limelight, lambda: AutoConstants.kTimedSpeed, lambda: 0, lambda: 0, lambda: False), 
+                                                commands2.WaitCommand(AutoConstants.kTimedTime),
+                                                DriveCommand(self.robotDrive, self.limelight, lambda: 0, lambda: 0, lambda: 0, lambda: False)
+                                                )
+        # return self.autoChooser.getSelected()
         # return PathPlannerAuto('New Auto')
         # return RunMotor(self.talonSubsystem, lambda: self.driverController.getRawAxis(1))

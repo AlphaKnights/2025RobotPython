@@ -10,6 +10,7 @@ class LaunchCommand(commands2.Command):
 
     def execute(self) -> None:
         self.coral_manipulator.launch(LaunchConstants.kLaunchSpeed)
+        print("firing")
 
     def isFinished(self) -> bool:
         return False

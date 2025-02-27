@@ -125,7 +125,7 @@ class OIConstants:
     kDriverControllerPort = 1
     kDriveDeadband = 0.2
 
-    kLaunchButton = 0
+    kLaunchButton = 1
     
 
 class AutoConstants:
@@ -159,9 +159,9 @@ class LEDConstants:
     kBadColor = [0, 100, 50]
 
 class UltrasonicConstants:
-    kPingChannel = 1
-    kEchoChannel = 2
+    kPingChannel = 2
+    kEchoChannel = 3
 
 class LaunchConstants:
-    kLaunchMotor = 10
-    kLaunchSpeed = 1.0
+    kLaunchMotor = 4
+    kLaunchSpeed = 0.3

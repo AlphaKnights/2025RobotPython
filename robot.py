@@ -19,36 +19,25 @@ class MyRobot(commands2.TimedCommandRobot):
     def robotInit(self) -> None:
         # Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         # autonomous chooser on the dashboard.
-        # self.container = RobotContainer()
+        self.container = RobotContainer()
         self.autonomousCommand: Optional[commands2.Command] = None
-                # Creates a ping-response Ultrasonic object on DIO 1 and 2.
-        self.rangeFinder = wpilib.Ultrasonic(2, 1)
-
-        # Add the ultrasonic to the "Sensors" tab of the dashboard
-        # Data will update automatically
-        Shuffleboard.getTab("Sensors").add(self.rangeFinder)
-
     def teleopPeriodic(self) -> None:
         pass
 
     def autonomousInit(self) -> None:
-        # self.autonomousCommand = self.container.getAutonomousCommand()
+        self.autonomousCommand = self.container.getAutonomousCommand()
 
-        # if self.autonomousCommand:
-        #     self.autonomousCommand.schedule()
+        if self.autonomousCommand:
+            self.autonomousCommand.schedule()
         pass
 
     def teleopInit(self) -> None:
         if self.autonomousCommand:
-            self.autonomousCommand.cancel()
-        # By default, the Ultrasonic class polls all ultrasonic sensors every in a round-robin to prevent
-        # them from interfering from one another.
-        # However, manual polling is also possible -- notes that this disables automatic mode!
-        
+            self.autonomousCommand.cancel()        
 
     def testInit(self) -> None:
-        # commands2.CommandScheduler.getInstance().cancelAll()
-        pass
+        commands2.CommandScheduler.getInstance().cancelAll()
+        
 
     def testPeriodic(self) -> None:
         pass

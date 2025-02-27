@@ -55,6 +55,12 @@ class RobotContainer:
         self.configureButtonBindings()
 
 
+        self.coral_manipulator.setDefaultCommand(
+                LaunchCommand(self.coral_manipulator)
+                    .onlyIf(lambda: self.driverController.getRawButton(OIConstants.kLaunchButton))\
+                    .onlyWhile(lambda: self.driverController.getRawButton(OIConstants.kLaunchButton))
+        )
+
         # Configure default commands
         # self.robotDrive.setDefaultCommand(
             # The left stick controls translation of the robot.
@@ -85,11 +91,7 @@ class RobotContainer:
         and then passing it to a JoystickButton.
         """
 
-        self.coral_manipulator.setDefaultCommand(
-                LaunchCommand(self.coral_manipulator)
-                    .onlyIf(lambda: self.driverController.getRawButton(OIConstants.kLaunchButton))\
-                    .onlyWhile(lambda: self.driverController.getRawButton(OIConstants.kLaunchButton))
-        )
+       
 
     def disablePIDSubsystems(self) -> None:
         """Disables all ProfiledPIDSubsystem and PIDSubsystem instances.

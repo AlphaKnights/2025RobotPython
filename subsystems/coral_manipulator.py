@@ -13,7 +13,11 @@ class CoralManipulator(Subsystem):
         super().__init__()
         self.led = wpilib.AddressableLED(LEDConstants.kLEDPort)
         self.rangeFinder = wpilib.Ultrasonic(UltrasonicConstants.kPingChannel, UltrasonicConstants.kEchoChannel)
+        self.rangeFinder.setEnabled(True)
+        self.rangeFinder.setAutomaticMode(False)
         self.launch_motor = phoenix6.hardware.TalonFX(LaunchConstants.kLaunchMotor)
+        # self.launch_motor 
+
 
         self.ledData = [wpilib.AddressableLED.LEDData() for _ in range(LEDConstants.kLEDBuffer)]
 
@@ -26,15 +30,17 @@ class CoralManipulator(Subsystem):
     def periodic(self) -> None:
         if not self.rangeFinder.isRangeValid():
             self.lightAll(*LEDConstants.kBadColor)
-            return
+            # return
         
         self.rangeFinder.ping()
         
         time.sleep(0.1)
-
-        if self.rangeFinder.getRangeInches() > 5:
-            self.lightAll(*LEDConstants.kBadColor)
-            return
+        if (self.rangeFinder.isRangeValid()):
+            print(self.rangeFinder.getRangeInches())
+        
+            if self.rangeFinder.getRangeInches() > 5:
+                self.lightAll(*LEDConstants.kBadColor)
+                return
         
         self.lightAll(*LEDConstants.kGoodColor)
 
@@ -51,8 +57,9 @@ class CoralManipulator(Subsystem):
             else:
                 self.ledData[i].setHSV(LEDConstants.kBlueHue, LEDConstants.kBlueSat, LEDConstants.kBlueVal)
 
-    def launch(self, speed) -> None:
+    def launch(self, speed: float) -> None:
         self.launch_motor.set(speed)
+        # print("fire")
 
     def stop(self) -> None:
         self.launch_motor.stopMotor()

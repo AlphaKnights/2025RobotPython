@@ -7,11 +7,13 @@ import wpimath
 import wpilib
 from wpilib import SmartDashboard
 
+
 from commands2 import cmd
 from wpimath.controller import HolonomicDriveController
 from wpimath.controller import PIDController, ProfiledPIDControllerRadians, HolonomicDriveController
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
+from wpimath.kinematics import ChassisSpeeds
 
 from commands.auto_align import AutoAlign
 from constants import AutoConstants, DriveConstants, OIConstants
@@ -39,8 +41,8 @@ class RobotContainer:
 
         self.limelight = LimelightSystem()
 
-        NamedCommands.registerCommand('Auto Position', AutoAlign(self.robotDrive, self.limelight))
-        NamedCommands.registerCommand('Auto Rotate', AutoRotate(self.robotDrive, self.limelight))
+        # NamedCommands.registerCommand('Auto Position', AutoAlign(self.robotDrive, self.limelight, 0.2, 0))
+        # NamedCommands.registerCommand('Auto Rotate', AutoRotate(self.robotDrive, self.limelight))
         
         self.autoChooser = AutoBuilder.buildAutoChooser()
 
@@ -73,21 +75,22 @@ class RobotContainer:
                     self.limelight,
                     lambda:
                         -wpimath.applyDeadband(
-                            self.driverController.getRawAxis(1) * (self.driverController.getRawAxis(3) + 1)/2, OIConstants.kDriveDeadband
-                        ),
+                            self.driverController.getRawAxis(1), OIConstants.kDriveDeadband
+                        ) * (self.driverController.getRawAxis(3) + 1)/2,
                     lambda:
                         -wpimath.applyDeadband(
                             self.driverController.getRawAxis(0) * (self.driverController.getRawAxis(3) + 1)/2, OIConstants.kDriveDeadband
-                        ),
+                        ) * (self.driverController.getRawAxis(3) + 1)/2,
                     lambda:
                         -wpimath.applyDeadband(
                             self.driverController.getRawAxis(2) * (self.driverController.getRawAxis(3) + 1)/2, OIConstants.kDriveDeadband
-                        ),
+                        ) * (self.driverController.getRawAxis(3) + 1)/2,
                     # lambda: 0.4 if self.driverController.getRawButton(11) else 0,
                     # lambda: 0,
                     # lambda: 0,
 
-                    lambda: self.driverController.getRawButton(12)
+                    lambda: self.driverController.getRawButton(12),
+                    lambda: self.driverController.getRawButton(11)
                     ),
                 )
         else:
@@ -109,9 +112,12 @@ class RobotContainer:
                         -wpimath.applyDeadband(
                             self.driverController.getRawAxis(2), OIConstants.kDriveDeadband
                         ),
-                    lambda: self.driverController.getAButton()
+                    lambda: self.driverController.getAButton(),
+                    lambda: self.driverController.getXButton()
                     ),
                 )
+
+        # self.driverController.button(1, EventLoop()).ifHigh(AutoAlign(self.robot55455Drive, self.limelight, 0.25, 0))
 
         # self.talonSubsystem.setDefaultCommand(
         #     RunMotor(self.talonSubsystem, lambda:
@@ -210,10 +216,10 @@ class RobotContainer:
         # https://github.com/robotpy/robotpy-rev/tree/384ca50b2ede3ab44e09f0c12b8c5db33dff7c9e/examples/maxswerve
 
         # return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))
-        return commands2.SequentialCommandGroup(DriveCommand(self.robotDrive, self.limelight, lambda: AutoConstants.kTimedSpeed, lambda: 0, lambda: 0, lambda: False), 
-                                                commands2.WaitCommand(AutoConstants.kTimedTime),
-                                                DriveCommand(self.robotDrive, self.limelight, lambda: 0, lambda: 0, lambda: 0, lambda: False)
-                                                )
-        # return self.autoChooser.getSelected()
+        # return commands2.SequentialCommandGroup(commands2.InstantCommand(lambda: self.robotDrive.drive(ChassisSpeeds(1, 0, 0), False, False), self.robotDrive), 
+        #                                         commands2.WaitCommand(AutoConstants.kTimedTime),
+        #                                         commands2.InstantCommand(lambda: self.robotDrive.drive(ChassisSpeeds(0, 0, 0), False, False), self.robotDrive)
+        #                                         )
+        return self.autoChooser.getSelected()
         # return PathPlannerAuto('New Auto')
         # return RunMotor(self.talonSubsystem, lambda: self.driverController.getRawAxis(1))

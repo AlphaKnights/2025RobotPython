@@ -111,10 +111,13 @@ class DriveSubsystem(Subsystem):
 
         # The gyro sensor
         self.gyro = AHRS(AHRS.NavXComType.kMXP_SPI)
+        self.gyro.enableBoardlevelYawReset(False)
+        self.gyro.reset()
         while abs(self.gyro.getAngle()) > 5:
             print('wrong angle', self.gyro.getAngle())
             self.gyro.reset()
         # self.gyro = wpilib.ADXRS450_Gyro()
+            self.gyro_heading = self.gyro.getAngle()
 
         # Slew rate filter variables for controlling lateral acceleration
         self.currentRotation = 0.0
@@ -276,6 +279,7 @@ class DriveSubsystem(Subsystem):
     def zeroHeading(self) -> None:
         """Zeroes the heading of the robot."""
         self.gyro.reset()
+        # self.gyro_heading = self.gyro.getAngle()
 
     def getHeading(self) -> float:
         """Returns the heading of the robot.

@@ -32,8 +32,9 @@ class TalonSwerveModule:
         drive_motor_config.slot0.k_i = ModuleConstants.kDrivingI
         drive_motor_config.slot0.k_d = ModuleConstants.kDrivingD
         drive_motor_config.slot0.k_s = ModuleConstants.kDrivingFF - 0.1
+        # drive_motor_config.slot0.k_s = ModuleConstants.kDrivingFF
 
-        phoenix6.swerve.SwerveModule
+        # phoenix6.swerve.SwerveModule
 
         drive_motor_config.open_loop_ramps.duty_cycle_open_loop_ramp_period = 0
         drive_motor_config.closed_loop_ramps.duty_cycle_closed_loop_ramp_period = 0
@@ -82,6 +83,9 @@ class TalonSwerveModule:
         return SwerveModulePosition(self.drive_motor.get_position().value_as_double, Rotation2d(self.encoder.get_position().value_as_double - self.offset))
     
     def setDesiredState(self, desired_state: SwerveModuleState) -> None:
+        # if self.encoder.device_id != 3:
+        #     return
+
         corrected_state = SwerveModuleState()
         corrected_state.speed = desired_state.speed
         corrected_state.angle = Rotation2d(desired_state.angle.radians())

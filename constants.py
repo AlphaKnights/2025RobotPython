@@ -27,7 +27,7 @@ class DriveConstants:
     # the robot, rather the allowed maximum speeds
     kMaxSpeedMetersPerSecond = 50
     # kMaxAngularSpeed = math.tau  # radians per second
-    kMaxAngularSpeed = 20
+    kMaxAngularSpeed = 40
 
     kDirectionSlewRate = 1.2  # radians per second
     kMagnitudeSlewRate = 1.8  # percent per second (1 = 100%)
@@ -184,3 +184,8 @@ class LEDConstants:
     kBlueHue = 90
     kBlueSat = 220
     kBlueVal = 30
+
+class AlignConstants:
+    kMaxNormalizedSpeed = 1.0
+    kDistToSlow = 0.1
+    kAlignDeadzone = 0.01

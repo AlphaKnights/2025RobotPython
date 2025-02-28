@@ -109,8 +109,11 @@ class DriveCommand(commands2.Command):
         print (dist)
         print (x)
         print (y)
-        self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, 0), False, False)
-        print('Already aligned')
+        if (x == 0 and y == 0):
+            print('Already aligned')
+            self.swerve.drive(ChassisSpeeds(0, 0, 0), False, False)
+        else:
+            self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, 0), False, False)
         
 
     def isFinished(self) -> bool:

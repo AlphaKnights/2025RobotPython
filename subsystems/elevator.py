@@ -11,13 +11,13 @@ class ElevatorSubsystem(Subsystem):
         super().__init__()
 
         self.elevatorMotorL = SparkMax(ElevatorConstants.kLeftMotorCanId, SparkMax.MotorType.kBrushless)
-        self.elevatorMotorR = SparkMax(ElevatorConstants.kRightMotorCanId, SparkMax.MotorType.kBrushless)
+        #self.elevatorMotorR = SparkMax(ElevatorConstants.kRightMotorCanId, SparkMax.MotorType.kBrushless)
 
         self.elevatorMotorLEncoder = self.elevatorMotorL.getEncoder()
         self.elevatorMotorLPID = self.elevatorMotorL.getClosedLoopController()
 
-        self.elevatorMotorREncoder = self.elevatorMotorR.getEncoder()
-        self.elevatorMotorRPID = self.elevatorMotorR.getClosedLoopController()
+        #self.elevatorMotorREncoder = self.elevatorMotorR.getEncoder()
+        #self.elevatorMotorRPID = self.elevatorMotorR.getClosedLoopController()
 
         l_config = SparkMaxConfig()
         l_config.IdleMode(int(SparkMax.IdleMode.kCoast))
@@ -35,24 +35,24 @@ class ElevatorSubsystem(Subsystem):
             .positionWrappingEnabled(False)         
            
 
-        r_config = SparkMaxConfig()
-        r_config.IdleMode(int(SparkMax.IdleMode.kCoast))
-        r_config.softLimit.forwardSoftLimit(ElevatorConstants.kForwardSoftLimit) \
-            .reverseSoftLimit(ElevatorConstants.kReverseSoftLimit)
-        r_config.softLimit.forwardSoftLimitEnabled(True) \
-            .reverseSoftLimitEnabled(True)
-        
-        r_config.encoder.positionConversionFactor(ElevatorConstants.kEncoderPositionFactor) \
-            .velocityConversionFactor(ElevatorConstants.kEncoderVelocityFactor)
-        
-        r_config.closedLoop.setFeedbackSensor(ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder) \
-            .pid(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD) \
-            .outputRange(-1, 1) \
-            .positionWrappingEnabled(False)
+        #r_config = SparkMaxConfig()
+        #r_config.IdleMode(int(SparkMax.IdleMode.kCoast))
+        #r_config.softLimit.forwardSoftLimit(ElevatorConstants.kForwardSoftLimit) \
+        #    .reverseSoftLimit(ElevatorConstants.kReverseSoftLimit)
+        #r_config.softLimit.forwardSoftLimitEnabled(True) \
+        #    .reverseSoftLimitEnabled(True)
+        #
+        #r_config.encoder.positionConversionFactor(ElevatorConstants.kEncoderPositionFactor) \
+        #    .velocityConversionFactor(ElevatorConstants.kEncoderVelocityFactor)
+        #
+        #r_config.closedLoop.setFeedbackSensor(ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder) \
+        #    .pid(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD) \
+        #    .outputRange(-1, 1) \
+        #    .positionWrappingEnabled(False)
         # r_config.follow(ElevatorConstants.kLeftMotorCanId, True)
 # 
         self.elevatorMotorL.configure(l_config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
-        self.elevatorMotorR.configure(r_config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
+        #self.elevatorMotorR.configure(r_config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
 
         # self.upperLimit = wpilib.DigitalInput(ElevatorConstants.kUpperLimit)
         # self.lowerLimit = wpilib.DigitalInput(ElevatorConstants.kLowerLimit)
@@ -75,7 +75,7 @@ class ElevatorSubsystem(Subsystem):
         #     print ("Upper On")
 
         print("Left Position: " + str(self.elevatorMotorLEncoder.getPosition()))
-        print("Right Position: " + str(self.elevatorMotorREncoder.getPosition()))
+        #print("Right Position: " + str(self.elevatorMotorREncoder.getPosition()))
 
 
     def move(self, speed: float) -> None:
@@ -90,15 +90,15 @@ class ElevatorSubsystem(Subsystem):
         #     return
     
         self.elevatorMotorL.set(speed)
-        self.elevatorMotorR.set(-speed)
+        #self.elevatorMotorR.set(-speed)
 
     def setPosition(self, position: float) -> None:
         print(self.elevatorMotorLEncoder.getPosition())
         self.elevatorMotorLPID.setReference(position, SparkMax.ControlType.kPosition)
-        self.elevatorMotorRPID.setReference(position, SparkMax.ControlType.kPosition)
+        #self.elevatorMotorRPID.setReference(position, SparkMax.ControlType.kPosition)
 
 
     def stop(self) -> None:
         print("Stop")
         self.elevatorMotorL.stopMotor()
-        self.elevatorMotorR.stopMotor()
+        #self.elevatorMotorR.stopMotor()

@@ -19,11 +19,9 @@ class LimelightSystem(commands2.Subsystem):
 
     def get_results(self) -> typing.Optional[LimelightResults]:
         results = self.limelight.get_results()
-        limelight_table = NetworkTables.getTable("limelight")
-        botpose = limelight_table.getNumberArray("botpose_wpiblue", [0]*7)
-        x = botpose[0]
-        y = botpose[1]
-        yaw = botpose[5]
+        x = results[0]
+        y = results[1]
+        yaw = results[5]
         print(x, y, yaw)
         if results["botpose_tagcount"] == 0:
             return None

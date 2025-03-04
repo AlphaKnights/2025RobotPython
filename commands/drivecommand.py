@@ -25,8 +25,9 @@ class DriveCommand(commands2.Command):
         self.heading = heading
         self.addRequirements(swerve_subsystem)
         self.addRequirements(limelight_susbsystem)
-        self.goalY = 0.25
+        self.goalY = 1
         self.goalX = 0
+        self.goalA = 0
 
     def execute(self) -> None:
         align = self.align()
@@ -46,7 +47,7 @@ class DriveCommand(commands2.Command):
                     self.x()* DriveConstants.kMaxSpeedMetersPerSecond, 
                     self.y()* DriveConstants.kMaxSpeedMetersPerSecond, 
                     self.rot() * DriveConstants.kMaxAngularSpeed
-                ), True, True)
+                ), False, True)
             return
         
         results = self.limelight.get_results()
@@ -73,6 +74,7 @@ class DriveCommand(commands2.Command):
         # Keep some between the tag and robot
         ty = ty - self.goalY
         tx = tx + self.goalX
+        ta = ta + self.goalA
 
         ax = abs(tx)
         ay = abs(ty)
@@ -90,6 +92,8 @@ class DriveCommand(commands2.Command):
         if tx < 0: 
             x *= -1
 
+        a = ta/abs(ta)
+
         if ax < AlignConstants.kAlignDeadzone:
             print("dead X")
             x = 0
@@ -98,6 +102,9 @@ class DriveCommand(commands2.Command):
             print("dead Y")
             y = 0
 
+        if abs(a) < AlignConstants.kAlignRotDeadzone:
+            a = 0
+
         dist = sqrt(tx**2 + ty**2)
         print(dist)
 
@@ -105,15 +112,27 @@ class DriveCommand(commands2.Command):
             dist = 1.0
         else:
             dist = dist / AlignConstants.kDistToSlow
+
+        if dist < 0.5:
+            dist = 0.5
         
-        print (dist)
-        print (x)
-        print (y)
-        if (x == 0 and y == 0):
-            print('Already aligned')
-            self.swerve.drive(ChassisSpeeds(0, 0, 0), False, False)
+        if abs(ta) > AlignConstants.kRotDistToSlow:
+            aDist = 1
         else:
-            self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, 0), False, False)
+            aDist = abs(ta)/AlignConstants.kRotDistToSlow
+
+        if aDist < 0.2:
+            aDist = 0.2
+
+        print ('distance', dist)
+        print ('x speed', x)
+        print ('y speed', y)
+        print ('angle error', ta)
+        if (x == 0 and y == 0 and a == 0):
+            print('Already aligned')
+            self.swerve.setX()
+        else:
+            self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, -a * AlignConstants.kMaxTurningSpeed * aDist), False, False)
         
 
     def isFinished(self) -> bool:

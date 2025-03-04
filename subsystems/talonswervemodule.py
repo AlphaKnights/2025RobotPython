@@ -28,11 +28,13 @@ class TalonSwerveModule:
         drive_motor_config.current_limits.supply_current_limit_enable = True
         drive_motor_config.current_limits.supply_current_limit = ModuleConstants.kDrivingMotorCurrentLimit
         
-        drive_motor_config.slot0.k_p = ModuleConstants.kDrivingP
+        # drive_motor_config.slot0.k_p = ModuleConstants.kDrivingP
+        drive_motor_config.slot0.k_p = 0.1
         drive_motor_config.slot0.k_i = ModuleConstants.kDrivingI
         drive_motor_config.slot0.k_d = ModuleConstants.kDrivingD
-        drive_motor_config.slot0.k_s = ModuleConstants.kDrivingFF - 0.1
-        # drive_motor_config.slot0.k_s = ModuleConstants.kDrivingFF
+        # drive_motor_config.slot0.k_s = ModuleConstants.kDrivingFF - 0.1
+        drive_motor_config.slot0.k_s = 0
+        drive_motor_config.slot0.k_v = 0.124
 
         # phoenix6.swerve.SwerveModule
 
@@ -41,7 +43,13 @@ class TalonSwerveModule:
 
         drive_motor_config.motor_output.neutral_mode = phoenix6.signals.NeutralModeValue.BRAKE
 
-        drive_motor_config.feedback.sensor_to_mechanism_ratio = -.1865671641791045
+        # drive_motor_config.feedback.sensor_to_mechanism_ratio = -.1865671641791045
+        drive_motor_config.feedback.sensor_to_mechanism_ratio = 7.363636
+        
+
+        # if  drive_motor_id == 7:
+        #     drive_motor_config.motor_output.inverted = InvertedValue(True)
+
 
         # Replace to_deserialize with string very weird workaround
         self.drive_motor.configurator.apply(drive_motor_config)
@@ -70,6 +78,7 @@ class TalonSwerveModule:
 
         turn_motor_config.motor_output.inverted = InvertedValue(True)
 
+
         self.turn_motor.configurator.apply(turn_motor_config)
 
         self.offset = offset
@@ -88,7 +97,7 @@ class TalonSwerveModule:
 
         corrected_state = SwerveModuleState()
         corrected_state.speed = desired_state.speed
-        corrected_state.angle = Rotation2d(desired_state.angle.radians())
+        corrected_state.angle = Rotation2d(desired_state.angle.radians() - self.offset)
 
         corrected_state.optimize(Rotation2d(self.encoder.get_position().value_as_double))
 

@@ -77,17 +77,17 @@ class RobotContainer:
                         -wpimath.applyDeadband(
                             self.driverController.getRawAxis(1), OIConstants.kDriveDeadband
                         ) * (self.driverController.getRawAxis(3) + 1)/2,
-                    lambda:
-                        -wpimath.applyDeadband(
-                            self.driverController.getRawAxis(0) * (self.driverController.getRawAxis(3) + 1)/2, OIConstants.kDriveDeadband
-                        ) * (self.driverController.getRawAxis(3) + 1)/2,
-                    lambda:
-                        -wpimath.applyDeadband(
-                            self.driverController.getRawAxis(2) * (self.driverController.getRawAxis(3) + 1)/2, OIConstants.kDriveDeadband
-                        ) * (self.driverController.getRawAxis(3) + 1)/2,
-                    # lambda: 0.4 if self.driverController.getRawButton(11) else 0,
-                    # lambda: 0,
-                    # lambda: 0,
+                    # lambda:
+                    #     -wpimath.applyDeadband(
+                    #         self.driverController.getRawAxis(0) * (self.driverController.getRawAxis(3) + 1)/2, OIConstants.kDriveDeadband
+                    #     ) * (self.driverController.getRawAxis(3) + 1)/2,
+                    # lambda:
+                    #     wpimath.applyDeadband(
+                    #         self.driverController.getRawAxis(2) * (self.driverController.getRawAxis(3) + 1)/2, OIConstants.kDriveDeadband
+                    #     ) * (self.driverController.getRawAxis(3) + 1)/2,
+                    # lambda: 0.4 if self.driverController.getRawButton(10) else 0,
+                    lambda: 0,
+                    lambda: 0,
 
                     lambda: self.driverController.getRawButton(12),
                     lambda: self.driverController.getRawButton(11)
@@ -216,7 +216,7 @@ class RobotContainer:
         # https://github.com/robotpy/robotpy-rev/tree/384ca50b2ede3ab44e09f0c12b8c5db33dff7c9e/examples/maxswerve
 
         # return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))
-        # return commands2.SequentialCommandGroup(commands2.InstantCommand(lambda: self.robotDrive.drive(ChassisSpeeds(1, 0, 0), False, False), self.robotDrive), 
+        # return commands2.SequentialCommandGroup(commands2.InstantCommand(lambda: self.robotDrive.drive(ChassisSpeeds(-8, 0, 0), False, False), self.robotDrive), 
         #                                         commands2.WaitCommand(AutoConstants.kTimedTime),
         #                                         commands2.InstantCommand(lambda: self.robotDrive.drive(ChassisSpeeds(0, 0, 0), False, False), self.robotDrive)
         #                                         )

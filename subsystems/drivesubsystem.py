@@ -234,7 +234,7 @@ class DriveSubsystem(Subsystem):
         self.rearRight.setDesiredState(swerveModuleStates[3])
 
     def setX(self) -> None:
-        return
+        # return
         """Sets the wheels into an X formation to prevent movement."""
         self.frontLeft.setDesiredState(SwerveModuleState(0, Rotation2d.fromDegrees(45)))
         self.frontRight.setDesiredState(

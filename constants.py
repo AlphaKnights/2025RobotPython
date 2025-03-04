@@ -53,10 +53,21 @@ class DriveConstants:
     # kBackLeftChassisAngularOffset = math.radians(110)
     # kBackRightChassisAngularOffset = math.radians(245)
 
-    kFrontLeftChassisAngularOffset = 0
-    kFrontRightChassisAngularOffset = 0
-    kBackLeftChassisAngularOffset = 0
-    kBackRightChassisAngularOffset = 0
+    # kFrontLeftChassisAngularOffset = 0.2902
+    # kFrontRightChassisAngularOffset = .23144
+    # kBackLeftChassisAngularOffset = 0.090
+    # kBackRightChassisAngularOffset = -.15722
+
+    kFrontLeftChassisAngularOffset = math.radians(-0.764892578125 * (360))
+    kFrontRightChassisAngularOffset = math.radians(0.75 * (360))
+    kBackLeftChassisAngularOffset = math.radians(0.079833984375 * (360))
+    kBackRightChassisAngularOffset = math.radians(0.367919921875 * (360))
+
+    # kFrontLeftChassisAngularOffset = -0.26171875
+    # kFrontRightChassisAngularOffset = 0.25
+    # kBackLeftChassisAngularOffset = 0.58984375
+    # kBackRightChassisAngularOffset = -0.125
+
 
     # SPARK MAX CAN IDs
     kFrontLeftDrivingCanId = 32
@@ -171,7 +182,7 @@ class AutoConstants:
     )
 
     kTimedSpeed = 0.6
-    kTimedTime = 0.5
+    kTimedTime = 4
 
 class LEDConstants:
     kLEDPort = 0
@@ -186,6 +197,9 @@ class LEDConstants:
     kBlueVal = 30
 
 class AlignConstants:
-    kMaxNormalizedSpeed = 1.0
-    kDistToSlow = 0.1
+    kMaxNormalizedSpeed = 5.0
+    kMaxTurningSpeed = 1.0
+    kDistToSlow = 0.3
+    kRotDistToSlow = 0.5
     kAlignDeadzone = 0.01
+    kAlignRotDeadzone = 5

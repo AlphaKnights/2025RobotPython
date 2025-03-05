@@ -7,5 +7,5 @@ class LimelightResults:
         self.tag_id = data["Fiducial"][0]["fID"]
         self.tx = data["Fiducial"][0]['t6t_rs'][0]
         self.ty = data["Fiducial"][0]['t6t_rs'][2]
-        self.ta = data["Fiducial"][0]['t6t_rs'][4]
+        self.yaw = data["Fiducial"][0]['t6t_rs'][4]
         

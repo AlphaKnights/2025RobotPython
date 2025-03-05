@@ -1,6 +1,6 @@
 import commands2
 import typing
-from math import sqrt
+from math import sqrt, cos, sin, radians, degrees
 from wpimath.kinematics import (
     ChassisSpeeds,
     SwerveModuleState,
@@ -66,16 +66,19 @@ class DriveCommand(commands2.Command):
 
         tx = results.tx
         ty = results.ty
-        ta = results.ta
+        yaw = radians(results.yaw)
 
         print(f'x: {tx}, y: {ty}')
 
+        goalXSign = self.goalX/abs(self.goalX)
 
         # Keep some between the tag and robot
-        ty = ty - self.goalY
-        tx = tx + self.goalX
-        ta = ta + self.goalA
+        # First adjustment is for distance from tag, second is for x offset
+        ty = ty - (cos(yaw) * self.goalY) - (sin(yaw) * self.goalX)
+        tx = tx + (sin(yaw) * self.goalY) - (cos(yaw) * self.goalX)
+        ta = yaw + self.goalA
 
+        # Normalize the values
         ax = abs(tx)
         ay = abs(ty)
 
@@ -102,7 +105,7 @@ class DriveCommand(commands2.Command):
             print("dead Y")
             y = 0
 
-        if abs(a) < AlignConstants.kAlignRotDeadzone:
+        if abs(yaw) < AlignConstants.kAlignRotDeadzone:
             a = 0
 
         dist = sqrt(tx**2 + ty**2)
@@ -116,13 +119,10 @@ class DriveCommand(commands2.Command):
         if dist < 0.5:
             dist = 0.5
         
-        if abs(ta) > AlignConstants.kRotDistToSlow:
-            aDist = 1
+        if abs(degrees(ta)) > AlignConstants.kRotDistToSlow:
+            aDist = 1.0
         else:
-            aDist = abs(ta)/AlignConstants.kRotDistToSlow
-
-        if aDist < 0.2:
-            aDist = 0.2
+            aDist = max(0.2, abs(ta)/AlignConstants.kRotDistToSlow)
 
         print ('distance', dist)
         print ('x speed', x)

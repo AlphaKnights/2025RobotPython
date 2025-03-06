@@ -36,13 +36,13 @@ class TalonSwerveModule:
         # drive_motor_config.slot0.k_s = 4.8
         # drive_motor_config.slot0.k_v = 0.248
 
-        drive_motor_config.slot0.k_p = 0.1
+        drive_motor_config.slot0.k_p = 0.65 #0.1   0.65
         drive_motor_config.slot0.k_i = 0
         drive_motor_config.slot0.k_d = ModuleConstants.kDrivingD
         # drive_motor_config.slot0.k_s = ModuleConstants.kDrivingFF - 0.1
-        drive_motor_config.slot0.k_s = 4
-        drive_motor_config.slot0.k_v = 0.248
-        drive_motor_config.slot0.k_a = 1.5
+        drive_motor_config.slot0.k_s = 0.0 #0  -0.85
+        drive_motor_config.slot0.k_v = 0.3  #0.124
+        drive_motor_config.slot0.k_a = 1.5 #1.5  
 
         # phoenix6.swerve.SwerveModule
 
@@ -94,14 +94,14 @@ class TalonSwerveModule:
         self.drive_motor.set_position(0)
     
     def getState(self) -> SwerveModuleState:
-        return SwerveModuleState(self.drive_motor.get_velocity().value_as_double, Rotation2d(self.encoder.get_position().value_as_double - self.offset))
+        return SwerveModuleState(self.drive_motor.get_velocity().value_as_double, Rotation2d(math.radians(self.turn_motor.get_position().value_as_double *360) + self.offset))
     
     def getPosition(self) -> SwerveModulePosition:
-        return SwerveModulePosition(self.drive_motor.get_position().value_as_double, Rotation2d(self.encoder.get_position().value_as_double - self.offset))
+        return SwerveModulePosition(self.drive_motor.get_position().value_as_double, Rotation2d(math.radians(self.turn_motor.get_position().value_as_double*360) + self.offset))
     
     def setDesiredState(self, desired_state: SwerveModuleState) -> None:
-        # if self.encoder.device_id != 3:
-        #     return
+        if self.encoder.device_id == 3:
+            return
 
         corrected_state = SwerveModuleState()
         corrected_state.speed = desired_state.speed

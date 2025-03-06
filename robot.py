@@ -23,10 +23,11 @@ class MyRobot(commands2.TimedCommandRobot):
         self.autonomousCommand = None
         frontCamera = CameraServer.startAutomaticCapture(1)
         rearCamera = CameraServer.startAutomaticCapture(0)
-
+        cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection")
+        
         self.driverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
-        self.camera = CameraSubsystem(frontCamera,rearCamera)
-        self.direction = "FRONT"
+        self.camera = CameraSubsystem(frontCamera, rearCamera, cameraSelection)
+        self.direction = 1
 
     # def autonomousInit(self) -> None:
     #     self.autonomousCommand = self.container.getAutonomousCommand()
@@ -41,11 +42,14 @@ class MyRobot(commands2.TimedCommandRobot):
     def teleopPeridodic(self) -> None:
         if self.driverController.getYChannel() <= 0:
             print("Setting camera 1")
-            self.direction = "FRONT"
+            self.direction = 1
+            self.camera.select(self.direction)
+            CameraServer.getVideo()
         else:
             print("Setting camera 2")
-            self.direction = "BACK"
-        self.camera.select(self.direction)
+            self.direction = 0
+            self.camera.select(self.direction)
+            CameraServer.getVideo()
     def testInit(self) -> None:
         commands2.CommandScheduler.getInstance().cancelAll()
 

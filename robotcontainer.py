@@ -85,7 +85,7 @@ class RobotContainer:
                     #     wpimath.applyDeadband(
                     #         self.driverController.getRawAxis(2) * (self.driverController.getRawAxis(3) + 1)/2, OIConstants.kDriveDeadband
                     #     ) * (self.driverController.getRawAxis(3) + 1)/2,
-                    # lambda: 0.4 if self.driverController.getRawButton(10) else 0,
+                    # lambda: 1 if self.driverController.getRawButton(10) else 0,
                     lambda: 0,
                     lambda: 0,
 

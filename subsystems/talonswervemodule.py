@@ -29,12 +29,20 @@ class TalonSwerveModule:
         drive_motor_config.current_limits.supply_current_limit = ModuleConstants.kDrivingMotorCurrentLimit
         
         # drive_motor_config.slot0.k_p = ModuleConstants.kDrivingP
+        # drive_motor_config.slot0.k_p = 0.2
+        # drive_motor_config.slot0.k_i = ModuleConstants.kDrivingI
+        # drive_motor_config.slot0.k_d = ModuleConstants.kDrivingD
+        # # drive_motor_config.slot0.k_s = ModuleConstants.kDrivingFF - 0.1
+        # drive_motor_config.slot0.k_s = 4.8
+        # drive_motor_config.slot0.k_v = 0.248
+
         drive_motor_config.slot0.k_p = 0.1
-        drive_motor_config.slot0.k_i = ModuleConstants.kDrivingI
+        drive_motor_config.slot0.k_i = 0
         drive_motor_config.slot0.k_d = ModuleConstants.kDrivingD
         # drive_motor_config.slot0.k_s = ModuleConstants.kDrivingFF - 0.1
-        drive_motor_config.slot0.k_s = 0
-        drive_motor_config.slot0.k_v = 0.124
+        drive_motor_config.slot0.k_s = 4
+        drive_motor_config.slot0.k_v = 0.248
+        drive_motor_config.slot0.k_a = 1.5
 
         # phoenix6.swerve.SwerveModule
 

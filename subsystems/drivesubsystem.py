@@ -6,7 +6,8 @@ from typing import Callable, Sequence
 import wpimath.kinematics
 import wpilib
 from navx import AHRS 
-
+from limelight_subsystem import LimelightSystem
+from interfaces.limelight_results import LimelightResults
 from commands2 import Subsystem
 from wpimath.filter import SlewRateLimiter
 from wpimath.controller import ProfiledPIDControllerRadians
@@ -68,6 +69,7 @@ class DriveSubsystem(Subsystem):
         #     DriveConstants.kRearRightCANCoderId,
         #     DriveConstants.kBackRightChassisAngularOffset,
         # )
+       
 
         self.field = Field2d()
         SmartDashboard.putData("Field", self.field)
@@ -110,8 +112,6 @@ class DriveSubsystem(Subsystem):
             # DriveConstants.kRearRightPosition
         )
 
-
-
         # The gyro sensor
         self.gyro = AHRS(AHRS.NavXComType.kMXP_SPI)
         self.gyro.enableBoardlevelYawReset(False)
@@ -131,6 +131,7 @@ class DriveSubsystem(Subsystem):
         self.rotLimiter = SlewRateLimiter(DriveConstants.kRotationalSlewRate)
         self.prevTime = wpilib.Timer.getFPGATimestamp()
 
+    
         # Odometry class for tracking robot pose
         self.odometry = SwerveDrive4Odometry(
             DriveConstants.kDriveKinematics,
@@ -161,8 +162,25 @@ class DriveSubsystem(Subsystem):
             self # Reference to this subsystem to set requirements
         )
 
+    def updatePos(self) -> None:       
+        self.limelight = LimelightSystem()
+        self.results = self.limelight.get_results()
+        self.odometry.update(
+            Rotation2d.fromDegrees(self.gyro.getAngle()),
+            (
+                self.frontLeft.getPosition(),
+                self.frontRight.getPosition(),
+                self.rearLeft.getPosition(),
+                self.rearRight.getPosition(),
+            ),
+        )
+
+
+
+
     def periodic(self) -> None:
         # Update the odometry in the periodic block
+
         self.odometry.update(
             Rotation2d.fromDegrees(self.gyro.getAngle()),
             (

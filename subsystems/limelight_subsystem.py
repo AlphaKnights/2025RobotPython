@@ -10,8 +10,9 @@ class LimelightSystem(commands2.Subsystem):
         super().__init__()
 
         limelights = limelight.discover_limelights(debug=True)
-
+        
         if not limelights:
+            # return
             raise ValueError("No limelights found")
 
         self.limelight = limelight.Limelight(limelights[0])

@@ -61,6 +61,7 @@ class RobotContainer:
         # Configure default commands
         self.driverController.setDefaultCommands()
 
+
         # self.driverController.button(1, EventLoop()).ifHigh(AutoAlign(self.robot55455Drive, self.limelight, 0.25, 0))
 
         # self.talonSubsystem.setDefaultCommand(
@@ -160,7 +161,7 @@ class RobotContainer:
         # https://github.com/robotpy/robotpy-rev/tree/384ca50b2ede3ab44e09f0c12b8c5db33dff7c9e/examples/maxswerve
 
         # return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))
-        # return commands2.SequentialCommandGroup(commands2.InstantCommand(lambda: self.robotDrive.drive(ChassisSpeeds(1, 0, 0), False, False), self.robotDrive), 
+        # return commands2.SequentialCommandGroup(commands2.InstantCommand(lambda: self.robotDrive.drive(ChassisSpeeds(-8, 0, 0), False, False), self.robotDrive), 
         #                                         commands2.WaitCommand(AutoConstants.kTimedTime),
         #                                         commands2.InstantCommand(lambda: self.robotDrive.drive(ChassisSpeeds(0, 0, 0), False, False), self.robotDrive)
         #                                         )

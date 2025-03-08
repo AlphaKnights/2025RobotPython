@@ -19,7 +19,8 @@ from wpimath.kinematics import (
     SwerveDrive4Odometry,
 )
 
-from wpilib import SmartDashboard, SendableChooser
+from wpilib import SmartDashboard, SendableChooser, Field2d
+
 
 from constants import AutoConstants, DriveConstants, ModuleConstants
 import swerveutils
@@ -68,6 +69,8 @@ class DriveSubsystem(Subsystem):
         #     DriveConstants.kBackRightChassisAngularOffset,
         # )
 
+        self.field = Field2d()
+        SmartDashboard.putData("Field", self.field)
         self.frontLeft = MAXSwerveModule(
             DriveConstants.kFrontLeftDrivingId,
             DriveConstants.kFrontLeftTurningId,
@@ -169,6 +172,7 @@ class DriveSubsystem(Subsystem):
                 self.rearRight.getPosition(),
             ),
         )
+        self.field.setRobotPose(self.odometry.getPose())
 
     def getPose(self) -> Pose2d:
         """Returns the currently-estimated pose of the robot.
@@ -219,7 +223,7 @@ class DriveSubsystem(Subsystem):
 
         # speeds = ChassisSpeeds(10, 0, 0)
 
-        print('angle', self.gyro.getAngle())
+        # print('angle', self.gyro.getAngle())
 
         swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds)
 
@@ -234,7 +238,7 @@ class DriveSubsystem(Subsystem):
         self.rearRight.setDesiredState(swerveModuleStates[3])
 
     def setX(self) -> None:
-        return
+        # return
         """Sets the wheels into an X formation to prevent movement."""
         self.frontLeft.setDesiredState(SwerveModuleState(0, Rotation2d.fromDegrees(45)))
         self.frontRight.setDesiredState(

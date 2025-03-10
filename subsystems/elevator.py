@@ -20,9 +20,10 @@ class ElevatorSubsystem(Subsystem):
         self.elevatorMotorRPID = self.elevatorMotorR.getClosedLoopController()
 
         l_config = SparkMaxConfig()
+        l_config.inverted(True)
         l_config.IdleMode(int(SparkMax.IdleMode.kCoast))
-        l_config.softLimit.forwardSoftLimit(30) \
-            .reverseSoftLimit(-10)
+        l_config.softLimit.forwardSoftLimit(ElevatorConstants.kForwardSoftLimit) \
+            .reverseSoftLimit(ElevatorConstants.kReverseSoftLimit)
         l_config.softLimit.forwardSoftLimitEnabled(True) \
             .reverseSoftLimitEnabled(True)
         
@@ -36,6 +37,7 @@ class ElevatorSubsystem(Subsystem):
            
 
         r_config = SparkMaxConfig()
+        r_config.inverted(False)
         r_config.IdleMode(int(SparkMax.IdleMode.kCoast))
         r_config.softLimit.forwardSoftLimit(ElevatorConstants.kForwardSoftLimit) \
             .reverseSoftLimit(ElevatorConstants.kReverseSoftLimit)
@@ -90,7 +92,8 @@ class ElevatorSubsystem(Subsystem):
         #     return
     
         self.elevatorMotorL.set(speed)
-        self.elevatorMotorR.set(-speed)
+        self.elevatorMotorR.set(speed)
+        
 
     def setPosition(self, position: float) -> None:
         print(self.elevatorMotorLEncoder.getPosition())

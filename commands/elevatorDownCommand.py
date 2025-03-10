@@ -1,4 +1,5 @@
 import commands2
+from constants import ElevatorConstants
 from subsystems.elevator import ElevatorSubsystem
 
 class ElevatorDownCommand(commands2.Command):
@@ -8,7 +9,7 @@ class ElevatorDownCommand(commands2.Command):
         self.addRequirements(elevator_subsystem)
 
     def execute(self) -> None:
-        self.elevator.move(-0.1)
+        self.elevator.move(-0.1 * ElevatorConstants.kElevatorMaxSpeed)
 
     def isFinished(self) -> bool:
         return False

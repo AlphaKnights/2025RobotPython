@@ -124,13 +124,13 @@ class OIConstants:
     kDriveDeadband = 0.2
 
     kButtonBoardPort = 0
-    kElevatorUpButton = 12
-    kElevatorDownButton = 11
-    kElevatorLvl0Button = 0
-    kElevatorLvl1Button = 1
-    kElevatorLvl2Button = 2
-    kElevatorLvl3Button = 3
-    kElevatorLvl4Button = 4
+    kElevatorUpButton = 1
+    kElevatorDownButton = 2
+   # kElevatorLvl0Button = 0
+    #kElevatorLvl1Button = 1
+    #kElevatorLvl2Button = 2
+    #kElevatorLvl3Button = 3
+    #kElevatorLvl4Button = 4
     
 
 class AutoConstants:
@@ -149,8 +149,8 @@ class AutoConstants:
     )
 
 class ElevatorConstants:
-    kLeftMotorCanId = 11
-    kRightMotorCanId = 1
+    kLeftMotorCanId = 3
+    kRightMotorCanId = 32
     kUpperLimit = 1
     kLowerLimit = 2
 

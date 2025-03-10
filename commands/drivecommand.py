@@ -47,7 +47,7 @@ class DriveCommand(commands2.Command):
                     self.x()* DriveConstants.kMaxSpeedMetersPerSecond, 
                     self.y()* DriveConstants.kMaxSpeedMetersPerSecond, 
                     self.rot() * DriveConstants.kMaxAngularSpeed
-                ), False, True)
+                ), True, True)
             return
         
         results = self.limelight.get_results()

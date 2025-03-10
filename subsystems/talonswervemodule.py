@@ -100,9 +100,6 @@ class TalonSwerveModule:
         return SwerveModulePosition(self.drive_motor.get_position().value_as_double, Rotation2d(math.radians(self.turn_motor.get_position().value_as_double*360) + self.offset))
     
     def setDesiredState(self, desired_state: SwerveModuleState) -> None:
-        if self.encoder.device_id == 3:
-            return
-
         corrected_state = SwerveModuleState()
         corrected_state.speed = desired_state.speed
         corrected_state.angle = Rotation2d(desired_state.angle.radians() - self.offset)

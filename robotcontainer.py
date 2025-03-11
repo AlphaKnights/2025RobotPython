@@ -20,11 +20,14 @@ from subsystems.limelight_subsystem import LimelightSystem
 from commands.auto_rotate import AutoRotate
 from commands.drivecommand import DriveCommand
 from commands.launch import LaunchCommand
+from commands.intake import IntakeCommand
 from subsystems.coral_manipulator import CoralManipulator
 
 from pathplannerlib.auto import AutoBuilder # type: ignore
 from pathplannerlib.auto import NamedCommands # type: ignore
 from pathplannerlib.auto import PathPlannerAuto # type: ignore
+
+import commands2.button
 
 import commands2.waitcommand
 
@@ -55,11 +58,12 @@ class RobotContainer:
         self.configureButtonBindings()
 
 
-        self.coral_manipulator.setDefaultCommand(
-                LaunchCommand(self.coral_manipulator)
-                    .onlyIf(lambda: self.driverController.getRawButton(OIConstants.kLaunchButton))\
-                    .onlyWhile(lambda: self.driverController.getRawButton(OIConstants.kLaunchButton))
-        )
+        self.launch_button = commands2.button.JoystickButton(self.driverController, 1)\
+            .whileTrue(LaunchCommand(self.coral_manipulator))
+        
+        self.intake_button = commands2.button.JoystickButton(self.driverController, 1)\
+            .whileTrue(IntakeCommand(self.coral_manipulator))
+        
 
         # Configure default commands
         # self.robotDrive.setDefaultCommand(

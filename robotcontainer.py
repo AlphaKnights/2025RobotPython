@@ -15,6 +15,13 @@ from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 from wpimath.kinematics import ChassisSpeeds
 
+from constants import AutoConstants, DriveConstants, OIConstants, ElevatorConstants
+
+
+from subsystems.elevator import ElevatorSubsystem
+from commands.elevatorUpCommand import ElevatorUpCommand
+from commands.elevatorDownCommand import ElevatorDownCommand
+from commands.elevatorPos import ElevatorPosCommand
 from commands.auto_align import AutoAlign
 from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
@@ -37,7 +44,8 @@ class RobotContainer:
 
     def __init__(self) -> None:
         # The robot's subsystems
-        self.robotDrive = DriveSubsystem()
+        #self.robotDrive = DriveSubsystem()
+        self.elevator = ElevatorSubsystem()
 
         self.limelight = LimelightSystem()
 
@@ -51,7 +59,9 @@ class RobotContainer:
 
         # self.talonSubsystem = TalonSubsystem()
 
-        # The driver's controller
+
+        # button boards
+        self.buttonBoard = commands2.button.CommandJoystick(OIConstants.kButtonBoardPort)
          # The driver's controller
         self.driverController = DriverController(self.robotDrive, self.limelight)
 
@@ -59,8 +69,8 @@ class RobotContainer:
         self.configureButtonBindings()
 
         # Configure default commands
-        self.driverController.setDefaultCommands()
 
+        self.driverController.setDefaultCommands()
 
         # self.driverController.button(1, EventLoop()).ifHigh(AutoAlign(self.robot55455Drive, self.limelight, 0.25, 0))
 
@@ -73,13 +83,33 @@ class RobotContainer:
         # )
 
 
-
     def configureButtonBindings(self) -> None:
         """
         Use this method to define your button->command mappings. Buttons can be created by
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
+        #manual elevator
+        self.buttonBoard.button(OIConstants.kElevatorUpButton).whileTrue(ElevatorUpCommand(self.elevator))
+        self.buttonBoard.button(OIConstants.kElevatorDownButton).whileTrue(ElevatorDownCommand(self.elevator))
+
+        #level 0
+        self.buttonBoard.button(OIConstants.kElevatorLvl0Button).whileTrue(ElevatorPosCommand(self.elevator, ElevatorConstants.kLvl0Height))
+
+        #level 1
+        self.buttonBoard.button(OIConstants.kElevatorLvl1Button).whileTrue(ElevatorPosCommand(self.elevator, ElevatorConstants.kLvl1Height))
+
+        #level 2
+        self.buttonBoard.button(OIConstants.kElevatorLvl2Button).whileTrue(ElevatorPosCommand(self.elevator, ElevatorConstants.kLvl2Height))
+
+        #level 3
+        self.buttonBoard.button(OIConstants.kElevatorLvl3Button).whileTrue(ElevatorPosCommand(self.elevator, ElevatorConstants.kLvl3Height))
+
+        #level 4
+        self.buttonBoard.button(OIConstants.kElevatorLvl4Button).whileTrue(ElevatorPosCommand(self.elevator, ElevatorConstants.kLvl4Height))
+
+        # self.elevator.setDefaultCommand(ElevatorPosCommand(self.elevator))
+
 
 
 

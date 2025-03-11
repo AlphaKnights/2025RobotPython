@@ -14,6 +14,7 @@ from wpimath.geometry import Translation2d
 from wpimath.kinematics import SwerveDrive4Kinematics
 from wpimath.trajectory import TrapezoidProfileRadians
 
+
 # from rev import CANSparkMax
 from rev import SparkMax, SparkBaseConfig
 
@@ -153,6 +154,7 @@ class ModuleConstants:
     kTurningMinOutput = -1
     kTurningMaxOutput = 1
 
+
     kDrivingMotorIdleMode = SparkBaseConfig.IdleMode.kBrake
     kTurningMotorIdleMode = SparkBaseConfig.IdleMode.kBrake
 
@@ -162,9 +164,16 @@ class ModuleConstants:
 
 class OIConstants:
     kDriverControllerPort = 1
-    # kDriveDeadband = 0.2
     kDriveDeadband = 0.4
-    
+
+    kButtonBoardPort = 0
+    kElevatorUpButton = 9
+    kElevatorDownButton = 8
+    kElevatorLvl0Button = 1
+    kElevatorLvl1Button = 2
+    kElevatorLvl2Button = 3
+    kElevatorLvl3Button = 4
+    kElevatorLvl4Button = 5
 
 class AutoConstants:
     kMaxSpeedMetersPerSecond = 10
@@ -181,6 +190,33 @@ class AutoConstants:
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared
     )
 
+class ElevatorConstants:
+    kLeftMotorCanId = 4
+    kRightMotorCanId = 32
+    kUpperLimit = 1
+    kLowerLimit = 2
+
+    kEncoderPositionFactor = 1
+    kEncoderVelocityFactor = 1
+
+    kP = 0.05
+    kI = 0
+    kD = 0
+
+    kLvl0Height = 0.0
+    
+    kLvl1Height = 0.0
+    
+    kLvl2Height = 0.0
+
+    kLvl3Height = 0.0
+    
+    kLvl4Height = 0.0
+
+    kForwardSoftLimit = 10000
+    kReverseSoftLimit = -100
+
+    kElevatorMaxSpeed = 1
     kTimedSpeed = 0.6
     kTimedTime = 4
 

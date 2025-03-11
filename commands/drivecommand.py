@@ -1,3 +1,4 @@
+
 import commands2
 import typing
 from math import sqrt, cos, sin, radians, degrees
@@ -134,10 +135,10 @@ class DriveCommand(commands2.Command):
         else:
             self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, -a * AlignConstants.kMaxTurningSpeed * aDist), False, False)
         
-
-    def isFinished(self) -> bool:
-        return False
+#     def isFinished(self) -> bool:
+#         return False
     
+
     def end(self, interrupted: bool) -> None:
         # self.swerve.drive(0, 0, 0, False, True)
         self.swerve.drive(ChassisSpeeds(0, 0, 0), False, True)

@@ -75,5 +75,3 @@ class MAXSwerveModule:
 
     def resetEncoders(self) -> None:
         self.drive_encoder.setPosition(0)
-
-    

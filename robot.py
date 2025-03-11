@@ -7,7 +7,7 @@
 
 import commands2
 import wpilib
-from cscore import UsbCamera, VideoSink, CameraServer
+from cscore import CameraServer
 
 from robotcontainer import RobotContainer
 from ntcore import NetworkTableInstance
@@ -21,8 +21,8 @@ class MyRobot(commands2.TimedCommandRobot):
         # autonomous chooser on the dashboard.
         self.container = RobotContainer()
         self.autonomousCommand = None
-        frontCamera = CameraServer.startAutomaticCapture(1)
-        rearCamera = CameraServer.startAutomaticCapture(0)
+        frontCamera = CameraServer.startAutomaticCapture(0)
+        rearCamera = CameraServer.startAutomaticCapture(1)
         cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection")
         
         self.driverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
@@ -40,16 +40,13 @@ class MyRobot(commands2.TimedCommandRobot):
             self.autonomousCommand.cancel()
     
     def teleopPeridodic(self) -> None:
-        if self.driverController.getYChannel() <= 0:
+        if self.driverController.getY() <= 0:
             print("Setting camera 1")
             self.direction = 1
-            self.camera.select(self.direction)
-            CameraServer.getVideo()
         else:
             print("Setting camera 2")
             self.direction = 0
-            self.camera.select(self.direction)
-            CameraServer.getVideo()
+        self.camera.select(self.direction)
     def testInit(self) -> None:
         commands2.CommandScheduler.getInstance().cancelAll()
 

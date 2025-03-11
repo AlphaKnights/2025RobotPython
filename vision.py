@@ -10,7 +10,6 @@ class CameraSubsystem:
         self.server = table
         
 
-    
     def select(self, direction):
         if direction == 1:
             self.server.setString(self.front_camera.getName())

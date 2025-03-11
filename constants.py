@@ -171,7 +171,7 @@ class ElevatorConstants:
     
     kLvl4Height = 0.0
 
-    kForwardSoftLimit = 40
+    kForwardSoftLimit = 10000
     kReverseSoftLimit = -10
 
     kElevatorMaxSpeed = 1

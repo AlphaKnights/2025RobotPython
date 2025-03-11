@@ -163,5 +163,5 @@ class UltrasonicConstants:
     kEchoChannel = 3
 
 class LaunchConstants:
-    kLaunchMotor = 4
+    kLaunchMotor = 42
     kLaunchSpeed = 0.3

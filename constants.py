@@ -124,8 +124,8 @@ class OIConstants:
     kDriveDeadband = 0.2
 
     kButtonBoardPort = 0
-    kElevatorUpButton = 8
-    kElevatorDownButton = 9
+    kElevatorUpButton = 9
+    kElevatorDownButton = 8
     kElevatorLvl0Button = 1
     kElevatorLvl1Button = 2
     kElevatorLvl2Button = 3
@@ -157,7 +157,7 @@ class ElevatorConstants:
     kEncoderPositionFactor = 1
     kEncoderVelocityFactor = 1
 
-    kP = 0.01
+    kP = 0.05
     kI = 0
     kD = 0
 
@@ -172,6 +172,6 @@ class ElevatorConstants:
     kLvl4Height = 0.0
 
     kForwardSoftLimit = 10000
-    kReverseSoftLimit = -10
+    kReverseSoftLimit = -100
 
     kElevatorMaxSpeed = 1

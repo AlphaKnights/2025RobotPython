@@ -5,6 +5,7 @@
 # the WPILib BSD license file in the root directory of this project.
 #
 
+from typing import Optional
 import commands2
 import wpilib
 
@@ -16,13 +17,13 @@ class MyRobot(commands2.TimedCommandRobot):
         # Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         # autonomous chooser on the dashboard.
         self.container = RobotContainer()
-        self.autonomousCommand = None
+        self.autonomousCommand: Optional[commands2.Command] = None
 
-    # def autonomousInit(self) -> None:
-    #     self.autonomousCommand = self.container.getAutonomousCommand()
+    def autonomousInit(self) -> None:
+        self.autonomousCommand = self.container.getAutonomousCommand()
 
-    #     if self.autonomousCommand:
-    #         self.autonomousCommand.schedule()
+        if self.autonomousCommand:
+            self.autonomousCommand.schedule()
 
     def teleopInit(self) -> None:
         if self.autonomousCommand:

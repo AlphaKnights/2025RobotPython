@@ -15,8 +15,8 @@ robotpy_extras = [
     # "apriltag",
      "commands2",
     # "cscore",
-    # "navx",
-    # "pathplannerlib",
+     "navx",
+     "pathplannerlib",
     # "phoenix5",
     # "phoenix6",
     # "photonvision",
@@ -31,4 +31,7 @@ robotpy_extras = [
 requires = [
     "pylint>=3.2.6",
     "mypy>=1.11.0",
+    "robotpy-ctre>=2025.0.0",
+    "limelightlib-python>=0.9.6",
+    "Pint>=0.20.1",
 ]

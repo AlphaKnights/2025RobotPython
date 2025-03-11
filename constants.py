@@ -14,7 +14,9 @@ from wpimath.geometry import Translation2d
 from wpimath.kinematics import SwerveDrive4Kinematics
 from wpimath.trajectory import TrapezoidProfileRadians
 
-from rev import SparkMax
+
+# from rev import CANSparkMax
+from rev import SparkMax, SparkBaseConfig
 
 
 class NeoMotorConstants:
@@ -24,8 +26,9 @@ class NeoMotorConstants:
 class DriveConstants:
     # Driving Parameters - Note that these are not the maximum capable speeds of
     # the robot, rather the allowed maximum speeds
-    kMaxSpeedMetersPerSecond = 4.8
-    kMaxAngularSpeed = math.tau  # radians per second
+    kMaxSpeedMetersPerSecond = 8
+    # kMaxAngularSpeed = math.tau  # radians per second
+    kMaxAngularSpeed = 40
 
     kDirectionSlewRate = 1.2  # radians per second
     kMagnitudeSlewRate = 1.8  # percent per second (1 = 100%)
@@ -46,10 +49,26 @@ class DriveConstants:
     kDriveKinematics = SwerveDrive4Kinematics(*kModulePositions)
 
     # Angular offsets of the modules relative to the chassis in radians
-    kFrontLeftChassisAngularOffset = math.radians(-120) #(-60 - 45)*(math.pi/180)
-    kFrontRightChassisAngularOffset = math.radians(55)#(43-180 - 45)*(math.pi/180)
-    kBackLeftChassisAngularOffset = math.radians(-205)#(45 - 45)*(math.pi/180)
-    kBackRightChassisAngularOffset = math.radians(70)#(270 - 45)*(math.pi/180)
+    # kFrontLeftChassisAngularOffset = math.radians(185) #(-60 - 45)*(math.pi/180)
+    # kFrontRightChassisAngularOffset = math.radians(310)
+    # kBackLeftChassisAngularOffset = math.radians(110)
+    # kBackRightChassisAngularOffset = math.radians(245)
+
+    # kFrontLeftChassisAngularOffset = 0.2902
+    # kFrontRightChassisAngularOffset = .23144
+    # kBackLeftChassisAngularOffset = 0.090
+    # kBackRightChassisAngularOffset = -.15722
+
+    kFrontLeftChassisAngularOffset = math.radians(-0.764892578125 * (360))
+    kFrontRightChassisAngularOffset = math.radians(0.75 * (360))
+    kBackLeftChassisAngularOffset = math.radians(0.079833984375 * (360))
+    kBackRightChassisAngularOffset = math.radians(0.367919921875 * (360))
+
+    # kFrontLeftChassisAngularOffset = -0.26171875
+    # kFrontRightChassisAngularOffset = 0.25
+    # kBackLeftChassisAngularOffset = 0.58984375
+    # kBackRightChassisAngularOffset = -0.125
+
 
     # SPARK MAX CAN IDs
     kFrontLeftDrivingCanId = 32
@@ -62,7 +81,29 @@ class DriveConstants:
     kFrontRightTurningCanId = 12
     kRearRightTurningCanId = 14
 
+    # Kraken IDs
+    kFrontLeftDrivingId = 5
+    kRearLeftDrivingId = 7
+    kFrontRightDrivingId = 4
+    kRearRightDrivingId = 1
+
+    kFrontLeftTurningId = 6
+    kRearLeftTurningId = 8
+    kFrontRightTurningId = 3
+    kRearRightTurningId = 2
+
+    kFrontLeftCANCoderId = 3    
+    kRearLeftCANCoderId = 4
+    kFrontRightCANCoderId = 2
+    kRearRightCANCoderId = 1
+
     kGyroReversed = True
+
+    # Kraken Positions
+    kFrontLeftPosition = Translation2d(-kWheelBase / 2, kTrackWidth / 2)
+    kFrontRightPosition = Translation2d(-kWheelBase / 2, -kTrackWidth / 2)
+    kRearLeftPosition = Translation2d(kWheelBase / 2, kTrackWidth / 2)
+    kRearRightPosition = Translation2d(kWheelBase / 2, -kTrackWidth / 2)
 
 
 class ModuleConstants:
@@ -98,22 +139,24 @@ class ModuleConstants:
     kTurningEncoderPositionPIDMinInput = 0  # radian
     kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor  # radian
 
-    kDrivingP = 0.04
+    kDrivingP = 0.02
     kDrivingI = 0
     kDrivingD = 0
     kDrivingFF = 1 / kDriveWheelFreeSpeedRps
+    # kDrivingFF = -0.235
     kDrivingMinOutput = -1
     kDrivingMaxOutput = 1
 
-    kTurningP = 1
+    kTurningP = 40
     kTurningI = 0
     kTurningD = 0
     kTurningFF = 0
     kTurningMinOutput = -1
     kTurningMaxOutput = 1
 
-    kDrivingMotorIdleMode = SparkMax.IdleMode.kBrake
-    kTurningMotorIdleMode = SparkMax.IdleMode.kBrake
+
+    kDrivingMotorIdleMode = SparkBaseConfig.IdleMode.kBrake
+    kTurningMotorIdleMode = SparkBaseConfig.IdleMode.kBrake
 
     kDrivingMotorCurrentLimit = 50  # amp
     kTurningMotorCurrentLimit = 20  # amp
@@ -121,7 +164,7 @@ class ModuleConstants:
 
 class OIConstants:
     kDriverControllerPort = 1
-    kDriveDeadband = 0.2
+    kDriveDeadband = 0.4
 
     kButtonBoardPort = 0
     kElevatorUpButton = 9
@@ -131,11 +174,10 @@ class OIConstants:
     kElevatorLvl2Button = 3
     kElevatorLvl3Button = 4
     kElevatorLvl4Button = 5
-    
 
 class AutoConstants:
-    kMaxSpeedMetersPerSecond = 3
-    kMaxAccelerationMetersPerSecondSquared = 3
+    kMaxSpeedMetersPerSecond = 10
+    kMaxAccelerationMetersPerSecondSquared = 10
     kMaxAngularSpeedRadiansPerSecond = math.pi
     kMaxAngularSpeedRadiansPerSecondSquared = math.pi
 
@@ -175,3 +217,25 @@ class ElevatorConstants:
     kReverseSoftLimit = -100
 
     kElevatorMaxSpeed = 1
+    kTimedSpeed = 0.6
+    kTimedTime = 4
+
+class LEDConstants:
+    kLEDPort = 0
+    kLEDBuffer = 64
+
+    kSilverHue = 0
+    kSilverSat = 0
+    kSilverVal = 10
+
+    kBlueHue = 90
+    kBlueSat = 220
+    kBlueVal = 30
+
+class AlignConstants:
+    kMaxNormalizedSpeed = 5.0
+    kMaxTurningSpeed = 1.0
+    kDistToSlow = 0.3
+    kRotDistToSlow = 0.5
+    kAlignDeadzone = 0.01
+    kAlignRotDeadzone = 5

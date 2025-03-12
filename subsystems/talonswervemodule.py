@@ -89,7 +89,7 @@ class TalonSwerveModule:
         corrected_state.speed = desired_state.speed
         corrected_state.angle = Rotation2d(desired_state.angle.radians() - self.offset)
 
-        corrected_state.optimize(Rotation2d(self.encoder.get_position().value_as_double))
+        corrected_state.optimize(Rotation2d(self.encoder.get_position().value_as_double * math.tau))
 
         self.drive_motor.set_control(VelocityVoltage(velocity=corrected_state.speed))
         self.turn_motor.set_control(PositionVoltage(position=corrected_state.angle.radians() / (2* math.pi)))

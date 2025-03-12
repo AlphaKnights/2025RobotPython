@@ -56,15 +56,15 @@ class DriveConstants:
     kBackRightChassisAngularOffset = math.radians(0.367919921875 * (360))
 
     # SPARK MAX CAN IDs
-    kFrontLeftDrivingCanId = 32
-    kRearLeftDrivingCanId = 1
-    kFrontRightDrivingCanId = 3
-    kRearRightDrivingCanId = 21
+    kFrontLeftDrivingCanId = 6
+    kRearLeftDrivingCanId = 21
+    kFrontRightDrivingCanId = 11
+    kRearRightDrivingCanId = 3
 
-    kFrontLeftTurningCanId = 13
-    kRearLeftTurningCanId = 11
-    kFrontRightTurningCanId = 12
-    kRearRightTurningCanId = 14
+    kFrontLeftTurningCanId = 22
+    kRearLeftTurningCanId = 14
+    kFrontRightTurningCanId = 13
+    kRearRightTurningCanId = 12
 
     # Kraken IDs
     kFrontLeftDrivingId = 5
@@ -218,3 +218,4 @@ class AlignConstants:
     kRotDistToSlow = 0.5
     kAlignDeadzone = 0.01
     kAlignRotDeadzone = 5
+

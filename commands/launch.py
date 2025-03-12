@@ -13,7 +13,7 @@ class LaunchCommand(commands2.Command):
         print("firing")
 
     def isFinished(self) -> bool:
-        return False
+        return (self.coral_manipulator.rangeFinder.getRangeInches() >= 3.0)
     
     def end(self, interrupted: bool) -> None:
         self.coral_manipulator.stop()

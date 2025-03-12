@@ -30,15 +30,17 @@ class CoralManipulator(Subsystem):
     def periodic(self) -> None:
         if not self.rangeFinder.isRangeValid():
             self.lightAll(*LEDConstants.kBadColor)
+            print("invalid")
             # return
         
         self.rangeFinder.ping()
-        
+        print("ping")
         time.sleep(0.1)
+        print(self.rangeFinder.getRangeInches())
+
         if (self.rangeFinder.isRangeValid()):
-            print(self.rangeFinder.getRangeInches())
         
-            if self.rangeFinder.getRangeInches() > 5:
+            if self.rangeFinder.getRangeInches() > 3:
                 self.lightAll(*LEDConstants.kBadColor)
                 return
         

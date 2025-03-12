@@ -27,37 +27,20 @@ class TalonSwerveModule:
 
         drive_motor_config.current_limits.supply_current_limit_enable = True
         drive_motor_config.current_limits.supply_current_limit = ModuleConstants.kDrivingMotorCurrentLimit
-        
-        # drive_motor_config.slot0.k_p = ModuleConstants.kDrivingP
-        # drive_motor_config.slot0.k_p = 0.2
-        # drive_motor_config.slot0.k_i = ModuleConstants.kDrivingI
-        # drive_motor_config.slot0.k_d = ModuleConstants.kDrivingD
-        # # drive_motor_config.slot0.k_s = ModuleConstants.kDrivingFF - 0.1
-        # drive_motor_config.slot0.k_s = 4.8
-        # drive_motor_config.slot0.k_v = 0.248
 
-        drive_motor_config.slot0.k_p = 0.65 #0.1   0.65
-        drive_motor_config.slot0.k_i = 0
+        drive_motor_config.slot0.k_p = ModuleConstants.kDrivingP
+        drive_motor_config.slot0.k_i = ModuleConstants.kDrivingI
         drive_motor_config.slot0.k_d = ModuleConstants.kDrivingD
-        # drive_motor_config.slot0.k_s = ModuleConstants.kDrivingFF - 0.1
-        drive_motor_config.slot0.k_s = 0.0 #0  -0.85
-        drive_motor_config.slot0.k_v = 0.3  #0.124
-        drive_motor_config.slot0.k_a = 1.5 #1.5  
-
-        # phoenix6.swerve.SwerveModule
+        drive_motor_config.slot0.k_s = ModuleConstants.kDrivingFF
+        drive_motor_config.slot0.k_v = ModuleConstants.kDrivingV
+        drive_motor_config.slot0.k_a = ModuleConstants.kDrivingA
 
         drive_motor_config.open_loop_ramps.duty_cycle_open_loop_ramp_period = 0
         drive_motor_config.closed_loop_ramps.duty_cycle_closed_loop_ramp_period = 0
 
         drive_motor_config.motor_output.neutral_mode = phoenix6.signals.NeutralModeValue.BRAKE
 
-        # drive_motor_config.feedback.sensor_to_mechanism_ratio = -.1865671641791045
         drive_motor_config.feedback.sensor_to_mechanism_ratio = 7.363636
-        
-
-        # if  drive_motor_id == 7:
-        #     drive_motor_config.motor_output.inverted = InvertedValue(True)
-
 
         # Replace to_deserialize with string very weird workaround
         self.drive_motor.configurator.apply(drive_motor_config)
@@ -86,6 +69,8 @@ class TalonSwerveModule:
 
         turn_motor_config.motor_output.inverted = InvertedValue(True)
 
+        phoenix6.swerve.swerve_module
+
 
         self.turn_motor.configurator.apply(turn_motor_config)
 
@@ -113,4 +98,3 @@ class TalonSwerveModule:
 
     def resetEncoders(self) -> None:
         self.drive_motor.set_position(0)
-        # self.encoder.set_position(0)

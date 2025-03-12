@@ -48,27 +48,12 @@ class DriveConstants:
     ]
     kDriveKinematics = SwerveDrive4Kinematics(*kModulePositions)
 
-    # Angular offsets of the modules relative to the chassis in radians
-    # kFrontLeftChassisAngularOffset = math.radians(185) #(-60 - 45)*(math.pi/180)
-    # kFrontRightChassisAngularOffset = math.radians(310)
-    # kBackLeftChassisAngularOffset = math.radians(110)
-    # kBackRightChassisAngularOffset = math.radians(245)
-
-    # kFrontLeftChassisAngularOffset = 0.2902
-    # kFrontRightChassisAngularOffset = .23144
-    # kBackLeftChassisAngularOffset = 0.090
-    # kBackRightChassisAngularOffset = -.15722
-
+    
+    # Offsets of the modules from the robot 
     kFrontLeftChassisAngularOffset = math.radians(-0.764892578125 * (360))
     kFrontRightChassisAngularOffset = math.radians(0.75 * (360))
     kBackLeftChassisAngularOffset = math.radians(0.079833984375 * (360))
     kBackRightChassisAngularOffset = math.radians(0.367919921875 * (360))
-
-    # kFrontLeftChassisAngularOffset = -0.26171875
-    # kFrontRightChassisAngularOffset = 0.25
-    # kBackLeftChassisAngularOffset = 0.58984375
-    # kBackRightChassisAngularOffset = -0.125
-
 
     # SPARK MAX CAN IDs
     kFrontLeftDrivingCanId = 32
@@ -98,13 +83,6 @@ class DriveConstants:
     kRearRightCANCoderId = 1
 
     kGyroReversed = True
-
-    # Kraken Positions
-    kFrontLeftPosition = Translation2d(-kWheelBase / 2, kTrackWidth / 2)
-    kFrontRightPosition = Translation2d(-kWheelBase / 2, -kTrackWidth / 2)
-    kRearLeftPosition = Translation2d(kWheelBase / 2, kTrackWidth / 2)
-    kRearRightPosition = Translation2d(kWheelBase / 2, -kTrackWidth / 2)
-
 
 class ModuleConstants:
     # The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
@@ -139,11 +117,12 @@ class ModuleConstants:
     kTurningEncoderPositionPIDMinInput = 0  # radian
     kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor  # radian
 
-    kDrivingP = 0.02
+    kDrivingP = 0.65
     kDrivingI = 0
     kDrivingD = 0
-    kDrivingFF = 1 / kDriveWheelFreeSpeedRps
-    # kDrivingFF = -0.235
+    kDrivingFF = 0
+    kDrivingV = 0.3
+    kDrivingA = 1.5
     kDrivingMinOutput = -1
     kDrivingMaxOutput = 1
 

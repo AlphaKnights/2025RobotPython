@@ -35,7 +35,7 @@ class AutoAlign(commands2.Command):
 
         tx = results.tx
         ty = results.ty
-        ta = results.ta
+        ta = results.yaw
 
         print(f'x: {tx}, y: {ty}')
 

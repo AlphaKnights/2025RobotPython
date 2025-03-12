@@ -44,7 +44,7 @@ class RobotContainer:
 
     def __init__(self) -> None:
         # The robot's subsystems
-        #self.robotDrive = DriveSubsystem()
+        self.robotDrive = DriveSubsystem()
         self.elevator = ElevatorSubsystem()
 
         self.limelight = LimelightSystem()

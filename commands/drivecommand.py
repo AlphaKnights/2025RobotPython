@@ -1,4 +1,5 @@
 
+import math
 import commands2
 import typing
 from math import sqrt, cos, sin, radians, degrees
@@ -50,7 +51,7 @@ class DriveCommand(commands2.Command):
                     self.rot() * DriveConstants.kMaxAngularSpeed
                 ), True, True)
             return
-        
+                
         results = self.limelight.get_results()
 
         if results is None:
@@ -67,17 +68,21 @@ class DriveCommand(commands2.Command):
 
         tx = results.tx
         ty = results.ty
-        yaw = radians(results.yaw)
+        # yaw = radians(results.yaw)
+        yaw = results.yaw
 
         print(f'x: {tx}, y: {ty}')
 
-        goalXSign = self.goalX/abs(self.goalX)
+        # if 
+        # goalXSign = self.goalX/abs(self.goalX)
 
         # Keep some between the tag and robot
         # First adjustment is for distance from tag, second is for x offset
-        ty = ty - (cos(yaw) * self.goalY) - (sin(yaw) * self.goalX)
-        tx = tx + (sin(yaw) * self.goalY) - (cos(yaw) * self.goalX)
-        ta = yaw + self.goalA
+        # ty = ty - (cos(yaw) * self.goalY) - (sin(yaw) * self.goalX)
+        # tx = tx + (sin(yaw) * self.goalY) - (cos(yaw) * self.goalX)
+
+        ty = ty - cos((math.pi / 2) + (yaw * (math.pi / 180))  - math.atan2(self.goalY, self.goalX))
+        tx = tx - sin((math.pi / 2) + (yaw * (math.pi / 180)) -  math.atan2(self.goalY, self.goalX))
 
         # Normalize the values
         ax = abs(tx)
@@ -93,10 +98,10 @@ class DriveCommand(commands2.Command):
         if ty < 0:
             y *= -1
 
-        if tx < 0: 
+        if tx > 0: 
             x *= -1
 
-        a = ta/abs(ta)
+        a = yaw/abs(yaw)
 
         if ax < AlignConstants.kAlignDeadzone:
             print("dead X")
@@ -120,15 +125,15 @@ class DriveCommand(commands2.Command):
         if dist < 0.5:
             dist = 0.5
         
-        if abs(degrees(ta)) > AlignConstants.kRotDistToSlow:
+        if abs(yaw) > AlignConstants.kRotDistToSlow:
             aDist = 1.0
         else:
-            aDist = max(0.2, abs(ta)/AlignConstants.kRotDistToSlow)
+            aDist = max(0.2, abs(yaw)/AlignConstants.kRotDistToSlow)
 
         print ('distance', dist)
         print ('x speed', x)
         print ('y speed', y)
-        print ('angle error', ta)
+        print ('angle error', yaw)
         if (x == 0 and y == 0 and a == 0):
             print('Already aligned')
             self.swerve.setX()

@@ -117,12 +117,14 @@ class ModuleConstants:
     kTurningEncoderPositionPIDMinInput = 0  # radian
     kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor  # radian
 
-    kDriveRatio = 7.363636
+    # kDriveRatio = 7.363636
+    kDriveRatio = 6.12
 
-    kDrivingP = 0.65
+
+    kDrivingP = 0.8
     kDrivingI = 0
     kDrivingD = 0
-    kDrivingFF = 1.5
+    kDrivingFF = 1
     kDrivingV = 0.3
     kDrivingA = 1.5
     kDrivingMinOutput = -1
@@ -186,13 +188,13 @@ class ElevatorConstants:
 
     kLvl0Height = 0.0
     
-    kLvl1Height = 0.0
+    kLvl1Height = 20
     
-    kLvl2Height = 0.0
+    kLvl2Height = 30
 
-    kLvl3Height = 0.0
+    kLvl3Height = 40
     
-    kLvl4Height = 0.0
+    kLvl4Height = 50
 
     kForwardSoftLimit = 10000
     kReverseSoftLimit = -100

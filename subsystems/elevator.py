@@ -76,8 +76,9 @@ class ElevatorSubsystem(Subsystem):
         # if (not self.upperLimit.get()):
         #     print ("Upper On")
 
-        print("Left Position: " + str(self.elevatorMotorLEncoder.getPosition()))
-        print("Right Position: " + str(self.elevatorMotorREncoder.getPosition()))
+        # print("Left Position: " + str(self.elevatorMotorLEncoder.getPosition()))
+        # print("Right Position: " + str(self.elevatorMotorREncoder.getPosition()))
+        return
 
 
     def move(self, speed: float) -> None:

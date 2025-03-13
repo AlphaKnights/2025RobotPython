@@ -70,6 +70,7 @@ class RobotContainer:
                 self.driverController.getAButton
                 ),
             )
+        
 
     def configureButtonBindings(self) -> None:
         """

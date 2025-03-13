@@ -31,7 +31,7 @@ class AutoRotate(commands2.Command):
             self.drive_subsystem.setX()
             return
 
-        ta = results.ta
+        ta = results.ra
 
         print(f'a: {ta}')
         
@@ -49,7 +49,7 @@ class AutoRotate(commands2.Command):
         if results is None:
             return False
 
-        ta = results.ta
+        ta = results.ra
 
         # Define margin of error
         margin_of_error = 1

@@ -21,7 +21,8 @@ from wpimath.kinematics import (
 from constants import AutoConstants, DriveConstants, ModuleConstants
 import swerveutils
 from .maxswervemodule import MAXSwerveModule
-
+from interfaces.limelight_results import LimelightResults
+from limelight_subsystem import LimelightSystem
 from pathplannerlib.auto import AutoBuilder # type: ignore
 from pathplannerlib.controller import PPHolonomicDriveController  # type: ignore
 from pathplannerlib.config import RobotConfig, PIDConstants # type: ignore
@@ -113,7 +114,26 @@ class DriveSubsystem(Subsystem):
                 self.rearLeft.getPosition(),
                 self.rearRight.getPosition(),
             ),
-        )
+        )   
+
+    def limelightPos(self, limelight : LimelightSystem) -> None:
+        results = limelight.get_results()
+        if results is not None:
+            x = results.fx
+            y = results.fy
+            yaw = results.fa
+
+            self.odometry.update(
+                Rotation2d.fromDegrees(self.gyro.getAngle()),
+                (
+                    self.frontLeft.getPosition(),
+                    self.frontRight.getPosition(),
+                    self.rearLeft.getPosition(),
+                    self.rearRight.getPosition(),
+                ),
+            )
+
+
 
     def getPose(self) -> Pose2d:
         """Returns the currently-estimated pose of the robot.
@@ -238,7 +258,7 @@ class DriveSubsystem(Subsystem):
         )
 
         return DriveConstants.kDriveKinematics.toChassisSpeeds(moduleStates)
-    
+
     def getTurnRate(self) -> float:
         """Returns the turn rate of the robot.
 

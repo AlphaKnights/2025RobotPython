@@ -46,8 +46,8 @@ class DriveCommand(commands2.Command):
         
         print('Aligning:', results.tag_id)
 
-        tx = results.tx
-        ty = results.ty
+        tx = results.rx
+        ty = results.ry
 
         # print(f'x: {tx}, y: {ty}')
 
@@ -69,7 +69,7 @@ class DriveCommand(commands2.Command):
             self.swerve.drive(ChassisSpeeds(x, y, 0), False, False)
             return
 
-        ta = results.ta
+        ta = results.ra
 
         print(f'a: {ta}')
         

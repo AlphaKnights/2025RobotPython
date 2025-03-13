@@ -32,8 +32,8 @@ class AutoAlign(commands2.Command):
             return
         
 
-        tx = results.tx
-        ty = results.ty
+        tx = results.rx
+        ty = results.ry
 
         print(f'x: {tx}, y: {ty}')
 
@@ -61,8 +61,8 @@ class AutoAlign(commands2.Command):
         if results is None:
             return False
 
-        tx = results.tx
-        ty = results.ty
+        tx = results.rx
+        ty = results.ry
 
         ty = ty - 0.35
 

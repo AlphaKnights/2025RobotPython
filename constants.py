@@ -205,13 +205,13 @@ class ElevatorConstants:
 
     kLvl0Height = 0.0
     
-    kLvl1Height = 0.0
+    kLvl1Height = 20.0
     
-    kLvl2Height = 0.0
+    kLvl2Height = 30.0
 
-    kLvl3Height = 0.0
+    kLvl3Height = 40.0
     
-    kLvl4Height = 0.0
+    kLvl4Height = 50.0
 
     kForwardSoftLimit = 10000
     kReverseSoftLimit = -100

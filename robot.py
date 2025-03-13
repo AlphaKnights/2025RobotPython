@@ -7,12 +7,13 @@
 
 import commands2
 import wpilib
+from cscore import VideoSource
 from cscore import CameraServer
 
 from robotcontainer import RobotContainer
 from ntcore import NetworkTableInstance
 from constants import OIConstants
-from vision import CameraSubsystem
+from vision import CameraSubsystem, Direction
 
 
 class MyRobot(commands2.TimedCommandRobot):
@@ -21,13 +22,17 @@ class MyRobot(commands2.TimedCommandRobot):
         # autonomous chooser on the dashboard.
         self.container = RobotContainer()
         self.autonomousCommand = None
-        frontCamera = CameraServer.startAutomaticCapture(0)
-        rearCamera = CameraServer.startAutomaticCapture(1)
-        cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection")
+        frontCamera = CameraServer.startAutomaticCapture("front", 0)
+        rearCamera = CameraServer.startAutomaticCapture("rear", 1)
+        server1 = CameraServer.addServer("server1", 0)
+        server2 = CameraServer.addServer("server2", 1)
+        frontCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kConnectionKeepOpen)
+        rearCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kConnectionKeepOpen)
         
         self.driverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
-        self.camera = CameraSubsystem(frontCamera, rearCamera, cameraSelection)
-        self.direction = 1
+        self.camera = CameraSubsystem(frontCamera, rearCamera, server1, server2)
+        self.direction = Direction.FRONT
+        self.camera.select()
 
     # def autonomousInit(self) -> None:
     #     self.autonomousCommand = self.container.getAutonomousCommand()
@@ -40,13 +45,9 @@ class MyRobot(commands2.TimedCommandRobot):
             self.autonomousCommand.cancel()
     
     def teleopPeridodic(self) -> None:
-        if self.driverController.getY() <= 0:
-            print("Setting camera 1")
-            self.direction = 1
-        else:
-            print("Setting camera 2")
-            self.direction = 0
-        self.camera.select(self.direction)
+        print("Setting camera 2")
+        self.direction = Direction.REAR
+        self.camera.select()
     def testInit(self) -> None:
         commands2.CommandScheduler.getInstance().cancelAll()
 

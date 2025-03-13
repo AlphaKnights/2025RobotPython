@@ -56,10 +56,6 @@ class RobotContainer:
 
         SmartDashboard.putData("Auto Chooser", self.autoChooser)
 
-
-        # self.talonSubsystem = TalonSubsystem()
-
-
         # button boards
         self.buttonBoard = commands2.button.CommandJoystick(OIConstants.kButtonBoardPort)
          # The driver's controller
@@ -69,18 +65,7 @@ class RobotContainer:
         self.configureButtonBindings()
 
         # Configure default commands
-
         self.driverController.setDefaultCommands()
-
-        # self.driverController.button(1, EventLoop()).ifHigh(AutoAlign(self.robot55455Drive, self.limelight, 0.25, 0))
-
-        # self.talonSubsystem.setDefaultCommand(
-        #     RunMotor(self.talonSubsystem, lambda:
-        #             -wpimath.applyDeadband(
-        #                 self.driverController.getY(), OIConstants.kDriveDeadband
-        #             ),
-        #         )
-        # )
 
 
     def configureButtonBindings(self) -> None:
@@ -119,75 +104,6 @@ class RobotContainer:
 
     
     def getAutonomousCommand(self) -> commands2.Command:
-        # return RunMotor(self.talonSubsystem, lambda: self.driverController.getRawAxis(1))
-        # """Use this to pass the autonomous command to the main {@link Robot} class.
-
-        # :returns: the command to run in autonomous
-        # """
-        # # Create config for trajectory
-        # config = TrajectoryConfig(
-        #     AutoConstants.kMaxSpeedMetersPerSecond,
-        #     AutoConstants.kMaxAccelerationMetersPerSecondSquared,
-        # )
-        # # Add kinematics to ensure max speed is actually obeyed
-        # config.setKinematics(DriveConstants.kDriveKinematics)
-
-        # # An example trajectory to follow. All units in meters.
-        # exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        #     # Start at the origin facing the +X direction
-        #     Pose2d(0, 0, Rotation2d(0)),
-        #     # Pass through these two interior waypoints, making an 's' curve path
-        #     [Translation2d(1, 1), Translation2d(2, -1)],
-        #     # End 3 meters straight ahead of where we started, facing forward
-        #     Pose2d(3, 0, Rotation2d(0)),
-        #     config,
-        # )
-
-        # exampleTrajectoryTwo = TrajectoryGenerator.generateTrajectory(
-        #     # Start at the origin facing the +X direction
-        #     Pose2d(0, 0, Rotation2d(0)),
-        #     # Pass through these two interior waypoints, making an 's' curve path
-        #     # [Translation2d(1, 1), Translation2d(2, -1)],
-        #     [],
-        #     # End 3 meters straight ahead of where we started, facing forward
-        #     Pose2d(3, 0, Rotation2d(0)),
-        #     config,
-        # )
-
-        # thetaController = ProfiledPIDControllerRadians(
-        #     AutoConstants.kPThetaController,
-        #     0,
-        #     0,
-        #     AutoConstants.kThetaControllerConstraints,
-        # )
-        # thetaController.enableContinuousInput(-math.pi, math.pi)
-
-        # controller = HolonomicDriveController(
-        #     PIDController(AutoConstants.kPXController, 0, 0),
-        #     PIDController(AutoConstants.kPYController, 0, 0),
-        #     thetaController,
-        # )
-
-        # swerveControllerCommand = commands2.SwerveControllerCommand(
-        #     exampleTrajectory,
-        #     self.robotDrive.getPose,
-        #     DriveConstants.kDriveKinematics,
-        #     controller,
-        #     self.robotDrive.setModuleStates,
-        #     (self.robotDrive,),
-        # )
-
-        # # Reset odometry to the starting pose of the trajectory.
-        # self.robotDrive.resetOdometry(exampleTrajectory.initialPose())
-
-        # # Run path following command, then stop at the end.
-        # return swerveControllerCommand.andThen(
-        #     cmd.run(
-        #         lambda: self.robotDrive.drive(0, 0, 0, False, False),
-        #         self.robotDrive,
-        #     )
-        # )
-
         # https://github.com/robotpy/robotpy-rev/tree/384ca50b2ede3ab44e09f0c12b8c5db33dff7c9e/examples/maxswerve
 
         # return AutoAlign(self.robotDrive, self.limelight).andThen(AutoRotate(self.robotDrive, self.limelight))
@@ -196,5 +112,3 @@ class RobotContainer:
         #                                         commands2.InstantCommand(lambda: self.robotDrive.drive(ChassisSpeeds(0, 0, 0), False, False), self.robotDrive)
         #                                         )
         return self.autoChooser.getSelected()
-        # return PathPlannerAuto('New Auto')
-        # return RunMotor(self.talonSubsystem, lambda: self.driverController.getRawAxis(1))

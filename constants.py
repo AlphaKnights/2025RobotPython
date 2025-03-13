@@ -120,7 +120,7 @@ class ModuleConstants:
     kDrivingP = 0.65
     kDrivingI = 0
     kDrivingD = 0
-    kDrivingFF = 0
+    kDrivingFF = 1.5
     kDrivingV = 0.3
     kDrivingA = 1.5
     kDrivingMinOutput = -1

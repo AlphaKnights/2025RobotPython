@@ -35,14 +35,15 @@ class DriverController():
                         ) * (-self.driverController.getRawAxis(3) + 1)/2,
                     lambda:
                         -wpimath.applyDeadband(
-                            self.driverController.getRawAxis(0) * (self.driverController.getRawAxis(3) + 1)/2, OIConstants.kDriveDeadband
+                            self.driverController.getRawAxis(0), OIConstants.kDriveDeadband
                         ) * (-self.driverController.getRawAxis(3) + 1)/2,
                     lambda:
                         -wpimath.applyDeadband(
-                            self.driverController.getRawAxis(2) * (self.driverController.getRawAxis(3) + 1)/2, OIConstants.kDriveDeadband
+                            self.driverController.getRawAxis(2), OIConstants.kDriveDeadband
                         ) * (-self.driverController.getRawAxis(3) + 1)/2,
                     # lambda: 0.4 if self.driverController.getRawButton(11) else 0,
                     # lambda: 0,
+                    
                     # lambda: 0,
 
                     lambda: self.driverController.getRawButton(12),

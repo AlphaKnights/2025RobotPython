@@ -22,17 +22,14 @@ class MyRobot(commands2.TimedCommandRobot):
         # autonomous chooser on the dashboard.
         self.container = RobotContainer()
         self.autonomousCommand = None
-        frontCamera = CameraServer.startAutomaticCapture("front", 0)
-        rearCamera = CameraServer.startAutomaticCapture("rear", 1)
-        server1 = CameraServer.addServer("server1", 0)
-        server2 = CameraServer.addServer("server2", 1)
-        frontCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kConnectionKeepOpen)
-        rearCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kConnectionKeepOpen)
+        self.frontCamera = CameraServer.startAutomaticCapture("front", 0)
+        self.rearCamera = CameraServer.startAutomaticCapture("rear", 1)
+        self.server = CameraServer.addSwitchedCamera("switch")
+        self.frontCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kConnectionKeepOpen)
+        self.rearCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kConnectionKeepOpen)
+        self.server.setSource(self.frontCamera)
         
         self.driverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
-        self.camera = CameraSubsystem(frontCamera, rearCamera, server1, server2)
-        self.direction = Direction.FRONT
-        self.camera.select()
 
     # def autonomousInit(self) -> None:
     #     self.autonomousCommand = self.container.getAutonomousCommand()
@@ -46,8 +43,7 @@ class MyRobot(commands2.TimedCommandRobot):
     
     def teleopPeridodic(self) -> None:
         print("Setting camera 2")
-        self.direction = Direction.REAR
-        self.camera.select()
+        self.server.setSource(self.rearCamera)
     def testInit(self) -> None:
         commands2.CommandScheduler.getInstance().cancelAll()
 

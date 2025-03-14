@@ -40,7 +40,7 @@ class TalonSwerveModule:
 
         drive_motor_config.motor_output.neutral_mode = phoenix6.signals.NeutralModeValue.BRAKE
 
-        drive_motor_config.feedback.sensor_to_mechanism_ratio = 8.6631
+        drive_motor_config.feedback.sensor_to_mechanism_ratio = ModuleConstants.kDriveRatio
 
         # Replace to_deserialize with string very weird workaround
         self.drive_motor.configurator.apply(drive_motor_config)
@@ -52,8 +52,6 @@ class TalonSwerveModule:
 
         turn_motor_config.current_limits.supply_current_limit_enable = True
         turn_motor_config.current_limits.supply_current_limit = ModuleConstants.kTurningMotorCurrentLimit
-
-        turn_motor_config.motor_output.duty_cycle_neutral_deadband = 0
 
         turn_motor_config.slot0.k_p = ModuleConstants.kTurningP
         turn_motor_config.slot0.k_i = ModuleConstants.kTurningI
@@ -79,16 +77,40 @@ class TalonSwerveModule:
         self.drive_motor.set_position(0)
     
     def getState(self) -> SwerveModuleState:
-        return SwerveModuleState(self.drive_motor.get_velocity().value_as_double, Rotation2d(math.radians(self.turn_motor.get_position().value_as_double *360) + self.offset))
+        '''
+        Get the current state of the module
+        
+        :returns: The current state of the module
+        '''
+        
+        return SwerveModuleState(
+                speed=self.drive_motor.get_velocity().value_as_double, 
+                angle=Rotation2d(math.radians(self.turn_motor.get_position().value_as_double *360) + self.offset)
+            )
     
     def getPosition(self) -> SwerveModulePosition:
-        return SwerveModulePosition(self.drive_motor.get_position().value_as_double, Rotation2d(math.radians(self.turn_motor.get_position().value_as_double*360) + self.offset))
+        '''
+        Get the current position of the swerve module
+        
+        :returns: The current position of the module
+        '''
+        
+        return SwerveModulePosition(
+                distance=self.drive_motor.get_position().value_as_double, 
+                angle=Rotation2d(math.radians(self.turn_motor.get_position().value_as_double*360) + self.offset)
+            )
     
     def setDesiredState(self, desired_state: SwerveModuleState) -> None:
+        '''
+        Set the desired state for the module
+        
+        :param desired_state: Desired state with the speed and angle
+        '''
         corrected_state = SwerveModuleState()
         corrected_state.speed = desired_state.speed
         corrected_state.angle = Rotation2d(desired_state.angle.radians() - self.offset)
 
+        # Phoenix6 returns rotations which needs to be converted to radians
         corrected_state.optimize(Rotation2d(self.encoder.get_position().value_as_double * math.tau))
 
         self.drive_motor.set_control(VelocityVoltage(velocity=corrected_state.speed))

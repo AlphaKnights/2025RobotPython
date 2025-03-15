@@ -216,10 +216,10 @@ class LEDConstants:
     kBlueVal = 30
 
 class AlignConstants:
-    kMaxNormalizedSpeed = 5.0
+    kMaxNormalizedSpeed = 0.5
     kMaxTurningSpeed = 1.0
     kDistToSlow = 0.3
     kRotDistToSlow = math.radians(20)
-    kAlignDeadzone = 0.01
+    kAlignDeadzone = 0.03
     kAlignRotDeadzone = math.radians(5)
 

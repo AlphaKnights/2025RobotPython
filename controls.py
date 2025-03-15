@@ -11,7 +11,7 @@ class DriverController():
         self.robotDrive = driveSub
         self.limelight = limeSub
 
-        self.joystickDrive = wpilib.Joystick(OIConstants.kDriverControllerPort).getName() == "Logitech Extreme 3D":
+        self.joystickDrive = wpilib.Joystick(OIConstants.kDriverControllerPort).getName() == "Logitech Extreme 3D"
 
         if self.joystickDrive:
             self.joystickDriverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
@@ -46,7 +46,7 @@ class DriverController():
                     lambda: self.joystickDriverController.getRawButton(11)
                     ),
                 )
-        else:uhy
+        else:
             self.robotDrive.setDefaultCommand(
                 # The left stick controls translation of the robot.
                 # Turning is controlled by the X axis of the right stick.

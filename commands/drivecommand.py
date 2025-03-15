@@ -27,7 +27,7 @@ class DriveCommand(commands2.Command):
         self.heading = heading
         self.addRequirements(swerve_subsystem)
         self.addRequirements(limelight_susbsystem)
-        self.goalY = 1
+        self.goalY = 0.5
         self.goalX = 0
         self.goalA = 0
 
@@ -74,8 +74,8 @@ class DriveCommand(commands2.Command):
 
         # Keep some between the tag and robot
         # First adjustment is for distance from tag, second is for x offset
-        ty = ty + (cos(yaw) * self.goalY) - (sin(yaw) * self.goalX)
-        tx = tx + (sin(yaw) * self.goalY) + (cos(yaw) * self.goalX)
+        ty = ty - (cos(yaw) * self.goalY) - (sin(yaw) * self.goalX)
+        tx = -tx - (sin(yaw) * self.goalY) - (cos(yaw) * self.goalX)
 
         # ty = ty - cos((math.pi / 2) + (yaw * (math.pi / 180))  - math.atan2(self.goalY, self.goalX))
         # tx = tx - sin((math.pi / 2) + (yaw * (math.pi / 180)) -  math.atan2(self.goalY, self.goalX))
@@ -98,7 +98,7 @@ class DriveCommand(commands2.Command):
             x *= -1
         if abs(yaw) < AlignConstants.kAlignRotDeadzone:
             rotSign = 0
-        else
+        else:
             rotSign = yaw/abs(yaw)
 
         if ax < AlignConstants.kAlignDeadzone:
@@ -126,13 +126,14 @@ class DriveCommand(commands2.Command):
             aDist = max(0.2, abs(yaw)/AlignConstants.kRotDistToSlow)
 
         print ('distance', dist)
-        print ('x speed', x)
-        print ('y speed', y)
-        print ('angle error', yaw)
+        print ('x speed', tx)
+        print ('y speed', ty)
+        print ('angle error', math.degrees(yaw))
         if (x == 0 and y == 0 and rotSign == 0):
             print('Already aligned')
             self.swerve.setX()
         else:
+            # self.swerve.setX()
             self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, -rotSign * AlignConstants.kMaxTurningSpeed * aDist), False, False)
         
 #     def isFinished(self) -> bool:

@@ -11,7 +11,7 @@ class DriverController():
         self.robotDrive = driveSub
         self.limelight = limeSub
 
-        self.joystickDrive = wpilib.Joystick(OIConstants.kDriverControllerPort).getName() == "Logitech Extreme 3D":
+        self.joystickDrive = wpilib.Joystick(OIConstants.kDriverControllerPort).getName() == "Logitech Extreme 3D"
 
         if self.joystickDrive:
             self.joystickDriverController = wpilib.Joystick(OIConstants.kDriverControllerPort)

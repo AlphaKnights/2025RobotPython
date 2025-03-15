@@ -78,11 +78,11 @@ class DriveCommand(commands2.Command):
 
         # Keep some between the tag and robot
         # First adjustment is for distance from tag, second is for x offset
-        # ty = ty - (cos(yaw) * self.goalY) - (sin(yaw) * self.goalX)
-        # tx = tx + (sin(yaw) * self.goalY) - (cos(yaw) * self.goalX)
+        ty = ty - (cos(yaw) * self.goalY) - (sin(yaw) * self.goalX)
+        tx = tx + (sin(yaw) * self.goalY) - (cos(yaw) * self.goalX)
 
-        ty = ty - cos((math.pi / 2) + (yaw * (math.pi / 180))  - math.atan2(self.goalY, self.goalX))
-        tx = tx - sin((math.pi / 2) + (yaw * (math.pi / 180)) -  math.atan2(self.goalY, self.goalX))
+        # ty = ty - cos((math.pi / 2) + (yaw * (math.pi / 180))  - math.atan2(self.goalY, self.goalX))
+        # tx = tx - sin((math.pi / 2) + (yaw * (math.pi / 180)) -  math.atan2(self.goalY, self.goalX))
 
         # Normalize the values
         ax = abs(tx)

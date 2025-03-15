@@ -11,16 +11,12 @@ class DriverController():
         self.robotDrive = driveSub
         self.limelight = limeSub
 
-        self.joystickDrive = False
-        if wpilib.Joystick(OIConstants.kDriverControllerPort).getName() == "Logitech Extreme 3D":
-            self.joystickDrive = True
-        # The driver's controller
-        # self.joystickDrive = True
+        self.joystickDrive = wpilib.Joystick(OIConstants.kDriverControllerPort).getName() == "Logitech Extreme 3D":
 
         if self.joystickDrive:
-            self.driverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
+            self.joystickDriverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
         else:
-            self.driverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
+            self.xBoxDriverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
 
     def setDefaultCommands(self) -> None:
         # Configure default commands
@@ -31,26 +27,26 @@ class DriverController():
                     self.limelight,
                     lambda:
                         -wpimath.applyDeadband(
-                            self.driverController.getRawAxis(1), OIConstants.kDriveDeadband
-                        ) * (-self.driverController.getRawAxis(3) + 1)/2,
+                            self.joystickDriverController.getRawAxis(1), OIConstants.kDriveDeadband
+                        ) * (-self.joystickDriverController.getRawAxis(3) + 1)/2,
                     lambda:
                         -wpimath.applyDeadband(
-                            self.driverController.getRawAxis(0), OIConstants.kDriveDeadband
-                        ) * (-self.driverController.getRawAxis(3) + 1)/2,
+                            self.joystickDriverController.getRawAxis(0), OIConstants.kDriveDeadband
+                        ) * (-self.joystickDriverController.getRawAxis(3) + 1)/2,
                     lambda:
                         -wpimath.applyDeadband(
-                            self.driverController.getRawAxis(2), OIConstants.kDriveDeadband
-                        ) * (-self.driverController.getRawAxis(3) + 1)/2,
-                    # lambda: 0.4 if self.driverController.getRawButton(11) else 0,
+                            self.joystickDriverController.getRawAxis(2), OIConstants.kDriveDeadband
+                        ) * (-self.joystickDriverController.getRawAxis(3) + 1)/2,
+                    # lambda: 0.4 if self.joystickDriverController.getRawButton(11) else 0,
                     # lambda: 0,
                     
                     # lambda: 0,
 
-                    lambda: self.driverController.getRawButton(12),
-                    lambda: self.driverController.getRawButton(11)
+                    lambda: self.joystickDriverController.getRawButton(12),
+                    lambda: self.joystickDriverController.getRawButton(11)
                     ),
                 )
-        else:
+        else:uhy
             self.robotDrive.setDefaultCommand(
                 # The left stick controls translation of the robot.
                 # Turning is controlled by the X axis of the right stick.
@@ -59,17 +55,17 @@ class DriverController():
                     self.limelight,
                     lambda:
                         -wpimath.applyDeadband(
-                            self.driverController.getLeftY(), OIConstants.kDriveDeadband
+                            self.xBoxDriverController.getLeftY(), OIConstants.kDriveDeadband
                         ),
                     lambda:
                         -wpimath.applyDeadband(
-                            self.driverController.getLeftX(), OIConstants.kDriveDeadband
+                            self.xBoxDriverController.getLeftX(), OIConstants.kDriveDeadband
                         ),
                     lambda:
                         -wpimath.applyDeadband(
-                            self.driverController.getRawAxis(2), OIConstants.kDriveDeadband
+                            self.xBoxDriverController.getRawAxis(2), OIConstants.kDriveDeadband
                         ),
-                    self.driverController.getAButton,
-                    self.driverController.getXButton
+                    self.xBoxDriverController.getAButton,
+                    self.xBoxDriverController.getXButton
                     ),
                 )

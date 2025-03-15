@@ -49,7 +49,7 @@ class RobotContainer:
 
         self.limelight = LimelightSystem()
 
-        NamedCommands.registerCommand('Auto Position', AutoAlign(self.robotDrive, self.limelight, 0.5, 0))
+        # NamedCommands.registerCommand('Auto Position', AutoAlign(self.robotDrive, self.limelight, 0.5, 0))
         # NamedCommands.registerCommand('Auto Rotate', AutoRotate(self.robotDrive, self.limelight))
         
         self.autoChooser = AutoBuilder.buildAutoChooser()

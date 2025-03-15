@@ -68,13 +68,9 @@ class DriveCommand(commands2.Command):
 
         tx = results.tx
         ty = results.ty
-        # yaw = radians(results.yaw)
-        yaw = results.yaw
+        yaw = radians(results.yaw)
 
         print(f'x: {tx}, y: {ty}')
-
-        # if 
-        # goalXSign = self.goalX/abs(self.goalX)
 
         # Keep some between the tag and robot
         # First adjustment is for distance from tag, second is for x offset
@@ -100,8 +96,10 @@ class DriveCommand(commands2.Command):
 
         if tx > 0: 
             x *= -1
-
-        a = yaw/abs(yaw)
+        if abs(yaw) < AlignConstants.kAlignRotDeadzone:
+            rotSign = 0
+        else
+            rotSign = yaw/abs(yaw)
 
         if ax < AlignConstants.kAlignDeadzone:
             print("dead X")
@@ -110,9 +108,6 @@ class DriveCommand(commands2.Command):
         if ay < AlignConstants.kAlignDeadzone:
             print("dead Y")
             y = 0
-
-        if abs(yaw) < AlignConstants.kAlignRotDeadzone:
-            a = 0
 
         dist = sqrt(tx**2 + ty**2)
         print(dist)
@@ -134,11 +129,11 @@ class DriveCommand(commands2.Command):
         print ('x speed', x)
         print ('y speed', y)
         print ('angle error', yaw)
-        if (x == 0 and y == 0 and a == 0):
+        if (x == 0 and y == 0 and rotSign == 0):
             print('Already aligned')
             self.swerve.setX()
         else:
-            self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, -a * AlignConstants.kMaxTurningSpeed * aDist), False, False)
+            self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, -rotSign * AlignConstants.kMaxTurningSpeed * aDist), False, False)
         
 #     def isFinished(self) -> bool:
 #         return False

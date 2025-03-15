@@ -186,7 +186,7 @@ class ElevatorConstants:
     kI = 0
     kD = 0
 
-    kLvl0Height = 10
+    kLvl0Height = 0
     
     kLvl1Height = 20
     

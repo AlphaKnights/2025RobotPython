@@ -219,7 +219,7 @@ class AlignConstants:
     kMaxNormalizedSpeed = 5.0
     kMaxTurningSpeed = 1.0
     kDistToSlow = 0.3
-    kRotDistToSlow = 0.5
+    kRotDistToSlow = math.radians(20)
     kAlignDeadzone = 0.01
-    kAlignRotDeadzone = 5
+    kAlignRotDeadzone = math.radians(5)
 

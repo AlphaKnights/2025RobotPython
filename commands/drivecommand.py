@@ -115,15 +115,13 @@ class DriveCommand(commands2.Command):
         if dist > AlignConstants.kDistToSlow:
             dist = 1.0
         else:
-            dist = dist / AlignConstants.kDistToSlow
+            dist = sqrt(max(0.0, dist / AlignConstants.kDistToSlow))
 
-        if dist < 0.5:
-            dist = 0.5
         
         if abs(yaw) > AlignConstants.kRotDistToSlow:
             aDist = 1.0
         else:
-            aDist = max(0.2, abs(yaw)/AlignConstants.kRotDistToSlow)
+            aDist = sqrt(max(0.0, abs(yaw)/AlignConstants.kRotDistToSlow))
 
         print ('distance', dist)
         print ('x speed', tx)
@@ -133,6 +131,7 @@ class DriveCommand(commands2.Command):
             print('Already aligned')
             self.swerve.setX()
         else:
+            # pass
             # self.swerve.setX()
             self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, -rotSign * AlignConstants.kMaxTurningSpeed * aDist), False, False)
         

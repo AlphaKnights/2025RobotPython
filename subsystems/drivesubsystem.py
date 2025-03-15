@@ -71,6 +71,7 @@ class DriveSubsystem(Subsystem):
 
         self.field = Field2d()
         SmartDashboard.putData("Field", self.field)
+        
         self.frontLeft = MAXSwerveModule(
             DriveConstants.kFrontLeftDrivingId,
             DriveConstants.kFrontLeftTurningId,

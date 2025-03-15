@@ -20,6 +20,7 @@ class DriverController():
 
     def setDefaultCommands(self) -> None:
         # Configure default commands
+        print(self.joystickDrive)
         if self.joystickDrive:
             self.robotDrive.setDefaultCommand(
                 DriveCommand(

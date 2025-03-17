@@ -32,13 +32,12 @@ class AutoAlign(commands2.Command):
         self.a = 1
 
         self.timer = Timer()
-        self.timer.start()
 
     def execute(self) -> None:
         results = self.limelight_subsystem.get_results()
 
         if results is None:
-            self.drive_subsystem.setX()
+            # self.drive_subsystem.setX()
             return
         
         self.timer.reset()
@@ -110,6 +109,7 @@ class AutoAlign(commands2.Command):
         results = self.limelight_subsystem.get_results()
         if results is None:
             time = self.timer.get()
+            print('time: ', time)
             # If more than a 5 seconds passes then there is no tag
             if time > 5:
                 return True
@@ -120,12 +120,17 @@ class AutoAlign(commands2.Command):
                     speeds=ChassisSpeeds(
                         vx=0,
                         vy=0,
-                        omega=.4), 
+                        omega=5), 
                     fieldRelative=False, 
                     rateLimit=False
                 )
                 return False
         return self.x == 0 and self.y == 0 and self.a == 0
+
+    def initialize(self):
+        self.timer.start()
+        self.timer.reset()
+        return super().initialize()
 
     def end(self, interrupted: bool = False) -> None:
         self.drive_subsystem.setX()

@@ -224,7 +224,7 @@ class AlignConstants:
     kAlignRotDeadzone = math.radians(5)
     
     kLeftAlignXOffset = 0
-    kLeftAlignYOffset = 0
+    kLeftAlignYOffset = 0.5
     
     kRightAlignXOffset = 0
     kRightAlignYOffset = 0

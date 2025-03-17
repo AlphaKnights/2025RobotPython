@@ -8,7 +8,8 @@
 from typing import Optional
 import commands2
 import wpilib
-
+from wpilib import SmartDashboard, DriverStation, RobotController
+from commands.auto_align import AutoAlign
 from robotcontainer import RobotContainer
 
 
@@ -18,6 +19,11 @@ class MyRobot(commands2.TimedCommandRobot):
         # autonomous chooser on the dashboard.
         self.container = RobotContainer()
         self.autonomousCommand: Optional[commands2.Command] = None
+
+    def robotPeriodic(self) -> None:
+        SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime())
+        SmartDashboard.putNumber("CAN Utilization %", RobotController.getCANStatus().percentBusUtilization * 100.0)
+        
 
     def autonomousInit(self) -> None:
         self.autonomousCommand = self.container.getAutonomousCommand()

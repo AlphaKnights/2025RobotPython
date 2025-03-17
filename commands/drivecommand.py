@@ -9,7 +9,7 @@ from wpimath.kinematics import (
     SwerveDrive4Kinematics,
     SwerveDrive4Odometry,
 )
-
+from wpilib import SmartDashboard
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.limelight_subsystem import LimelightSystem
 
@@ -31,7 +31,13 @@ class DriveCommand(commands2.Command):
         self.goalX = 0
         self.goalA = 0
 
+
+
+
     def execute(self) -> None:
+        isAligned = False
+        tagDetected = False
+
         align = self.align()
         heading = self.heading()
 
@@ -64,7 +70,7 @@ class DriveCommand(commands2.Command):
         if results is None:
             self.swerve.setX()
             return
-        
+        tagDetected = True
 
         tx = results.tx
         ty = results.ty
@@ -130,11 +136,15 @@ class DriveCommand(commands2.Command):
         if (x == 0 and y == 0 and rotSign == 0):
             print('Already aligned')
             self.swerve.setX()
+            aligned = True
+            
         else:
             # pass
             # self.swerve.setX()
             self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, -rotSign * AlignConstants.kMaxTurningSpeed * aDist), False, False)
-        
+            aligned = False
+        SmartDashboard.putBoolean("Tag Detected", tagDetected)
+        SmartDashboard.putBoolean("Aligned to Tag", isAligned)
 #     def isFinished(self) -> bool:
 #         return False
     

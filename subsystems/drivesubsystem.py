@@ -111,8 +111,6 @@ class DriveSubsystem(Subsystem):
             # DriveConstants.kRearRightPosition
         )
 
-
-
         # The gyro sensor
         self.gyro = AHRS(AHRS.NavXComType.kMXP_SPI)
         self.gyro.enableBoardlevelYawReset(False)

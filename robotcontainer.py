@@ -3,19 +3,9 @@ import math
 import commands2
 import commands2.sequentialcommandgroup
 import commands2.waitcommand
-import wpimath
-import wpilib
 from wpilib import SmartDashboard
 
-
-from commands2 import cmd
-from wpimath.controller import HolonomicDriveController
-from wpimath.controller import PIDController, ProfiledPIDControllerRadians, HolonomicDriveController
-from wpimath.geometry import Pose2d, Rotation2d, Translation2d
-from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
-from wpimath.kinematics import ChassisSpeeds
-
-from constants import AutoConstants, DriveConstants, OIConstants, ElevatorConstants
+from constants import AutoConstants, DriveConstants, OIConstants, ElevatorConstants, AlignConstants
 
 
 from subsystems.elevator import ElevatorSubsystem
@@ -27,12 +17,12 @@ from constants import AutoConstants, DriveConstants, OIConstants
 from subsystems.drivesubsystem import DriveSubsystem
 
 from subsystems.limelight_subsystem import LimelightSystem
-from commands.auto_rotate import AutoRotate
 from commands.drivecommand import DriveCommand
 from controls import DriverController
 from pathplannerlib.auto import AutoBuilder # type: ignore
 from pathplannerlib.auto import NamedCommands # type: ignore
 from pathplannerlib.auto import PathPlannerAuto # type: ignore
+
 
 class RobotContainer:
     """
@@ -49,8 +39,8 @@ class RobotContainer:
 
         self.limelight = LimelightSystem()
 
-        # NamedCommands.registerCommand('Auto Position', AutoAlign(self.robotDrive, self.limelight, 0.5, 0))
-        # NamedCommands.registerCommand('Auto Rotate', AutoRotate(self.robotDrive, self.limelight))
+        NamedCommands.registerCommand('Left Side Align', AutoAlign(self.robotDrive, self.limelight, AlignConstants.kLeftAlignYOffset, AlignConstants.kLeftAlignXOffset))
+        NamedCommands.registerCommand('Right Side Align', AutoAlign(self.robotDrive, self.limelight, AlignConstants.kRightAlignYOffset, AlignConstants.kRightAlignXOffset))
         
         self.autoChooser = AutoBuilder.buildAutoChooser()
 

@@ -99,7 +99,7 @@ class DriveCommand(commands2.Command):
         if abs(yaw) < AlignConstants.kAlignRotDeadzone:
             rotSign = 0
         else:
-            rotSign = yaw/abs(yaw)
+            rotSign = int(yaw/abs(yaw))
 
         if ax < AlignConstants.kAlignDeadzone:
             print("dead X")
@@ -131,8 +131,6 @@ class DriveCommand(commands2.Command):
             print('Already aligned')
             self.swerve.setX()
         else:
-            # pass
-            # self.swerve.setX()
             self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, -rotSign * AlignConstants.kMaxTurningSpeed * aDist), False, False)
         
 #     def isFinished(self) -> bool:

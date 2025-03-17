@@ -222,4 +222,9 @@ class AlignConstants:
     kRotDistToSlow = math.radians(20)
     kAlignDeadzone = 0.03
     kAlignRotDeadzone = math.radians(5)
-
+    
+    kLeftAlignXOffset = 0
+    kLeftAlignYOffset = 0
+    
+    kRightAlignXOffset = 0
+    kRightAlignYOffset = 0

@@ -118,7 +118,8 @@ class ModuleConstants:
     kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor  # radian
 
     # kDriveRatio = 7.363636
-    kDriveRatio = 8.6631011765
+    # kDriveRatio = 8.6631011765
+    kDriveRatio = 17.326202353
 
 
     kDrivingP = 0.8

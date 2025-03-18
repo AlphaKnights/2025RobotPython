@@ -147,6 +147,7 @@ class ModuleConstants:
 
 class OIConstants:
     kDriverControllerPort = 1
+    kDriverSteerPort = 2
     kDriveDeadband = 0.4
 
     kButtonBoardPort = 0

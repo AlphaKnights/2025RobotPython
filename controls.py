@@ -15,6 +15,7 @@ class DriverController():
 
         if self.joystickDrive:
             self.joystickDriverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
+            self.joystickDriverSteerController = wpilib.Joystick(OIConstants.kDriverSteerPort)
         else:
             self.xBoxDriverController = wpilib.XboxController(OIConstants.kDriverControllerPort)
 
@@ -36,8 +37,8 @@ class DriverController():
                         ) * (-self.joystickDriverController.getRawAxis(3) + 1)/2,
                     lambda:
                         -wpimath.applyDeadband(
-                            self.joystickDriverController.getRawAxis(2), OIConstants.kDriveDeadband
-                        ) * (-self.joystickDriverController.getRawAxis(3) + 1)/2,
+                            self.joystickDriverSteerController.getRawAxis(0), OIConstants.kDriveDeadband
+                        ) * (-self.joystickDriverSteerController.getRawAxis(3) + 1)/2,
                     # lambda: 0.4 if self.joystickDriverController.getRawButton(11) else 0,
                     # lambda: 0,
                     

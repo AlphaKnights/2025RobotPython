@@ -46,6 +46,8 @@ class AutoAlign(commands2.Command):
         ty = results.ty
         yaw = radians(results.yaw)
 
+        print("tx: ", tx, "ty: ", ty, "angle", yaw)
+
         ty = ty - (cos(yaw) * self.goalY) - (sin(yaw) * self.goalX)
         tx = tx = -tx - (sin(yaw) * self.goalY) - (cos(yaw) * self.goalX)
 
@@ -97,9 +99,9 @@ class AutoAlign(commands2.Command):
 
         self.drive_subsystem.drive(
             speeds = ChassisSpeeds(
-                vx = y * AlignConstants.kMaxNormalizedSpeed * dist, 
-                vy = -x * AlignConstants.kMaxNormalizedSpeed * dist, 
-                omega = -rotSign * AlignConstants.kMaxTurningSpeed * aDist
+                vx = y * AlignConstants.kMaxNormalizedSpeed * sqrt(dist), 
+                vy = -x * AlignConstants.kMaxNormalizedSpeed * sqrt(dist), 
+                omega = -rotSign * AlignConstants.kMaxTurningSpeed * sqrt(aDist)
             ), 
             fieldRelative=False, 
             rateLimit=False
@@ -125,6 +127,8 @@ class AutoAlign(commands2.Command):
                     rateLimit=False
                 )
                 return False
+            
+            self.drive_subsystem.setX()
         return self.x == 0 and self.y == 0 and self.a == 0
 
     def initialize(self):

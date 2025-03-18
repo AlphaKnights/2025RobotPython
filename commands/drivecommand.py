@@ -27,7 +27,7 @@ class DriveCommand(commands2.Command):
         self.heading = heading
         self.addRequirements(swerve_subsystem)
         self.addRequirements(limelight_susbsystem)
-        self.goalY = 0.5
+        self.goalY = 0.35
         self.goalX = 0
         self.goalA = 0
 
@@ -131,7 +131,7 @@ class DriveCommand(commands2.Command):
             print('Already aligned')
             self.swerve.setX()
         else:
-            self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, -rotSign * AlignConstants.kMaxTurningSpeed * aDist), False, False)
+            self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * sqrt(dist), -x * AlignConstants.kMaxNormalizedSpeed * sqrt(dist), -rotSign * AlignConstants.kMaxTurningSpeed * sqrt(aDist)), False, False)
         
 #     def isFinished(self) -> bool:
 #         return False

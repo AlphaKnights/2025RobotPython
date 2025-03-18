@@ -223,3 +223,16 @@ class AlignConstants:
     kAlignDeadzone = 0.03
     kAlignRotDeadzone = math.radians(5)
 
+class ClimbConstants:
+    kLeftMotorCanId = 5
+    kRightMotorCanId = 6
+
+    kEncoderPositionFactor = 1
+    kEncoderVelocityFactor = 1
+
+    kP = 0.05
+    kI = 0
+    kD = 0
+
+    kForwardSoftLimit = 20
+    kReverseSoftLimit = 0

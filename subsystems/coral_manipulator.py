@@ -16,6 +16,10 @@ class CoralManipulator(Subsystem):
         self.rangeFinder.setEnabled(True)
         self.rangeFinder.setAutomaticMode(False)
         self.launch_motor = phoenix6.hardware.TalonFX(LaunchConstants.kLaunchMotor)
+        drive_motor_config = phoenix6.configs.TalonFXConfiguration()
+        drive_motor_config.motor_output.neutral_mode = phoenix6.signals.NeutralModeValue.BRAKE
+        self.launch_motor.configurator.apply(drive_motor_config)
+
         # self.launch_motor 
 
 

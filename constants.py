@@ -164,4 +164,4 @@ class UltrasonicConstants:
 
 class LaunchConstants:
     kLaunchMotor = 42
-    kLaunchSpeed = 0.3
+    kLaunchSpeed = 0.6

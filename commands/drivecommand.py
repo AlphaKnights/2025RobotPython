@@ -16,6 +16,9 @@ from subsystems.limelight_subsystem import LimelightSystem
 from constants import DriveConstants, AlignConstants
 
 class DriveCommand(commands2.Command):
+    isaligned = False
+    isTagDetected = False
+
     def __init__(self, swerve_subsystem: DriveSubsystem, limelight_susbsystem: LimelightSystem, x: typing.Callable[[], float], y: typing.Callable[[], float], rot: typing.Callable[[], float], align: typing.Callable[[], bool], heading: typing.Callable[[], bool]) -> None:
         super().__init__()
         self.swerve = swerve_subsystem
@@ -33,11 +36,7 @@ class DriveCommand(commands2.Command):
 
 
 
-
     def execute(self) -> None:
-        isAligned = False
-        tagDetected = False
-
         align = self.align()
         heading = self.heading()
 
@@ -70,7 +69,7 @@ class DriveCommand(commands2.Command):
         if results is None:
             self.swerve.setX()
             return
-        tagDetected = True
+        self.isTagDetected = True
 
         tx = results.tx
         ty = results.ty
@@ -136,15 +135,13 @@ class DriveCommand(commands2.Command):
         if (x == 0 and y == 0 and rotSign == 0):
             print('Already aligned')
             self.swerve.setX()
-            aligned = True
+            self.isAlligned = True
             
         else:
             # pass
             # self.swerve.setX()
             self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, -rotSign * AlignConstants.kMaxTurningSpeed * aDist), False, False)
-            aligned = False
-        SmartDashboard.putBoolean("Tag Detected", tagDetected)
-        SmartDashboard.putBoolean("Aligned to Tag", isAligned)
+            self.isAlligned = False
 #     def isFinished(self) -> bool:
 #         return False
     

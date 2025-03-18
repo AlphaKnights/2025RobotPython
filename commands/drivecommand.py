@@ -35,7 +35,6 @@ class DriveCommand(commands2.Command):
         self.goalA = 0
 
 
-
     def execute(self) -> None:
         align = self.align()
         heading = self.heading()

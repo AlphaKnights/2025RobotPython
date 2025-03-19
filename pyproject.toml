@@ -33,4 +33,5 @@ requires = [
     "mypy>=1.11.0",
     "robotpy-ctre>=2025.0.0",
     "limelightlib-python>=0.9.6",
+    "Pint>=0.20.1",
 ]

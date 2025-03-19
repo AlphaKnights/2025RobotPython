@@ -8,12 +8,10 @@
 from typing import Optional
 import commands2
 import wpilib
-from wpilib.shuffleboard import Shuffleboard
-from wpilib import SmartDashboard
-import time
-#from wpilib.filter import MedianFilter
+from wpilib import SmartDashboard, DriverStation, RobotController
+from commands.auto_align import AutoAlign
 from robotcontainer import RobotContainer
-
+from commands.drivecommand import DriveCommand
 
 class MyRobot(commands2.TimedCommandRobot):
     def robotInit(self) -> None:
@@ -24,6 +22,11 @@ class MyRobot(commands2.TimedCommandRobot):
     def teleopPeriodic(self) -> None:
         pass
 
+    def robotPeriodic(self) -> None:
+        SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime())
+        SmartDashboard.putNumber("CAN Utilization %", RobotController.getCANStatus().percentBusUtilization * 100.0)
+        SmartDashboard.putBoolean("Tag Detected", DriveCommand.isTagDetected)
+        SmartDashboard.putBoolean("Aligned to Tag", DriveCommand.isAlligned)
     def autonomousInit(self) -> None:
         self.autonomousCommand = self.container.getAutonomousCommand()
 

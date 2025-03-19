@@ -1,20 +1,26 @@
+
+import math
 import commands2
 import typing
-
+from math import sqrt, cos, sin, radians, degrees
 from wpimath.kinematics import (
     ChassisSpeeds,
     SwerveModuleState,
     SwerveDrive4Kinematics,
     SwerveDrive4Odometry,
 )
-
+from wpilib import SmartDashboard
 from subsystems.drivesubsystem import DriveSubsystem
 from subsystems.limelight_subsystem import LimelightSystem
 
-from constants import DriveConstants
+from constants import DriveConstants, AlignConstants
 
 class DriveCommand(commands2.Command):
-    def __init__(self, swerve_subsystem: DriveSubsystem, limelight_susbsystem: LimelightSystem, x: typing.Callable[[], float], y: typing.Callable[[], float], rot: typing.Callable[[], float], align: typing.Callable[[], bool]) -> None:
+    isAlligned = False
+    isTagDetected = False
+
+
+    def __init__(self, swerve_subsystem: DriveSubsystem, limelight_susbsystem: LimelightSystem, x: typing.Callable[[], float], y: typing.Callable[[], float], rot: typing.Callable[[], float], align: typing.Callable[[], bool], heading: typing.Callable[[], bool]) -> None:
         super().__init__()
         self.swerve = swerve_subsystem
         self.limelight = limelight_susbsystem
@@ -22,22 +28,40 @@ class DriveCommand(commands2.Command):
         self.x = x
         self.rot = rot
         self.align = align
+        self.heading = heading
         self.addRequirements(swerve_subsystem)
         self.addRequirements(limelight_susbsystem)
+        self.goalY = 0.5
+        self.goalX = 0
+        self.goalA = 0
+
 
     def execute(self) -> None:
+
         align = self.align()
+        heading = self.heading()
+        
+        results = self.limelight.get_results()
+
+        DriveCommand.isTagDetected = results is not None
+        if heading:
+            self.swerve.zeroHeading()
+
+        # if align:
+        #     # self.swerve.resetEncoders()
+        #     self.swerve.gyro.reset()
+        #     return
+
         if not align:
             self.swerve.drive(
                 ChassisSpeeds(
-                    self.x() * DriveConstants.kMaxSpeedMetersPerSecond, 
+                    self.x()* DriveConstants.kMaxSpeedMetersPerSecond, 
                     self.y()* DriveConstants.kMaxSpeedMetersPerSecond, 
                     self.rot() * DriveConstants.kMaxAngularSpeed
                 ), True, True)
             return
-        
-        results = self.limelight.get_results()
-
+                
+       
         if results is None:
             print('No tag detected')
             self.swerve.setX()
@@ -45,47 +69,86 @@ class DriveCommand(commands2.Command):
         
         print('Aligning:', results.tag_id)
 
+        if results is None:
+            self.swerve.setX()
+            return
+        
+
         tx = results.tx
         ty = results.ty
+        yaw = radians(results.yaw)
 
-        # print(f'x: {tx}, y: {ty}')
-
+        print(f'x: {tx}, y: {ty}')
 
         # Keep some between the tag and robot
-        ty = ty - 0.35
-        
-        y = -0.1 if tx > 0 else 0.1
-        x = 0.1 if ty > 0 else -0.1
+        # First adjustment is for distance from tag, second is for x offset
+        ty = ty - (cos(yaw) * self.goalY) - (sin(yaw) * self.goalX)
+        tx = -tx - (sin(yaw) * self.goalY) - (cos(yaw) * self.goalX)
 
-        if abs(tx) < 0.01:
-            y = 0
+        # ty = ty - cos((math.pi / 2) + (yaw * (math.pi / 180))  - math.atan2(self.goalY, self.goalX))
+        # tx = tx - sin((math.pi / 2) + (yaw * (math.pi / 180)) -  math.atan2(self.goalY, self.goalX))
 
-        if abs(ty) < 0.01:
+        # Normalize the values
+        ax = abs(tx)
+        ay = abs(ty)
+
+        if (ax > ay):
+            y = ay/ax
+            x = 1
+        else:
+            y = 1
+            x = ax/ay
+
+        if ty < 0:
+            y *= -1
+
+        if tx > 0: 
+            x *= -1
+        if abs(yaw) < AlignConstants.kAlignRotDeadzone:
+            rotSign = 0
+        else:
+            rotSign = int(yaw/abs(yaw))
+
+        if ax < AlignConstants.kAlignDeadzone:
+            print("dead X")
             x = 0
 
-        if y != 0 or x != 0:
-            # self.swerve.drive(x, y, 0, False, False)
-            self.swerve.drive(ChassisSpeeds(x, y, 0), False, False)
-            return
+        if ay < AlignConstants.kAlignDeadzone:
+            print("dead Y")
+            y = 0
 
-        ta = results.ta
+        dist = sqrt(tx**2 + ty**2)
+        print(dist)
 
-        print(f'a: {ta}')
+        if dist > AlignConstants.kDistToSlow:
+            dist = 1.0
+        else:
+            dist = sqrt(max(0.0, dist / AlignConstants.kDistToSlow))
+
         
-        a = -0.2 if ta > 0 else 0.2
+        if abs(yaw) > AlignConstants.kRotDistToSlow:
+            aDist = 1.0
+        else:
+            aDist = sqrt(max(0.0, abs(yaw)/AlignConstants.kRotDistToSlow))
 
-        if abs(ta) > 1:
-            # self.swerve.drive(0, 0, a, False, False)
-            self.swerve.drive(ChassisSpeeds(0, 0, a), False, False)
-            return
-        
-        self.swerve.setX()
-        print('Already aligned')
-        
-
-    def isFinished(self) -> bool:
-        return False
+        print ('distance', dist)
+        print ('x speed', tx)
+        print ('y speed', ty)
+        print ('angle error', math.degrees(yaw))
+        if (x == 0 and y == 0 and rotSign == 0):
+            print('Already aligned')
+            self.swerve.setX()
+            DriveCommand.isAlligned = True
+            
+        else:
+            # pass
+            # self.swerve.setX()
+            self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, -rotSign * AlignConstants.kMaxTurningSpeed * aDist), False, False)
+            DriveCommand.isAlligned = False
+#     def isFinished(self) -> bool:
+#         return False
     
+
     def end(self, interrupted: bool) -> None:
         # self.swerve.drive(0, 0, 0, False, True)
         self.swerve.drive(ChassisSpeeds(0, 0, 0), False, True)

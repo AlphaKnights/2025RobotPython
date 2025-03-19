@@ -14,6 +14,7 @@ from wpimath.geometry import Translation2d
 from wpimath.kinematics import SwerveDrive4Kinematics
 from wpimath.trajectory import TrapezoidProfileRadians
 
+
 # from rev import CANSparkMax
 from rev import SparkMax, SparkBaseConfig
 
@@ -25,8 +26,9 @@ class NeoMotorConstants:
 class DriveConstants:
     # Driving Parameters - Note that these are not the maximum capable speeds of
     # the robot, rather the allowed maximum speeds
-    kMaxSpeedMetersPerSecond = 7
-    kMaxAngularSpeed = math.tau  # radians per second
+    kMaxSpeedMetersPerSecond = 15
+    # kMaxAngularSpeed = math.tau  # radians per second
+    kMaxAngularSpeed = 20
 
     kDirectionSlewRate = 1.2  # radians per second
     kMagnitudeSlewRate = 1.8  # percent per second (1 = 100%)
@@ -46,26 +48,41 @@ class DriveConstants:
     ]
     kDriveKinematics = SwerveDrive4Kinematics(*kModulePositions)
 
-    # Angular offsets of the modules relative to the chassis in radians
-    kFrontLeftChassisAngularOffset = math.radians(-120) #(-60 - 45)*(math.pi/180)
-    kFrontRightChassisAngularOffset = math.radians(-25)
-    kBackLeftChassisAngularOffset = math.radians(-205)
-    kBackRightChassisAngularOffset = math.radians(70)
-
+    
+    # Offsets of the modules from the robot 
+    kFrontLeftChassisAngularOffset = math.radians(-0.764892578125 * (360))
+    kFrontRightChassisAngularOffset = math.radians(0.75 * (360))
+    kBackLeftChassisAngularOffset = math.radians(0.079833984375 * (360))
+    kBackRightChassisAngularOffset = math.radians(0.367919921875 * (360))
 
     # SPARK MAX CAN IDs
-    kFrontLeftDrivingCanId = 32
-    kRearLeftDrivingCanId = 1
-    kFrontRightDrivingCanId = 3
-    kRearRightDrivingCanId = 21
+    kFrontLeftDrivingCanId = 6
+    kRearLeftDrivingCanId = 21
+    kFrontRightDrivingCanId = 11
+    kRearRightDrivingCanId = 3
 
-    kFrontLeftTurningCanId = 13
-    kRearLeftTurningCanId = 11
-    kFrontRightTurningCanId = 12
-    kRearRightTurningCanId = 14
+    kFrontLeftTurningCanId = 22
+    kRearLeftTurningCanId = 14
+    kFrontRightTurningCanId = 13
+    kRearRightTurningCanId = 12
+
+    # Kraken IDs
+    kFrontLeftDrivingId = 5
+    kRearLeftDrivingId = 7
+    kFrontRightDrivingId = 4
+    kRearRightDrivingId = 1
+
+    kFrontLeftTurningId = 6
+    kRearLeftTurningId = 8
+    kFrontRightTurningId = 3
+    kRearRightTurningId = 2
+
+    kFrontLeftCANCoderId = 3    
+    kRearLeftCANCoderId = 4
+    kFrontRightCANCoderId = 2
+    kRearRightCANCoderId = 1
 
     kGyroReversed = True
-
 
 class ModuleConstants:
     # The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
@@ -100,19 +117,26 @@ class ModuleConstants:
     kTurningEncoderPositionPIDMinInput = 0  # radian
     kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor  # radian
 
-    kDrivingP = 0.04
+    # kDriveRatio = 7.363636
+    kDriveRatio = 8.6631011765
+
+
+    kDrivingP = 0.8
     kDrivingI = 0
     kDrivingD = 0
-    kDrivingFF = 1 / kDriveWheelFreeSpeedRps
+    kDrivingFF = 1
+    kDrivingV = 0.3
+    kDrivingA = 1.5
     kDrivingMinOutput = -1
     kDrivingMaxOutput = 1
 
-    kTurningP = 1
+    kTurningP = 40
     kTurningI = 0
     kTurningD = 0
     kTurningFF = 0
     kTurningMinOutput = -1
     kTurningMaxOutput = 1
+
 
     kDrivingMotorIdleMode = SparkBaseConfig.IdleMode.kBrake
     kTurningMotorIdleMode = SparkBaseConfig.IdleMode.kBrake
@@ -123,10 +147,19 @@ class ModuleConstants:
 
 class OIConstants:
     kDriverControllerPort = 1
-    kDriveDeadband = 0.2
 
-    kLaunchButton = 1
+    kDriveDeadband = 0.4
     
+    kLaunchButton = 1
+
+    kButtonBoardPort = 0
+    kElevatorUpButton = 9
+    kElevatorDownButton = 8
+    kElevatorLvl0Button = 1
+    kElevatorLvl1Button = 2
+    kElevatorLvl2Button = 3
+    kElevatorLvl3Button = 4
+    kElevatorLvl4Button = 5
 
 class AutoConstants:
     kMaxSpeedMetersPerSecond = 10
@@ -142,6 +175,36 @@ class AutoConstants:
     kThetaControllerConstraints = TrapezoidProfileRadians.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared
     )
+
+class ElevatorConstants:
+    kLeftMotorCanId = 4
+    kRightMotorCanId = 32
+    kUpperLimit = 1
+    kLowerLimit = 2
+
+    kEncoderPositionFactor = 1
+    kEncoderVelocityFactor = 1
+
+    kP = 0.05
+    kI = 0
+    kD = 0
+
+    kLvl0Height = 0
+    
+    kLvl1Height = 20
+    
+    kLvl2Height = 30
+
+    kLvl3Height = 40
+    
+    kLvl4Height = 50
+
+    kForwardSoftLimit = 10000
+    kReverseSoftLimit = -100
+
+    kElevatorMaxSpeed = 1
+    kTimedSpeed = 0.6
+    kTimedTime = 4
 
 class LEDConstants:
     kLEDPort = 0
@@ -165,3 +228,11 @@ class UltrasonicConstants:
 class LaunchConstants:
     kLaunchMotor = 42
     kLaunchSpeed = 0.6
+
+class AlignConstants:
+    kMaxNormalizedSpeed = 0.5
+    kMaxTurningSpeed = 1.0
+    kDistToSlow = 0.3
+    kRotDistToSlow = math.radians(20)
+    kAlignDeadzone = 0.03
+    kAlignRotDeadzone = math.radians(5)

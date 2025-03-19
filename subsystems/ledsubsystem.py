@@ -27,6 +27,9 @@ class LEDSubsystem(Subsystem):
             self.ledData[i].setHSV(hue, sat, val)
 
     def teamLights(self) -> None:
+        '''
+        Sets all the leds on the robot to Galvaknights team colors
+        '''
         for i in range(LEDConstants.kLEDBuffer):
             if (i % 2 == 0):
                 self.ledData[i].setHSV(LEDConstants.kSilverHue, LEDConstants.kSilverSat, LEDConstants.kSilverVal)

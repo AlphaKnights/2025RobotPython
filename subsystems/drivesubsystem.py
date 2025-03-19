@@ -1,5 +1,6 @@
 import math
 import typing
+import time
 from typing import Callable, Sequence
 
 import wpimath.kinematics
@@ -18,9 +19,13 @@ from wpimath.kinematics import (
     SwerveDrive4Odometry,
 )
 
+from wpilib import SmartDashboard, SendableChooser, Field2d
+
+
 from constants import AutoConstants, DriveConstants, ModuleConstants
 import swerveutils
-from .maxswervemodule import MAXSwerveModule
+# from .maxswervemodule import MAXSwerveModule
+from .talonswervemodule import TalonSwerveModule as MAXSwerveModule # type: ignore
 
 from pathplannerlib.auto import AutoBuilder # type: ignore
 from pathplannerlib.controller import PPHolonomicDriveController  # type: ignore
@@ -36,33 +41,87 @@ class DriveSubsystem(Subsystem):
         super().__init__()
 
         # Create MAXSwerveModules
+        # self.frontLeft = MAXSwerveModule(
+            #  DriveConstants.kFrontLeftDrivingCanId,
+        #     DriveConstants.kFrontLeftTurningCanId,
+        #     DriveConstants.kFrontLeftCANCoderId,
+        #     DriveConstants.kFrontLeftChassisAngularOffset,
+        # )
+
+        # self.frontRight = MAXSwerveModule(
+        #     DriveConstants.kFrontRightDrivingCanId,
+        #     DriveConstants.kFrontRightTurningCanId,
+        #     DriveConstants.kFrontRightCANCoderId,
+        #     DriveConstants.kFrontRightChassisAngularOffset,
+        # )
+
+        # self.rearLeft = MAXSwerveModule(
+        #     DriveConstants.kRearLeftDrivingCanId,
+        #     DriveConstants.kRearLeftTurningCanId,
+        #     DriveConstants.kRearLeftCANCoderId,
+        #     DriveConstants.kBackLeftChassisAngularOffset,
+        # )
+
+        # self.rearRight = MAXSwerveModule(
+        #     DriveConstants.kRearRightDrivingCanId,
+        #     DriveConstants.kRearRightTurningCanId,
+        #     DriveConstants.kRearRightCANCoderId,
+        #     DriveConstants.kBackRightChassisAngularOffset,
+        # )
+
+        self.field = Field2d()
+        SmartDashboard.putData("Field", self.field)
+        
         self.frontLeft = MAXSwerveModule(
-            DriveConstants.kFrontLeftDrivingCanId,
-            DriveConstants.kFrontLeftTurningCanId,
+            DriveConstants.kFrontLeftDrivingId,
+            DriveConstants.kFrontLeftTurningId,
+            DriveConstants.kFrontLeftCANCoderId,
             DriveConstants.kFrontLeftChassisAngularOffset,
+            # 1,
+            # DriveConstants.kFrontLeftPosition,
         )
+
 
         self.frontRight = MAXSwerveModule(
-            DriveConstants.kFrontRightDrivingCanId,
-            DriveConstants.kFrontRightTurningCanId,
+            DriveConstants.kFrontRightDrivingId,
+            DriveConstants.kFrontRightTurningId,
+            DriveConstants.kFrontRightCANCoderId,
             DriveConstants.kFrontRightChassisAngularOffset,
+            # 2,
+            # DriveConstants.kFrontRightPosition,
         )
+
 
         self.rearLeft = MAXSwerveModule(
-            DriveConstants.kRearLeftDrivingCanId,
-            DriveConstants.kRearLeftTurningCanId,
+            DriveConstants.kRearLeftDrivingId,
+            DriveConstants.kRearLeftTurningId,
+            DriveConstants.kRearLeftCANCoderId,
             DriveConstants.kBackLeftChassisAngularOffset,
+            # 3,
+            # DriveConstants.kRearLeftPosition,
         )
 
+
         self.rearRight = MAXSwerveModule(
-            DriveConstants.kRearRightDrivingCanId,
-            DriveConstants.kRearRightTurningCanId,
+            DriveConstants.kRearRightDrivingId,
+            DriveConstants.kRearRightTurningId,
+            DriveConstants.kRearRightCANCoderId,
             DriveConstants.kBackRightChassisAngularOffset,
+            # 4,
+            # DriveConstants.kRearRightPosition
         )
+
+
 
         # The gyro sensor
         self.gyro = AHRS(AHRS.NavXComType.kMXP_SPI)
+        self.gyro.enableBoardlevelYawReset(False)
+        self.gyro.reset()
+        while abs(self.gyro.getAngle()) > 5:
+            print('wrong angle', self.gyro.getAngle())
+            self.gyro.reset()
         # self.gyro = wpilib.ADXRS450_Gyro()
+            self.gyro_heading = self.gyro.getAngle()
 
         # Slew rate filter variables for controlling lateral acceleration
         self.currentRotation = 0.0
@@ -95,7 +154,7 @@ class DriveSubsystem(Subsystem):
             lambda speeds, feedforwards: self.drive(speeds, False, False), # Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also outputs individual module feedforwards
             PPHolonomicDriveController( # PPHolonomicController is the built in path following controller for holonomic drive trains
                 PIDConstants(5, 0, 0), # Translation PID constants
-                PIDConstants(5, 0, 0), # Rotation PID constants
+                PIDConstants(13, 0, 0), # Rotation PID constants
                 1,
             ),
             config, # The robot configuration
@@ -114,6 +173,7 @@ class DriveSubsystem(Subsystem):
                 self.rearRight.getPosition(),
             ),
         )
+        self.field.setRobotPose(self.odometry.getPose())
 
     def getPose(self) -> Pose2d:
         """Returns the currently-estimated pose of the robot.
@@ -162,10 +222,16 @@ class DriveSubsystem(Subsystem):
         :param rateLimit:     Whether to enable rate limiting for smoother control.
         """
 
+        # speeds = ChassisSpeeds(10, 0, 0)
+
+        # print('angle', self.gyro.getAngle())
+
         swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds)
 
         # swerveModuleStates = SwerveDrive4Kinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond)
 
+        if fieldRelative:
+            swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, Rotation2d.fromDegrees(self.gyro.getAngle())))
 
         self.frontLeft.setDesiredState(swerveModuleStates[0])
         self.frontRight.setDesiredState(swerveModuleStates[1])
@@ -173,6 +239,7 @@ class DriveSubsystem(Subsystem):
         self.rearRight.setDesiredState(swerveModuleStates[3])
 
     def setX(self) -> None:
+        # return
         """Sets the wheels into an X formation to prevent movement."""
         self.frontLeft.setDesiredState(SwerveModuleState(0, Rotation2d.fromDegrees(45)))
         self.frontRight.setDesiredState(
@@ -217,6 +284,7 @@ class DriveSubsystem(Subsystem):
     def zeroHeading(self) -> None:
         """Zeroes the heading of the robot."""
         self.gyro.reset()
+        # self.gyro_heading = self.gyro.getAngle()
 
     def getHeading(self) -> float:
         """Returns the heading of the robot.

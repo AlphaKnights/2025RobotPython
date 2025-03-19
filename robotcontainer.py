@@ -60,16 +60,6 @@ class RobotContainer:
 
         # Configure the button bindings
         self.configureButtonBindings()
-
-
-        self.launch_button = commands2.button.JoystickButton(self.driverController, 2)\
-            .onTrue(LaunchCommand(self.coral_manipulator))
-        
-        self.intake_button = commands2.button.JoystickButton(self.driverController, 1)\
-            .onTrue(IntakeCommand(self.coral_manipulator))
-        
-        self.stop_launch_button = commands2.button.JoystickButton(self.driverController, 9)\
-            .whileTrue(IntakeCommand(self.coral_manipulator))
         
 
         # Configure default commands
@@ -101,6 +91,14 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
+        self.launch_button = commands2.button.JoystickButton(self.driverController, 2)\
+            .onTrue(LaunchCommand(self.coral_manipulator))
+        
+        self.intake_button = commands2.button.JoystickButton(self.driverController, 1)\
+            .onTrue(IntakeCommand(self.coral_manipulator))
+        
+        self.stop_launch_button = commands2.button.JoystickButton(self.driverController, 9)\
+            .whileTrue(IntakeCommand(self.coral_manipulator))
 
        
 

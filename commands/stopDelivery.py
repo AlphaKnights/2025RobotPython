@@ -8,19 +8,10 @@ class IntakeCommand(commands2.Command):
         super().__init__()
         self.coral_manipulator = coral_manip
         self.addRequirements(coral_manip)
-        self.timer= Timer()
-        self.timer.start()
-
-    def initialize(self):
-        self.timer.restart()
-        return super().initialize()
 
     def execute(self) -> None:
-        self.coral_manipulator.launch(LaunchConstants.kLaunchSpeed)
-        print("intaking")
+        self.coral_manipulator.stop()
+        print("stopping")
 
-    def isFinished(self) -> bool:
-        return (self.coral_manipulator.rangeFinder.getRangeInches() <= 3.0) or (self.timer.get() >= 3)
-    
     def end(self, interrupted: bool) -> None:
         self.coral_manipulator.stop()

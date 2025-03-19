@@ -51,6 +51,10 @@ class RobotContainer:
 
         # self.ultrasonic = UltrasonicSubsystem()
         self.coral_manipulator = CoralManipulator()
+
+        NamedCommands.registerCommand('Launch', LaunchCommand(self.coral_manipulator))
+        NamedCommands.registerCommand('Intake', IntakeCommand(self.coral_manipulator))
+
         # The driver's controller
         self.driverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
 
@@ -59,9 +63,12 @@ class RobotContainer:
 
 
         self.launch_button = commands2.button.JoystickButton(self.driverController, 2)\
-            .whileTrue(LaunchCommand(self.coral_manipulator))
+            .onTrue(LaunchCommand(self.coral_manipulator))
         
         self.intake_button = commands2.button.JoystickButton(self.driverController, 1)\
+            .onTrue(IntakeCommand(self.coral_manipulator))
+        
+        self.stop_launch_button = commands2.button.JoystickButton(self.driverController, 9)\
             .whileTrue(IntakeCommand(self.coral_manipulator))
         
 

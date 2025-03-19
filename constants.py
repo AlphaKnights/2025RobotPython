@@ -147,7 +147,10 @@ class ModuleConstants:
 
 class OIConstants:
     kDriverControllerPort = 1
+
     kDriveDeadband = 0.4
+    
+    kLaunchButton = 1
 
     kButtonBoardPort = 0
     kElevatorUpButton = 9
@@ -215,6 +218,17 @@ class LEDConstants:
     kBlueSat = 220
     kBlueVal = 30
 
+    kGoodColor = [120, 255, 50]
+    kBadColor = [0, 100, 50]
+
+class UltrasonicConstants:
+    kPingChannel = 1
+    kEchoChannel = 2
+
+class LaunchConstants:
+    kLaunchMotor = 42
+    kLaunchSpeed = 0.6
+
 class AlignConstants:
     kMaxNormalizedSpeed = 0.5
     kMaxTurningSpeed = 1.0
@@ -222,4 +236,3 @@ class AlignConstants:
     kRotDistToSlow = math.radians(20)
     kAlignDeadzone = 0.03
     kAlignRotDeadzone = math.radians(5)
-

@@ -19,6 +19,8 @@ class MyRobot(commands2.TimedCommandRobot):
         # autonomous chooser on the dashboard.
         self.container = RobotContainer()
         self.autonomousCommand: Optional[commands2.Command] = None
+    def teleopPeriodic(self) -> None:
+        pass
 
     def robotPeriodic(self) -> None:
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime())
@@ -30,14 +32,21 @@ class MyRobot(commands2.TimedCommandRobot):
 
         if self.autonomousCommand:
             self.autonomousCommand.schedule()
+        pass
 
     def teleopInit(self) -> None:
         if self.autonomousCommand:
-            self.autonomousCommand.cancel()
+            self.autonomousCommand.cancel()        
 
     def testInit(self) -> None:
         commands2.CommandScheduler.getInstance().cancelAll()
+        
 
+    def testPeriodic(self) -> None:
+        pass
 
+    def testExit(self) -> None:
+        pass
+    
 if __name__ == "__main__":
     wpilib.run(MyRobot)

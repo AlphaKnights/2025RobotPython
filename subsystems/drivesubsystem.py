@@ -122,7 +122,7 @@ class DriveSubsystem(Subsystem):
             x = results.fx
             y = results.fy
             yaw = results.fa
-
+            
             self.odometry.update(
                 Rotation2d.fromDegrees(self.gyro.getAngle()),
                 (

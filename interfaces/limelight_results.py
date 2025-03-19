@@ -5,9 +5,9 @@ class LimelightResults:
 
     def __init__(self, data: dict) -> None:
         self.tag_id = data["Fiducial"][0]["fID"]
-        self.rx = data["Fiducial"][0]['t6r_fs'][0]
-        self.ry = data["Fiducial"][0]['t6r_fs'][2]
-        self.ra = data["Fiducial"][0]['t6r_fs'][4]
+        self.rx = data["Fiducial"][0]['t6t_fs'][0]
+        self.ry = data["Fiducial"][0]['t6t_fs'][2]
+        self.ra = data["Fiducial"][0]['t6t_fs'][4]
 
         self.fx = data["Fiducial"][0]['t6r_fs'][0]
         self.fy = data["Fiducial"][0]['t6r_fs'][2]

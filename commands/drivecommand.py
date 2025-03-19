@@ -19,6 +19,7 @@ class DriveCommand(commands2.Command):
     isaligned = False
     isTagDetected = False
 
+
     def __init__(self, swerve_subsystem: DriveSubsystem, limelight_susbsystem: LimelightSystem, x: typing.Callable[[], float], y: typing.Callable[[], float], rot: typing.Callable[[], float], align: typing.Callable[[], bool], heading: typing.Callable[[], bool]) -> None:
         super().__init__()
         self.swerve = swerve_subsystem
@@ -36,9 +37,13 @@ class DriveCommand(commands2.Command):
 
 
     def execute(self) -> None:
+
         align = self.align()
         heading = self.heading()
+        
+        results = self.limelight.get_results()
 
+        DriveCommand.isTagDetected = results is not None
         if heading:
             self.swerve.zeroHeading()
 
@@ -56,8 +61,7 @@ class DriveCommand(commands2.Command):
                 ), True, True)
             return
                 
-        results = self.limelight.get_results()
-
+       
         if results is None:
             print('No tag detected')
             self.swerve.setX()
@@ -68,7 +72,7 @@ class DriveCommand(commands2.Command):
         if results is None:
             self.swerve.setX()
             return
-        self.isTagDetected = True
+        
 
         tx = results.tx
         ty = results.ty
@@ -134,13 +138,13 @@ class DriveCommand(commands2.Command):
         if (x == 0 and y == 0 and rotSign == 0):
             print('Already aligned')
             self.swerve.setX()
-            self.isAlligned = True
+            DriveCommand.isAlligned = True
             
         else:
             # pass
             # self.swerve.setX()
             self.swerve.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, -rotSign * AlignConstants.kMaxTurningSpeed * aDist), False, False)
-            self.isAlligned = False
+            DriveCommand.isAlligned = False
 #     def isFinished(self) -> bool:
 #         return False
     

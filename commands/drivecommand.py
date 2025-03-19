@@ -16,7 +16,7 @@ from subsystems.limelight_subsystem import LimelightSystem
 from constants import DriveConstants, AlignConstants
 
 class DriveCommand(commands2.Command):
-    isaligned = False
+    isAlligned = False
     isTagDetected = False
 
 
@@ -107,7 +107,7 @@ class DriveCommand(commands2.Command):
         if abs(yaw) < AlignConstants.kAlignRotDeadzone:
             rotSign = 0
         else:
-            rotSign = yaw/abs(yaw)
+            rotSign = int(yaw/abs(yaw))
 
         if ax < AlignConstants.kAlignDeadzone:
             print("dead X")

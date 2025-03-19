@@ -69,7 +69,7 @@ class AutoAlign(commands2.Command):
         if abs(yaw) < AlignConstants.kAlignRotDeadzone:
             rotSign = 0
         else:
-            rotSign = yaw/abs(yaw)
+            rotSign = int(yaw/abs(yaw))
 
         if ax < AlignConstants.kAlignDeadzone:
             x = 0

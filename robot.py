@@ -24,7 +24,7 @@ class MyRobot(commands2.TimedCommandRobot):
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime())
         SmartDashboard.putNumber("CAN Utilization %", RobotController.getCANStatus().percentBusUtilization * 100.0)
         SmartDashboard.putBoolean("Tag Detected", DriveCommand.isTagDetected)
-        SmartDashboard.putBoolean("Aligned to Tag", DriveCommand.isaligned)
+        SmartDashboard.putBoolean("Aligned to Tag", DriveCommand.isAlligned)
     def autonomousInit(self) -> None:
         self.autonomousCommand = self.container.getAutonomousCommand()
 

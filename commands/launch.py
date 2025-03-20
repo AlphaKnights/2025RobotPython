@@ -11,7 +11,7 @@ class LaunchCommand(commands2.Command):
         self.timer = wpilib.Timer()
         self.timer.start()
 
-    def initialize(self):
+    def initialize(self) -> None:
         self.timer.restart()
         return super().initialize()
 

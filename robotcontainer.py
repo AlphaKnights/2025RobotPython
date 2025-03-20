@@ -32,6 +32,7 @@ from commands.auto_rotate import AutoRotate
 from commands.drivecommand import DriveCommand
 from commands.launch import LaunchCommand
 from commands.intake import IntakeCommand
+from commands.stopDelivery import StopCommand
 from subsystems.coral_manipulator import CoralManipulator
 
 
@@ -63,7 +64,7 @@ class RobotContainer:
         # NamedCommands.registerCommand('Auto Position', AutoAlign(self.robotDrive, self.limelight, 0.5, 0))
         # NamedCommands.registerCommand('Auto Rotate', AutoRotate(self.robotDrive, self.limelight))
         
-        # self.autoChooser = AutoBuilder.buildAutoChooser()
+        self.autoChooser = AutoBuilder.buildAutoChooser()
 
         #SmartDashboard.putData("Auto Chooser", self.autoChooser)
 
@@ -93,21 +94,25 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
-        self.launch_button = commands2.button.JoystickButton(self.driverController.controller, 2)\
-            .onTrue(LaunchCommand(self.coral_manipulator))
+        # self.launch_button = commands2.button.JoystickButton(self.driverController.controller, 2)\
+        #     .onTrue(LaunchCommand(self.coral_manipulator))
         
-        self.intake_button = commands2.button.JoystickButton(self.driverController.controller, 1)\
-            .onTrue(IntakeCommand(self.coral_manipulator))
+        # self.intake_button = commands2.button.JoystickButton(self.driverController.controller, 1)\
+        #     .onTrue(IntakeCommand(self.coral_manipulator))
         
         self.stop_launch_button = commands2.button.JoystickButton(self.driverController.controller, 9)\
-            .whileTrue(IntakeCommand(self.coral_manipulator))
+            .whileTrue(StopCommand(self.coral_manipulator))
+        
+        self.buttonBoard.button(OIConstants.kIntakeButton).onTrue(IntakeCommand(self.coral_manipulator))
+        self.buttonBoard.button(OIConstants.kDeliveryButton).onTrue(LaunchCommand(self.coral_manipulator))
+        
 
         #manual elevator
         self.buttonBoard.button(OIConstants.kElevatorUpButton).whileTrue(ElevatorUpCommand(self.elevator))
         self.buttonBoard.button(OIConstants.kElevatorDownButton).whileTrue(ElevatorDownCommand(self.elevator))
 
         #level 0
-        self.buttonBoard.button(OIConstants.kElevatorLvl0Button).whileTrue(ElevatorPosCommand(self.elevator, ElevatorConstants.kLvl0Height))
+        # self.buttonBoard.button(OIConstants.kElevatorLvl0Button).whileTrue(ElevatorPosCommand(self.elevator, ElevatorConstants.kLvl0Height))
 
         #level 1
         self.buttonBoard.button(OIConstants.kElevatorLvl1Button).whileTrue(ElevatorPosCommand(self.elevator, ElevatorConstants.kLvl1Height))

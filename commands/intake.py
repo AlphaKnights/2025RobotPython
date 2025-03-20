@@ -11,7 +11,7 @@ class IntakeCommand(commands2.Command):
         self.timer= Timer()
         self.timer.start()
 
-    def initialize(self):
+    def initialize(self) -> None:
         self.timer.restart()
         return super().initialize()
 

@@ -152,14 +152,18 @@ class OIConstants:
     
     kLaunchButton = 1
 
-    kButtonBoardPort = 0
-    kElevatorUpButton = 9
-    kElevatorDownButton = 8
+    kButtonBoardPort = 2
+    kButtonBoardPort2 = 0
+    kElevatorUpButton = 8
+    kElevatorDownButton = 10
     kElevatorLvl0Button = 1
-    kElevatorLvl1Button = 2
-    kElevatorLvl2Button = 3
-    kElevatorLvl3Button = 4
-    kElevatorLvl4Button = 5
+    kElevatorLvl1Button = 1
+    kElevatorLvl2Button = 2
+    kElevatorLvl3Button = 3
+    kElevatorLvl4Button = 4
+
+    kIntakeButton = 6
+    kDeliveryButton = 9
 
 class AutoConstants:
     kMaxSpeedMetersPerSecond = 10
@@ -185,13 +189,13 @@ class ElevatorConstants:
     kEncoderPositionFactor = 1
     kEncoderVelocityFactor = 1
 
-    kP = 0.05
+    kP = 0.08
     kI = 0
     kD = 0
 
     kLvl0Height = 0
     
-    kLvl1Height = 20
+    kLvl1Height = 7
     
     kLvl2Height = 30
 
@@ -202,7 +206,7 @@ class ElevatorConstants:
     kForwardSoftLimit = 10000
     kReverseSoftLimit = -100
 
-    kElevatorMaxSpeed = 1
+    kElevatorMaxSpeed = 3
     kTimedSpeed = 0.6
     kTimedTime = 4
 

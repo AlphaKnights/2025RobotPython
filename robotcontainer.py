@@ -93,13 +93,13 @@ class RobotContainer:
         instantiating a :GenericHID or one of its subclasses (Joystick or XboxController),
         and then passing it to a JoystickButton.
         """
-        self.launch_button = commands2.button.JoystickButton(self.driverController.joystickDrive, 2)\
+        self.launch_button = commands2.button.JoystickButton(self.driverController.controller, 2)\
             .onTrue(LaunchCommand(self.coral_manipulator))
         
-        self.intake_button = commands2.button.JoystickButton(self.driverController.joystickDrive, 1)\
+        self.intake_button = commands2.button.JoystickButton(self.driverController.controller, 1)\
             .onTrue(IntakeCommand(self.coral_manipulator))
         
-        self.stop_launch_button = commands2.button.JoystickButton(self.driverController.joystickDrive, 9)\
+        self.stop_launch_button = commands2.button.JoystickButton(self.driverController.controller, 9)\
             .whileTrue(IntakeCommand(self.coral_manipulator))
 
         #manual elevator

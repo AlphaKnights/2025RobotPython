@@ -35,9 +35,9 @@ class MyRobot(commands2.TimedCommandRobot):
         self.results = self.limelight.get_results()
         if self.results is None:
             return
-        x = self.results.tx
-        y = self.results.ty
-        a = self.results.ta
+        x = self.results.fx
+        y = self.results.fy
+        a = self.results.fa
         print(x,y,a)
         
        # print(self.results)

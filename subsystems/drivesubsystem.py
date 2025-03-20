@@ -16,6 +16,7 @@ from wpimath.kinematics import (
     SwerveModuleState,
     SwerveDrive4Kinematics,
     SwerveDrive4Odometry,
+    SwerveModulePosition
 )
 
 from constants import AutoConstants, DriveConstants, ModuleConstants
@@ -117,12 +118,26 @@ class DriveSubsystem(Subsystem):
         )   
 
     def limelightPos(self, limelight : LimelightSystem) -> None:
+
+        #8cm from the left edge
+        #18 from the front
+        #72.39 cm by 72.39
+
+        #front offset is 36.195 cm - 8cm = 28.195 cm
+        #
+
+
         results = limelight.get_results()
         if results is not None:
             x = results.fx
             y = results.fy
             yaw = results.fa
-            
+
+            self.frontL = SwerveModulePosition(x, Rotation2d(yaw))
+            self.frontR = SwerveModulePosition(x, Rotation2d(yaw))
+            self.backR = SwerveModulePosition((y/100 - (18-72.39))*100, Rotation2d(yaw))
+            self.backL = SwerveModulePosition(y, Rotation2d(yaw))
+
             self.odometry.update(
                 Rotation2d.fromDegrees(self.gyro.getAngle()),
                 (

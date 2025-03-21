@@ -66,6 +66,8 @@ class CoralManipulator(Subsystem):
     def launch(self, speed: float) -> None:
         self.launch_motor.set(speed)
         # print("fire")
+    def reverse(self, speed: float) -> None:
+        self.launch_motor.set(-speed)
 
     def stop(self) -> None:
         self.launch_motor.stopMotor()

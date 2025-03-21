@@ -22,6 +22,7 @@ from commands.drivecommand import DriveCommand
 from commands.launch import LaunchCommand
 from commands.intake import IntakeCommand
 from commands.stopDelivery import StopCommand
+from commands.reverse import ReverseCommand
 from subsystems.coral_manipulator import CoralManipulator
 
 
@@ -64,6 +65,10 @@ class RobotContainer:
 
         NamedCommands.registerCommand('Launch', LaunchCommand(self.coral_manipulator))
         NamedCommands.registerCommand('Intake', IntakeCommand(self.coral_manipulator))
+        NamedCommands.registerCommand('Reverse', ReverseCommand(self.coral_manipulator))
+
+
+
 
         # The driver's controller
         # button boards
@@ -96,7 +101,9 @@ class RobotContainer:
         
         self.buttonBoard.button(OIConstants.kIntakeButton).onTrue(IntakeCommand(self.coral_manipulator))
         self.buttonBoard.button(OIConstants.kDeliveryButton).onTrue(LaunchCommand(self.coral_manipulator))
-        
+
+        self.reverse_button = commands2.button.JoystickButton(self.driverController.controller, 3)\
+            .whileTrue(ReverseCommand(self.coral_manipulator))
 
         #manual elevator
         self.buttonBoard.button(OIConstants.kElevatorUpButton).whileTrue(ElevatorUpCommand(self.elevator))

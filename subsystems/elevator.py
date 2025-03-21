@@ -76,10 +76,17 @@ class ElevatorSubsystem(Subsystem):
         # if (not self.upperLimit.get()):
         #     print ("Upper On")
 
-        print("Left Position: " + str(self.elevatorMotorLEncoder.getPosition()))
-        print("Right Position: " + str(self.elevatorMotorREncoder.getPosition()))
+        if self.elevatorMotorL.getForwardLimitSwitch():
+            self.resetEncoders()
+
+
+        # print("Left Position: " + str(self.elevatorMotorLEncoder.getPosition()))
+        # print("Right Position: " + str(self.elevatorMotorREncoder.getPosition()))
         return
 
+    def resetEncoders(self) -> None:
+        self.elevatorMotorLEncoder.setPosition(0)
+        self.elevatorMotorREncoder.setPosition(0)
 
     def move(self, speed: float) -> None:
         # if (not self.upperLimit.get() and speed > 0):

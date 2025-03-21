@@ -23,6 +23,7 @@ from commands.launch import LaunchCommand
 from commands.intake import IntakeCommand
 from commands.stopDelivery import StopCommand
 from commands.reverse import ReverseCommand
+from commands.calibrate import calibrateCommand
 from subsystems.coral_manipulator import CoralManipulator
 
 
@@ -66,6 +67,7 @@ class RobotContainer:
         NamedCommands.registerCommand('Launch', LaunchCommand(self.coral_manipulator))
         NamedCommands.registerCommand('Intake', IntakeCommand(self.coral_manipulator))
         NamedCommands.registerCommand('Reverse', ReverseCommand(self.coral_manipulator))
+        NamedCommands.registerCommand('Calibrate', calibrateCommand(self.elevator))
 
 
 

@@ -157,7 +157,10 @@ class OIConstants:
     kElevatorLvl1Button = 2
     kElevatorLvl2Button = 3
     kElevatorLvl3Button = 4
-    kElevatorLvl4Button = 5
+    # kElevatorLvl4Button = 5
+
+    kAlignLeftButton = 5
+    kAlignRightButton = 7
 
 class AutoConstants:
     kMaxSpeedMetersPerSecond = 10

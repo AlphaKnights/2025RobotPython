@@ -49,7 +49,7 @@ class RobotContainer:
         # button boards
         self.buttonBoard = commands2.button.CommandJoystick(OIConstants.kButtonBoardPort)
          # The driver's controller
-        self.driverController = DriverController(self.robotDrive, self.limelight)
+        self.driverController = DriverController(self.robotDrive, self.limelight, self.buttonBoard)
 
         # Configure the button bindings
         self.configureButtonBindings()

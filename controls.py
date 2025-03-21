@@ -1,4 +1,5 @@
 import wpilib
+import commands2.button
 import wpimath
 from constants import OIConstants
 from commands.drivecommand import DriveCommand
@@ -7,9 +8,10 @@ from subsystems.limelight_subsystem import LimelightSystem
 
 
 class DriverController():
-    def __init__(self, driveSub: DriveSubsystem, limeSub: LimelightSystem) -> None:
+    def __init__(self, driveSub: DriveSubsystem, limeSub: LimelightSystem, buttonBoard: commands2.button.CommandJoystick) -> None:
         self.robotDrive = driveSub
         self.limelight = limeSub
+        self.buttonBoard = buttonBoard
 
         self.joystickDrive = wpilib.Joystick(OIConstants.kDriverControllerPort).getName() == "Logitech Extreme 3D"
 
@@ -43,7 +45,8 @@ class DriverController():
                     
                     # lambda: 0,
 
-                    lambda: self.joystickDriverController.getRawButton(12),
+                    lambda: self.buttonBoard.button(OIConstants.kAlignLeftButton).getAsBoolean(),
+                    lambda: self.buttonBoard.button(OIConstants.kAlignRightButton).getAsBoolean(),
                     lambda: self.joystickDriverController.getRawButton(11)
                     ),
                 )
@@ -66,7 +69,8 @@ class DriverController():
                         -wpimath.applyDeadband(
                             self.xBoxDriverController.getRawAxis(2), OIConstants.kDriveDeadband
                         ),
-                    self.xBoxDriverController.getAButton,
+                    lambda: self.buttonBoard.button(OIConstants.kAlignLeftButton).getAsBoolean(),
+                    lambda: self.buttonBoard.button(OIConstants.kAlignRightButton).getAsBoolean(),
                     self.xBoxDriverController.getXButton
                     ),
                 )

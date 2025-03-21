@@ -148,16 +148,23 @@ class ModuleConstants:
 
 class OIConstants:
     kDriverControllerPort = 1
-    kDriveDeadband = 0.4
 
-    kButtonBoardPort = 0
-    kElevatorUpButton = 9
-    kElevatorDownButton = 8
+    kDriveDeadband = 0.4
+    
+    kLaunchButton = 1
+
+    kButtonBoardPort = 2
+    kButtonBoardPort2 = 0
+    kElevatorUpButton = 8
+    kElevatorDownButton = 10
     kElevatorLvl0Button = 1
-    kElevatorLvl1Button = 2
-    kElevatorLvl2Button = 3
-    kElevatorLvl3Button = 4
-    kElevatorLvl4Button = 5
+    kElevatorLvl1Button = 1
+    kElevatorLvl2Button = 2
+    kElevatorLvl3Button = 3
+    kElevatorLvl4Button = 4
+
+    kIntakeButton = 6
+    kDeliveryButton = 9
 
     kAlignLeftButton = 5
     kAlignRightButton = 7
@@ -186,24 +193,24 @@ class ElevatorConstants:
     kEncoderPositionFactor = 1
     kEncoderVelocityFactor = 1
 
-    kP = 0.05
+    kP = 0.08
     kI = 0
     kD = 0
 
     kLvl0Height = 0
     
-    kLvl1Height = 20
+    kLvl1Height = 0
     
-    kLvl2Height = 30
+    kLvl2Height = 35
 
-    kLvl3Height = 40
+    kLvl3Height = 60
     
     kLvl4Height = 50
 
     kForwardSoftLimit = 10000
     kReverseSoftLimit = -100
 
-    kElevatorMaxSpeed = 1
+    kElevatorMaxSpeed = 3
     kTimedSpeed = 0.6
     kTimedTime = 4
 
@@ -219,6 +226,17 @@ class LEDConstants:
     kBlueSat = 220
     kBlueVal = 30
 
+    kGoodColor = [120, 255, 50]
+    kBadColor = [0, 100, 50]
+
+class UltrasonicConstants:
+    kPingChannel = 1
+    kEchoChannel = 2
+
+class LaunchConstants:
+    kLaunchMotor = 42
+    kLaunchSpeed = 0.6
+
 class AlignConstants:
     kMaxNormalizedSpeed = 1.0
     kMaxTurningSpeed = 1.0
@@ -232,3 +250,4 @@ class AlignConstants:
     
     kRightAlignXOffset = 0
     kRightAlignYOffset = 0
+

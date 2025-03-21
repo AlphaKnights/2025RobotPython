@@ -15,6 +15,8 @@ class DriverController():
 
         self.joystickDrive = wpilib.Joystick(OIConstants.kDriverControllerPort).getName() == "Logitech Extreme 3D"
 
+        self.controller = wpilib.Joystick(OIConstants.kDriverControllerPort)
+
         if self.joystickDrive:
             self.joystickDriverController = wpilib.Joystick(OIConstants.kDriverControllerPort)
         else:

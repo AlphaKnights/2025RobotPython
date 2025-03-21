@@ -18,7 +18,6 @@ from subsystems.drivesubsystem import DriveSubsystem
 
 from subsystems.limelight_subsystem import LimelightSystem
 
-from commands.auto_rotate import AutoRotate
 from commands.drivecommand import DriveCommand
 from commands.launch import LaunchCommand
 from commands.intake import IntakeCommand

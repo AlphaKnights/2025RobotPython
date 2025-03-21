@@ -150,6 +150,13 @@ class OIConstants:
     kDriveDeadband = 0.4
 
     kButtonBoardPort = 0
+    kButtonBoardSecondaryPort = 2
+
+# secondary board
+    kHopperInButton = 1 
+    kHopperOutButton = 3
+
+# primary board
     kElevatorUpButton = 9
     kElevatorDownButton = 8
     kElevatorLvl0Button = 1
@@ -236,3 +243,19 @@ class ClimbConstants:
 
     kForwardSoftLimit = 20
     kReverseSoftLimit = 0
+
+class winchConstants:
+    kMotorCanId = 55
+
+    kEncoderPositionFactor = 1
+    kEncoderVelocityFactor = 1
+
+    kP = 0.05
+    kI = 0
+    kD = 0
+
+    kForwardSoftLimit = 50
+    kReverseSoftLimit = 0
+
+    kDownPosition = 50
+    kUpPosition = 0

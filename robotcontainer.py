@@ -15,9 +15,10 @@ from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 from wpimath.kinematics import ChassisSpeeds
 
-from constants import AutoConstants, DriveConstants, OIConstants, ElevatorConstants
+from constants import AutoConstants, DriveConstants, OIConstants, ElevatorConstants, winchConstants
 
-
+from subsystems.winch import WinchSubsystem
+from commands.winchPos import WinchPosCommand
 from subsystems.elevator import ElevatorSubsystem
 from commands.elevatorUpCommand import ElevatorUpCommand
 from commands.elevatorDownCommand import ElevatorDownCommand
@@ -46,6 +47,7 @@ class RobotContainer:
         # The robot's subsystems
         self.robotDrive = DriveSubsystem()
         self.elevator = ElevatorSubsystem()
+        self.winch = WinchSubsystem()
 
         self.limelight = LimelightSystem()
 
@@ -58,6 +60,8 @@ class RobotContainer:
 
         # button boards
         self.buttonBoard = commands2.button.CommandJoystick(OIConstants.kButtonBoardPort)
+        self.buttonBoardSecondary = commands2.button.CommandJoystick(OIConstants.kButtonBoardSecondaryPort)
+
          # The driver's controller
         self.driverController = DriverController(self.robotDrive, self.limelight)
 
@@ -94,6 +98,9 @@ class RobotContainer:
         self.buttonBoard.button(OIConstants.kElevatorLvl4Button).whileTrue(ElevatorPosCommand(self.elevator, ElevatorConstants.kLvl4Height))
 
         # self.elevator.setDefaultCommand(ElevatorPosCommand(self.elevator))
+
+        self.buttonBoardSecondary.button(OIConstants.kHopperInButton).onTrue(WinchPosCommand(self.winch, winchConstants.kUpPosition))
+        self.buttonBoardSecondary.button(OIConstants.kHopperOutButton).onTrue(WinchPosCommand(self.winch, winchConstants.kDownPosition))
 
 
 

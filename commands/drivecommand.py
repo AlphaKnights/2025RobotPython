@@ -33,8 +33,8 @@ class DriveCommand(commands2.Command):
         self.addRequirements(swerve_subsystem)
         self.addRequirements(limelight_susbsystem)
         self.goalY = 0.35
-        self.goalX = 0
-        self.goalA = 0
+        self.goalX = 0.0
+        self.goalA = 0.0
 
 
     def execute(self) -> None:

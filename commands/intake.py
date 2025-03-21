@@ -20,7 +20,7 @@ class IntakeCommand(commands2.Command):
         print("intaking")
 
     def isFinished(self) -> bool:
-        return (self.coral_manipulator.rangeFinder.getRangeInches() <= 3.0) or (self.timer.get() >= 3)
+        return (self.coral_manipulator.rangeFinder.getRangeInches() <= 3.0) or (self.timer.get() >= 10)
     
     def end(self, interrupted: bool) -> None:
         self.coral_manipulator.stop()

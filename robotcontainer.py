@@ -24,6 +24,7 @@ from commands.intake import IntakeCommand
 from commands.stopDelivery import StopCommand
 from commands.reverse import ReverseCommand
 from commands.calibrate import calibrateCommand
+from commands.elevatorPosAuto import ElevatorPosAutoCommand
 from subsystems.coral_manipulator import CoralManipulator
 
 
@@ -59,7 +60,7 @@ class RobotContainer:
         
         self.autoChooser = AutoBuilder.buildAutoChooser()
 
-        #SmartDashboard.putData("Auto Chooser", self.autoChooser)
+        SmartDashboard.putData("Auto Chooser", self.autoChooser)
 
         # self.ultrasonic = UltrasonicSubsystem()
         self.coral_manipulator = CoralManipulator()
@@ -69,7 +70,8 @@ class RobotContainer:
         NamedCommands.registerCommand('Reverse', ReverseCommand(self.coral_manipulator))
         NamedCommands.registerCommand('Calibrate', calibrateCommand(self.elevator))
 
-
+        NamedCommands.registerCommand('Elevator Lift', ElevatorPosAutoCommand(self.elevator, ElevatorConstants.kLvl2Height))
+        NamedCommands.registerCommand('Elevator Drop', ElevatorPosAutoCommand(self.elevator, ElevatorConstants.kLvl0Height))
 
 
         # The driver's controller

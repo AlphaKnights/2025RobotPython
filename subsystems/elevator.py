@@ -76,13 +76,12 @@ class ElevatorSubsystem(Subsystem):
         # if (not self.upperLimit.get()):
         #     print ("Upper On")
 
-        if self.elevatorMotorL.getForwardLimitSwitch():
-            self.resetEncoders()
+        # if self.elevatorMotorL.getForwardLimitSwitch():
+            # self.resetEncoders()
 
 
-        # print("Left Position: " + str(self.elevatorMotorLEncoder.getPosition()))
-        # print("Right Position: " + str(self.elevatorMotorREncoder.getPosition()))
-        return
+        print("Left Position: " + str(self.elevatorMotorLEncoder.getPosition()))
+        print("Right Position: " + str(self.elevatorMotorREncoder.getPosition()))
 
     def resetEncoders(self) -> None:
         self.elevatorMotorLEncoder.setPosition(0)

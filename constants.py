@@ -152,6 +152,10 @@ class OIConstants:
     kButtonBoardPort = 0
     kButtonBoardSecondaryPort = 2
 
+# joysticks
+    kWinchUpButton = 7
+    kWinchDownButton = 8
+
 # secondary board
     kHopperInButton = 1 
     kHopperOutButton = 3

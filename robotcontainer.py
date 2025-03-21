@@ -19,6 +19,7 @@ from constants import AutoConstants, DriveConstants, OIConstants, ElevatorConsta
 
 from subsystems.winch import WinchSubsystem
 from commands.winchPos import WinchPosCommand
+from commands.winchMove import WinchMoveCommand
 from subsystems.elevator import ElevatorSubsystem
 from commands.elevatorUpCommand import ElevatorUpCommand
 from commands.elevatorDownCommand import ElevatorDownCommand
@@ -99,10 +100,13 @@ class RobotContainer:
 
         # self.elevator.setDefaultCommand(ElevatorPosCommand(self.elevator))
 
-        self.buttonBoardSecondary.button(OIConstants.kHopperInButton).onTrue(WinchPosCommand(self.winch, winchConstants.kUpPosition))
-        self.buttonBoardSecondary.button(OIConstants.kHopperOutButton).onTrue(WinchPosCommand(self.winch, winchConstants.kDownPosition))
+        self.buttonBoardSecondary.button(OIConstants.kHopperInButton).whileTrue(WinchPosCommand(self.winch, winchConstants.kUpPosition))
+        self.buttonBoardSecondary.button(OIConstants.kHopperOutButton).whileTrue(WinchPosCommand(self.winch, winchConstants.kDownPosition))
 
-
+        self.winch.setDefaultCommand(WinchMoveCommand(self.winch,\
+                                                      -0.1 if self.driverController.joystickDriverController.getRawButton(OIConstants.kWinchUpButton) \
+                                                      else 0.1 if self.driverController.joystickDriverController.getRawButton(OIConstants.kWinchDownButton)\
+                                                      else 0))
 
 
     def disablePIDSubsystems(self) -> None:

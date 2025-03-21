@@ -32,13 +32,12 @@ class AutoAlign(commands2.Command):
         self.a = 1
 
         self.timer = Timer()
-        self.timer.start()
 
     def execute(self) -> None:
         results = self.limelight_subsystem.get_results()
 
         if results is None:
-            self.drive_subsystem.setX()
+            # self.drive_subsystem.setX()
             return
         
         self.timer.reset()
@@ -46,6 +45,8 @@ class AutoAlign(commands2.Command):
         tx = results.tx
         ty = results.ty
         yaw = radians(results.yaw)
+
+        print("tx: ", tx, "ty: ", ty, "angle", yaw)
 
         ty = ty - (cos(yaw) * self.goalY) - (sin(yaw) * self.goalX)
         tx = tx = -tx - (sin(yaw) * self.goalY) - (cos(yaw) * self.goalX)
@@ -96,23 +97,44 @@ class AutoAlign(commands2.Command):
         self.y = y
         self.a = rotSign
 
-        self.drive_subsystem.drive(ChassisSpeeds(y * AlignConstants.kMaxNormalizedSpeed * dist, -x * AlignConstants.kMaxNormalizedSpeed * dist, -rotSign * AlignConstants.kMaxTurningSpeed * aDist), False, False)
+        self.drive_subsystem.drive(
+            speeds = ChassisSpeeds(
+                vx = y * AlignConstants.kMaxNormalizedSpeed * sqrt(dist), 
+                vy = -x * AlignConstants.kMaxNormalizedSpeed * sqrt(dist), 
+                omega = -rotSign * AlignConstants.kMaxTurningSpeed * sqrt(aDist)
+            ), 
+            fieldRelative=False, 
+            rateLimit=False
+            )
 
     def isFinished(self) -> bool:
         results = self.limelight_subsystem.get_results()
         if results is None:
-            self.drive_subsystem.drive(ChassisSpeeds(0,0,.4), False, False)
-            return self.timer.get() > 5
-        
-        return self.x == 0 and self.y == 0 and self.a == 0
+            time = self.timer.get()
+            print('time: ', time)
+            # If more than a 5 seconds passes then there is no tag
+            if time > 5:
+                return True
             
-        
+            # If more than a second but less than 1 second passes, then spin in place until a tag is found
+            if time > 1:
+                self.drive_subsystem.drive(
+                    speeds=ChassisSpeeds(
+                        vx=0,
+                        vy=0,
+                        omega=5), 
+                    fieldRelative=False, 
+                    rateLimit=False
+                )
+                return False
+            
+            self.drive_subsystem.setX()
+        return self.x == 0 and self.y == 0 and self.a == 0
 
-
-
+    def initialize(self) -> None:
+        self.timer.start()
+        self.timer.reset()
+        return super().initialize()
 
     def end(self, interrupted: bool = False) -> None:
         self.drive_subsystem.setX()
-
-    def interrupted(self) -> None:
-        self.end()

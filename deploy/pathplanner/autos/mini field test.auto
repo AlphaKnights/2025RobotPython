@@ -7,13 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Example Path"
+            "pathName": "First"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Left Side Align"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Second"
           }
         }
       ]

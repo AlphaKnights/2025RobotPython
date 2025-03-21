@@ -118,7 +118,8 @@ class ModuleConstants:
     kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor  # radian
 
     # kDriveRatio = 7.363636
-    kDriveRatio = 8.6631011765
+    # kDriveRatio = 8.6631011765
+    kDriveRatio = 17.326202353
 
 
     kDrivingP = 0.8
@@ -164,6 +165,9 @@ class OIConstants:
 
     kIntakeButton = 6
     kDeliveryButton = 9
+
+    kAlignLeftButton = 5
+    kAlignRightButton = 7
 
 class AutoConstants:
     kMaxSpeedMetersPerSecond = 10
@@ -234,9 +238,16 @@ class LaunchConstants:
     kLaunchSpeed = 0.6
 
 class AlignConstants:
-    kMaxNormalizedSpeed = 0.5
+    kMaxNormalizedSpeed = 1.0
     kMaxTurningSpeed = 1.0
     kDistToSlow = 0.3
     kRotDistToSlow = math.radians(20)
     kAlignDeadzone = 0.03
     kAlignRotDeadzone = math.radians(5)
+    
+    kLeftAlignXOffset = 0
+    kLeftAlignYOffset = 0.35
+    
+    kRightAlignXOffset = 0
+    kRightAlignYOffset = 0
+

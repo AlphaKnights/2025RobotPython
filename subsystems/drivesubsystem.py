@@ -111,8 +111,6 @@ class DriveSubsystem(Subsystem):
             # DriveConstants.kRearRightPosition
         )
 
-
-
         # The gyro sensor
         self.gyro = AHRS(AHRS.NavXComType.kMXP_SPI)
         self.gyro.enableBoardlevelYawReset(False)
@@ -154,7 +152,7 @@ class DriveSubsystem(Subsystem):
             lambda speeds, feedforwards: self.drive(speeds, False, False), # Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also outputs individual module feedforwards
             PPHolonomicDriveController( # PPHolonomicController is the built in path following controller for holonomic drive trains
                 PIDConstants(5, 0, 0), # Translation PID constants
-                PIDConstants(13, 0, 0), # Rotation PID constants
+                PIDConstants(5, 0, 0), # Rotation PID constants
                 1,
             ),
             config, # The robot configuration

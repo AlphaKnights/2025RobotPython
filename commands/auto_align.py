@@ -131,7 +131,7 @@ class AutoAlign(commands2.Command):
             self.drive_subsystem.setX()
         return self.x == 0 and self.y == 0 and self.a == 0
 
-    def initialize(self):
+    def initialize(self) -> None:
         self.timer.start()
         self.timer.reset()
         return super().initialize()

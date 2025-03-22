@@ -12,12 +12,19 @@ class LimelightSystem(commands2.Subsystem):
         limelights = limelight.discover_limelights(debug=True)
         
         if not limelights:
-            raise ValueError("No limelights found")
+            print('No limelight')
+            return
+            # raise ValueError("No limelights found")
 
         self.limelight = limelight.Limelight(limelights[0])
 
     def get_results(self) -> typing.Optional[LimelightResults]:
-        results = self.limelight.get_results()
+        try:
+            results = self.limelight.get_results()
+
+        except:
+            print('Cannot connect to limelight')
+            return
 
         if results["botpose_tagcount"] == 0:
             return None

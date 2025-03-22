@@ -17,7 +17,7 @@ class IntakeCommand(commands2.Command):
 
     def execute(self) -> None:
         self.coral_manipulator.launch(LaunchConstants.kLaunchSpeed)
-        print("intaking")
+        # print("intaking")
 
     def isFinished(self) -> bool:
         return (self.coral_manipulator.rangeFinder.getRangeInches() <= 3.0) or (self.timer.get() >= 10)

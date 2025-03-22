@@ -49,7 +49,7 @@ class AutoAlign(commands2.Command):
         print("tx: ", tx, "ty: ", ty, "angle", yaw)
 
         ty = ty - (cos(yaw) * self.goalY) - (sin(yaw) * self.goalX)
-        tx = tx = -tx - (sin(yaw) * self.goalY) - (cos(yaw) * self.goalX)
+        tx = -tx - (sin(yaw) * self.goalY) - (cos(yaw) * self.goalX)
 
         # Normalize the values
         ax = abs(tx)

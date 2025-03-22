@@ -17,8 +17,8 @@ class LaunchCommand(commands2.Command):
 
 
     def execute(self) -> None:
-        self.coral_manipulator.launch(LaunchConstants.kLaunchSpeed)
-        print("firing")
+        self.coral_manipulator.launch(LaunchConstants.kLaunchSpeed+0.4)
+        # print("firing")
 
     def isFinished(self) -> bool:
         return ((self.coral_manipulator.rangeFinder.getRangeInches() >= 3.0) or (self.timer.get() >= 3.0))

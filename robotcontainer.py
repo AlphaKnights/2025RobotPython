@@ -58,9 +58,6 @@ class RobotContainer:
         NamedCommands.registerCommand('Left Side Align', AutoAlign(self.robotDrive, self.limelight, AlignConstants.kLeftAlignYOffset, AlignConstants.kLeftAlignXOffset))
         NamedCommands.registerCommand('Right Side Align', AutoAlign(self.robotDrive, self.limelight, AlignConstants.kRightAlignYOffset, AlignConstants.kRightAlignXOffset))
         
-        self.autoChooser = AutoBuilder.buildAutoChooser()
-
-        SmartDashboard.putData("Auto Chooser", self.autoChooser)
 
         # self.ultrasonic = UltrasonicSubsystem()
         self.coral_manipulator = CoralManipulator()
@@ -87,6 +84,11 @@ class RobotContainer:
         # Configure default commands
 
         self.driverController.setDefaultCommands()
+
+        self.autoChooser = AutoBuilder.buildAutoChooser()
+
+        SmartDashboard.putData("Auto Chooser", self.autoChooser)
+
 
     def configureButtonBindings(self) -> None:
         """

@@ -14,7 +14,7 @@ class CoralManipulator(Subsystem):
         self.led = wpilib.AddressableLED(LEDConstants.kLEDPort)
         self.rangeFinder = wpilib.Ultrasonic(UltrasonicConstants.kPingChannel, UltrasonicConstants.kEchoChannel)
         self.rangeFinder.setEnabled(True)
-        self.rangeFinder.setAutomaticMode(False)
+        self.rangeFinder.setAutomaticMode(True)
         self.launch_motor = phoenix6.hardware.TalonFX(LaunchConstants.kLaunchMotor)
         drive_motor_config = phoenix6.configs.TalonFXConfiguration()
         drive_motor_config.motor_output.neutral_mode = phoenix6.signals.NeutralModeValue.BRAKE
@@ -37,9 +37,9 @@ class CoralManipulator(Subsystem):
             # print("invalid")
             # return
         
-        self.rangeFinder.ping()
+        # self.rangeFinder.ping()
         # print("ping")
-        time.sleep(0.1)
+        # time.sleep(0.1)
         # print(self.rangeFinder.getRangeInches())
 
         if (self.rangeFinder.isRangeValid()):

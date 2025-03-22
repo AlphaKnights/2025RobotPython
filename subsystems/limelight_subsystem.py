@@ -12,9 +12,7 @@ class LimelightSystem(commands2.Subsystem):
         self.failed = False
         limelights = limelight.discover_limelights(debug=True)
         self.nt = ntcore.NetworkTableInstance.getDefault()
-        self.nt.setServer('roborio-6695-frc.local')
-        self.nt.startClient4('limelight@4')
-        self.nt.startDSClient()
+
 
         if not limelights:
             print('No limelight')
@@ -23,10 +21,14 @@ class LimelightSystem(commands2.Subsystem):
 
         self.limelight = limelight.Limelight(limelights[0])
 
+        self.nt.setServer('roborio-6695-frc.local')
+        self.nt.startClient4(str(self.limelight.get_name()))
+        self.nt.startDSClient()
 
+        
     def get_results(self) -> typing.Optional[LimelightResults]:
         if self.failed or self.limelight is None:
-            return
+            return None
         try:
             results = self.limelight.get_results()
 
@@ -43,7 +45,7 @@ class LimelightSystem(commands2.Subsystem):
     def periodic(self) -> None: 
         super().periodic()
 
-        
+
 
         results = self.get_results()
 

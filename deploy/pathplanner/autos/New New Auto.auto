@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Straight"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Left Side Align"

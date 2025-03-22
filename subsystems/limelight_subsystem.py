@@ -27,15 +27,16 @@ class LimelightSystem(commands2.Subsystem):
         self.nt.startDSClient()
 
     def get_results_json(self):
-        response = requests.get(f"{self.limelight.base_url}/results", timeout=2)
+        response = requests.get(f"{self.limelight.base_url}/results", timeout=1)
 
         if response.ok:
             return response.json()
         
+        print('error getting results')
         return None
         
     def get_results(self) -> typing.Optional[LimelightResults]:
-        if self.failed or self.limelight is None or self.limelight.get_status() is not None:
+        if self.failed or self.limelight is None:
             return None
         try:
             results = self.get_results_json()

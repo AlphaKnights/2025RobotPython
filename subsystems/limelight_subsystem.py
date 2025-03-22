@@ -23,3 +23,12 @@ class LimelightSystem(commands2.Subsystem):
             return None
 
         return LimelightResults(results)
+    
+    def periodic(self) -> None: 
+        super().periodic()
+
+        results = self.get_results()
+
+        if results is not None:
+            print('x: ', results.tx)
+            print('y: ', results.ty)

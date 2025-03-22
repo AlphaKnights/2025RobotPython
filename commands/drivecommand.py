@@ -117,11 +117,13 @@ class DriveCommand(commands2.Command):
         else:
             rotSign = int(yaw/abs(yaw))
 
-        if ax < AlignConstants.kAlignDeadzone:
+        deadzone = 0.05 if self.goalX < 0 else AlignConstants.kAlignDeadzone
+
+        if ax < deadzone:
             print("dead X")
             x = 0
 
-        if ay < AlignConstants.kAlignDeadzone:
+        if ay < deadzone:
             print("dead Y")
             y = 0
 

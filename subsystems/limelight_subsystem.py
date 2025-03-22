@@ -13,7 +13,9 @@ class LimelightSystem(commands2.Subsystem):
         limelights = limelight.discover_limelights(debug=True)
         self.nt = ntcore.NetworkTableInstance.getDefault()
         self.nt.setServer('roborio-6695-frc.local')
-        self.nt.startClient4('limelight nt')
+        self.nt.startClient4('limelight@4')
+        self.nt.startDSClient()
+
         if not limelights:
             print('No limelight')
             return

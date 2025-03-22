@@ -12,7 +12,7 @@ class ElevatorPosAutoCommand(commands2.Command):
         self.elevator.setPosition(self.position)
 
     def isFinished(self) -> bool:
-        return (self.elevator.elevatorMotorLEncoder.getPosition() - self.position <= 1.0) and (self.elevator.elevatorMotorREncoder.getPosition() - self.position <= 1.0)
+        return (self.elevator.elevatorMotorLEncoder.getPosition() - self.position <= 0.5) and (self.elevator.elevatorMotorREncoder.getPosition() - self.position <= 0.5)
     
     def end(self, interrupted: bool) -> None:
         # self.elevator.stop()

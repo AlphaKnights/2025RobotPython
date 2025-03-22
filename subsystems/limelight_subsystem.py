@@ -46,6 +46,7 @@ class LimelightSystem(commands2.Subsystem):
             return None
         
         if results is None:
+            self.failed = True
             return None
 
         if results["botpose_tagcount"] == 0:

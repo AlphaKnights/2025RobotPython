@@ -5,6 +5,7 @@ import commands2
 import limelight  # type: ignore
 import ntcore
 from interfaces.limelight_results import LimelightResults
+import requests
 
 class LimelightSystem(commands2.Subsystem):
     def __init__(self) -> None:
@@ -25,16 +26,26 @@ class LimelightSystem(commands2.Subsystem):
         self.nt.startClient4(str(self.limelight.get_name()))
         self.nt.startDSClient()
 
+    def get_results_json(self):
+        response = requests.get(f"{self.limelight.base_url}/results", timeout=2)
+
+        if response.ok:
+            return response.json()
+        
+        return None
         
     def get_results(self) -> typing.Optional[LimelightResults]:
-        if self.failed or self.limelight is None:
+        if self.failed or self.limelight is None or self.limelight.get_status() is not None:
             return None
         try:
-            results = self.limelight.get_results()
+            results = self.get_results_json()
 
         except:
             print('Cannot connect to limelight')
             self.failed = True
+            return None
+        
+        if results is None:
             return None
 
         if results["botpose_tagcount"] == 0:

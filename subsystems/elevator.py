@@ -80,8 +80,9 @@ class ElevatorSubsystem(Subsystem):
             # self.resetEncoders()
 
 
-        print("Left Position: " + str(self.elevatorMotorLEncoder.getPosition()))
-        print("Right Position: " + str(self.elevatorMotorREncoder.getPosition()))
+        # print("Left Position: " + str(self.elevatorMotorLEncoder.getPosition()))
+        # print("Right Position: " + str(self.elevatorMotorREncoder.getPosition()))
+        return
 
     def resetEncoders(self) -> None:
         self.elevatorMotorLEncoder.setPosition(0)

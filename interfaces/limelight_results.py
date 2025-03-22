@@ -5,9 +5,9 @@ class LimelightResults:
 
     def __init__(self, data: dict) -> None:
         self.tag_id = data["Fiducial"][0]["fID"]
-        self.tx = data["Fiducial"][0]['t6t_cs'][0] - 0.08
-        self.ty = data["Fiducial"][0]['t6t_cs'][2] -  0.28195
-        self.yaw = data["Fiducial"][0]['t6t_cs'][4] - 30.0
+        self.tx = data["Fiducial"][0]['t6t_rs'][0]
+        self.ty = data["Fiducial"][0]['t6t_rs'][2] - 0.457
+        self.yaw = data["Fiducial"][0]['t6t_rs'][4]
 
         self.fx = data["Fiducial"][0]['t6r_fs'][0] /100 - 72.39
         self.fy = data["Fiducial"][0]['t6r_fs'][2] / 100 - 72.39
@@ -22,3 +22,6 @@ class LimelightResults:
         
 
         # 1.48
+
+        # 7 inches from front 0.178
+        # 11.5 0.292

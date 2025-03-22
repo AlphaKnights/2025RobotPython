@@ -38,9 +38,9 @@ class CoralManipulator(Subsystem):
             # return
         
         self.rangeFinder.ping()
-        print("ping")
+        # print("ping")
         time.sleep(0.1)
-        print(self.rangeFinder.getRangeInches())
+        # print(self.rangeFinder.getRangeInches())
 
         if (self.rangeFinder.isRangeValid()):
         

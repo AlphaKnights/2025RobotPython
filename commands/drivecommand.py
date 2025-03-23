@@ -32,7 +32,7 @@ class DriveCommand(commands2.Command):
         self.heading = heading
         self.addRequirements(swerve_subsystem)
         self.addRequirements(limelight_susbsystem)
-        self.goalY = 0.35
+        self.goalY = AlignConstants.kLeftAlignYOffset
         self.goalX = 0.0
         self.goalA = 0.0
 

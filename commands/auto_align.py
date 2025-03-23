@@ -72,7 +72,7 @@ class AutoAlign(commands2.Command):
         else:
             rotSign = int(yaw/abs(yaw))
 
-        deadzone = 0.05 if self.goalX < 0 else AlignConstants.kAlignDeadzone
+        deadzone = AlignConstants.kAlignDeadzone #*0.05 if self.goalX < 0 else AlignConstants.kAlignDeadzone
         
         if ax < deadzone:
             print("dead X")

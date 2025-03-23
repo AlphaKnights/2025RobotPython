@@ -193,7 +193,7 @@ class ElevatorConstants:
     kEncoderPositionFactor = 1
     kEncoderVelocityFactor = 1
 
-    kP = 0.08
+    kP = 0.02
     kI = 0
     kD = 0
 
@@ -201,16 +201,16 @@ class ElevatorConstants:
     
     kLvl1Height = 0
     
-    kLvl2Height = 35
+    kLvl2Height = 38
 
-    kLvl3Height = 60
+    kLvl3Height = 63
     
     kLvl4Height = 50
 
     kForwardSoftLimit = 10000
     kReverseSoftLimit = -100
 
-    kElevatorMaxSpeed = 3
+    kElevatorMaxSpeed = 1.5
     kTimedSpeed = 0.6
     kTimedTime = 4
 

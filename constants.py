@@ -203,7 +203,7 @@ class ElevatorConstants:
     
     kLvl2Height = 45
 
-    kLvl3Height = 67
+    kLvl3Height = 72
     
     kLvl4Height = 50
 

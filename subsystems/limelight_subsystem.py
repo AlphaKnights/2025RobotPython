@@ -14,6 +14,7 @@ class LimelightSystem(commands2.Subsystem):
         limelights = limelight.discover_limelights(debug=True)
         self.nt = ntcore.NetworkTableInstance.getDefault()
 
+        self.limelight = None
 
         if not limelights:
             print('No limelight')
@@ -22,9 +23,9 @@ class LimelightSystem(commands2.Subsystem):
 
         self.limelight = limelight.Limelight(limelights[0])
 
-        self.nt.setServer('roborio-6695-frc.local')
-        self.nt.startClient4(str(self.limelight.get_name()))
-        self.nt.startDSClient()
+        # self.nt.setServer('roborio-6695-frc.local')
+        # self.nt.startClient4(str(self.limelight.get_name()))
+        # self.nt.startDSClient()
 
     def get_results_json(self):
         response = requests.get(f"{self.limelight.base_url}/results", timeout=1)

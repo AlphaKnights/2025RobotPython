@@ -21,7 +21,7 @@ class ElevatorSubsystem(Subsystem):
 
         l_config = SparkMaxConfig()
         l_config.inverted(True)
-        l_config.IdleMode(int(SparkMax.IdleMode.kCoast))
+        l_config.IdleMode(int(SparkMax.IdleMode.kBrake))
         l_config.softLimit.forwardSoftLimit(ElevatorConstants.kForwardSoftLimit) \
             .reverseSoftLimit(ElevatorConstants.kReverseSoftLimit)
         l_config.softLimit.forwardSoftLimitEnabled(True) \
@@ -38,7 +38,7 @@ class ElevatorSubsystem(Subsystem):
 
         r_config = SparkMaxConfig()
         r_config.inverted(False)
-        r_config.IdleMode(int(SparkMax.IdleMode.kCoast))
+        r_config.IdleMode(int(SparkMax.IdleMode.kBrake))
         r_config.softLimit.forwardSoftLimit(ElevatorConstants.kForwardSoftLimit) \
             .reverseSoftLimit(ElevatorConstants.kReverseSoftLimit)
         r_config.softLimit.forwardSoftLimitEnabled(True) \

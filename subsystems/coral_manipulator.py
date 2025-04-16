@@ -4,6 +4,7 @@ import time
 
 import wpilib
 import phoenix6
+from rev import SparkMax, SparkMaxConfig, ClosedLoopConfig
 
 from commands2 import Subsystem
 from constants import LEDConstants, UltrasonicConstants, LaunchConstants
@@ -15,10 +16,14 @@ class CoralManipulator(Subsystem):
         self.rangeFinder = wpilib.Ultrasonic(UltrasonicConstants.kPingChannel, UltrasonicConstants.kEchoChannel)
         self.rangeFinder.setEnabled(True)
         self.rangeFinder.setAutomaticMode(True)
-        self.launch_motor = phoenix6.hardware.TalonFX(LaunchConstants.kLaunchMotor)
-        drive_motor_config = phoenix6.configs.TalonFXConfiguration()
-        drive_motor_config.motor_output.neutral_mode = phoenix6.signals.NeutralModeValue.BRAKE
-        self.launch_motor.configurator.apply(drive_motor_config)
+        self.launch_motor = SparkMax(LaunchConstants.kLaunchMotor, SparkMax.MotorType.kBrushless)
+        motor_config = SparkMaxConfig()
+        motor_config.IdleMode(int(SparkMax.IdleMode.kBrake))
+        self.launch_motor.configure(motor_config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters)
+        #self.launch_motor = phoenix6.hardware.TalonFX(LaunchConstants.kLaunchMotor)
+        #drive_motor_config = phoenix6.configs.TalonFXConfiguration()
+        #drive_motor_config.motor_output.neutral_mode = phoenix6.signals.NeutralModeValue.BRAKE
+        #self.launch_motor.configurator.apply(drive_motor_config)
 
         # self.launch_motor 
 

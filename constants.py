@@ -230,11 +230,11 @@ class LEDConstants:
     kBadColor = [0, 100, 50]
 
 class UltrasonicConstants:
-    kPingChannel = 1
-    kEchoChannel = 2
+    kPingChannel = 0
+    kEchoChannel = 1
 
 class LaunchConstants:
-    kLaunchMotor = 42
+    kLaunchMotor = 30
     kLaunchSpeed = 0.6
 
 class AlignConstants:
